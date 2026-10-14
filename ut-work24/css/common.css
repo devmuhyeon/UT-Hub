@@ -1,0 +1,55 @@
+@charset "utf-8";
+:root {
+    --width:1900;
+    --designWidth:1248;
+    --col_blue:#3F58D4;
+    --col_skyblue:#408cff;
+    --col_skyblue_light:#F3F8FF;
+    --col_darkblue:#3043a1;
+    --col_green:#24A960;
+    --col_green2:#117935;
+    --col_lightgreen:#71a125;
+    --col_darkgreen:#145c34;
+    --col_orange:#F0651F;
+    --col_navy:#39425D;
+    --col_cyan:#06a3bf;
+    --col_pink:#FF0046;
+    --col_pink2:#ec6793;
+    --col_magenta:#FF00D6;
+    --col_yellow:#bf8738;
+    --col_purple:#9353ea;
+    --col_h:#111;
+    --col_body:#333;
+    --col_p:#555;
+    --col_dis:#888;
+    --col_white:#fff;
+    --col_tabe:#ccc;
+    --col_btn:#ddd;
+    --col_button:#757575;
+    --col_border:#eee;
+    --col_bg:#f5f5f5;
+    --col_bluegray: #f5f6f8;
+    --col_box_bg:#f8f8f8;
+    --col_red:#E0024B;
+    --col_darkred:#b21116;
+    --col_gray:#757575;
+    --col_brown:#A95A12;
+    --col_brown2:#978f3d;
+    --col_header_line:#5DC488;
+    --col_homegreen:#29C78E;
+    --col_brightyellow:#fef101;
+    --swiper-centered-offset-before:none;
+    --swiper-centered-offset-after:none;
+}
+* {letter-spacing: -0.032em !important;}
+body {margin: 0; font-family: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", sans-serif; line-height: 1.5; color: var(--col_body); background: radial-gradient(circle at 12% 8%, rgba(64, 140, 255, .22) 0, transparent 30%), linear-gradient(135deg, var(--col_white) 0%, var(--col_skyblue_light) 48%, var(--col_bluegray) 100%);}
+.survey_wrap {min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 64px 20px;}
+.survey_box {width: 100%; max-width: 900px; overflow: hidden; border: 1px solid var(--col_border); border-radius: 32px; background: rgba(255, 255, 255, .94); box-shadow: 0 26px 80px rgba(17, 17, 17, .14);}
+.survey_head {position: relative; padding: 48px 52px 40px; overflow: hidden; background: linear-gradient(135deg, var(--col_darkblue) 0%, var(--col_blue) 58%, var(--col_blue) 100% ); color: var(--col_white);}
+.survey_badge {position: relative; z-index: 1; display: inline-flex; align-items: center; height: 34px; margin-bottom: 20px; padding: 0 15px; border: 1px solid rgba(255, 255, 255, .3); border-radius: 999px; background: rgba(255, 255, 255, .16); font-size: 13px; font-weight: 600; letter-spacing: .04em;}
+.survey_title {position: relative; z-index: 1; margin: 0; color: var(--col_white); font-size: 30px; line-height: 1.25; font-weight: 600; letter-spacing: -.045em;}
+.survey_desc {position: relative; z-index: 1; margin: 8px 0 0; color: rgba(255, 255, 255, .90); font-size: 17px; line-height: 1.7; width: 100%;}
+.step_list {position: relative; z-index: 1; display: flex; gap: 10px; margin: 30px 0 0; padding: 0; list-style: none;}
+.step_list li {flex: 1; height: 9px; border-radius: 999px; background: rgba(255, 255, 255, .32);}
+.step_list li.is_current {background: var(--col_white); box-shadow: 0 0 0 4px rgba(255, 255, 255, .16);}
+.sr_only {position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;}

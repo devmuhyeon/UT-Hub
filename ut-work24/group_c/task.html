@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/ut-work24/css/reset.css">
+        <link rel="stylesheet" href="/ut-work24/css/font.css">
+        <link rel="stylesheet" href="/ut-work24/css/common.css">
+        <link rel="stylesheet" href="/ut-work24/css/survey.css">
+        <link rel="stylesheet" href="/ut-work24/css/task.css">
+        <link rel="stylesheet" href="/ut-work24/css/responsive.css">
+		<title>고용24 사용자 조사 - 설문 방법 안내</title>
+    </head>
+
+    <body>
+        <div class="survey_wrap">
+            <form id="surveyForm" class="survey_box" novalidate>
+                <input type="hidden" id="user_ut_id" name="user_ut_id">
+                <div class="survey_head">
+                    <span class="survey_badge">고용24 사용자 경험 조사</span>
+                    <h1 class="survey_title">설문 방법 안내</h1>
+                    <p class="survey_desc">화면에서 제시된 메뉴를 찾아 클릭하는 테스트를 진행합니다. 다음 화면에서 시작 안내창이 표시됩니다.</p>
+                    <ol class="step_list" aria-label="조사 진행 단계">
+                        <li><span class="sr_only">고용24 사용자 경험 조사</span></li>
+                        <li><span class="sr_only">참여 전 확인</span></li>
+                        <li class="is_current"><span class="sr_only">현재 단계: 설문 방법 안내</span></li>
+                        <li><span class="sr_only">메뉴 탐색 테스트</span></li>
+                        <li><span class="sr_only">주관식 의견 조사</span></li>
+                        <li><span class="sr_only">결과 제출</span></li>
+                    </ol>
+                </div>
+                <div class="survey_body">
+                    <main class="task_body">
+                        <section class="guide_card" aria-labelledby="guideTitle01">
+                            <h3 id="guideTitle01" class="guide_title"><span class="guide_number" aria-hidden="true">STEP 1</span>안내창에서 메뉴명을 확인합니다.</h3>
+                            <p class="guide_desc">테스트 시작 전에 찾아야 할 메뉴명을 알려드립니다. 어떤 메뉴를 찾아야 하는지 먼저 확인해 주세요.</p>
+                        </section>
+                        <section class="guide_card" aria-labelledby="guideTitle02">
+                            <h3 id="guideTitle02" class="guide_title"><span class="guide_number" aria-hidden="true">STEP 2</span>시작 버튼을 누르면 측정이 시작됩니다.</h3>
+                            <p class="guide_desc">시작 버튼을 누르면 안내창이 사라집니다. 이후 제시된 메뉴를 찾아 클릭해 주세요.</p>
+                        </section>
+                        <section class="guide_card" aria-labelledby="guideTitle03">
+                            <h3 id="guideTitle03" class="guide_title"><span class="guide_number" aria-hidden="true">STEP 3</span>자유롭게 메뉴를 찾아 클릭합니다.</h3>
+                            <p class="guide_desc">제시된 메뉴를 찾아 클릭하면 다음 단계로 넘어갑니다. 찾지 못해도 괜찮습니다. 일정 시간이 지나면 자동으로 넘어갑니다.</p>
+                        </section>
+                    </main>
+                    <!-- 버튼 -->
+                    <div class="task_button_area">
+                        <button type="button" class="btn_next" id="goTestPage">테스트 진행하기</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <script src="/ut-work24/js/jquery-3.7.1.min.js"></script>
+        <script src="/ut-work24/js/ut-c-common.js"></script>
+        <script src="/ut-work24/js/alert.js"></script>
+
+        <script>
+            $(function() {
+
+                $('#goTestPage').on('click', function() {
+
+                    location.href = '/ut-work24/group_c/ut-asis-b-cs.html';
+
+                });
+
+            });
+        </script>
+
+    </body>
+</html>

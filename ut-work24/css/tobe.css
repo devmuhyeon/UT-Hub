@@ -1,0 +1,9 @@
+@charset "utf-8";
+
+.new #gnb > ul > li#mm_spec_li {margin-left: 200px !important; display: flex; align-items: center;}
+.new #gnb > ul > li#mm_spec_li > a {height: 36px; padding: 0 10px;}
+.new #gnb > ul > li#mm_spec_li > a > span {font-size: 14px; color: var(--col_blue); padding: 0;}
+.new #gnb > ul > li#mm_spec_li > a::after, .new #gnb > ul > li#mm_spec_li > a > span::after {display: none;}
+.ico_tobe { margin-left: 4px; display: block; width: 24px; height: 24px; background: url(/ut-work24/include/images/ico24_arrow2_downm.svg) no-repeat; transform: rotate(0); transition: transform .2s; filter: invert(25%) sepia(89%) saturate(2000%) hue-rotate(220deg) brightness(85%) contrast(110%);}
+.new #gnb > ul > li#mm_spec_li > a[aria-expanded="true"] .ico_tobe {transform: rotate(-180deg);}
+.new #gnb > ul > li#mm_spec_li > a#mm_txt > span {font-size: 20px;}
