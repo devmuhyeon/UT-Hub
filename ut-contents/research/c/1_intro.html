@@ -54,7 +54,12 @@
         <script>
             $(function () {
                 sessionStorage.setItem('ut_group', 'C');
+
                 $('#btnStart').on('click', function () {
+                    UT_C.clearStorage();
+                    sessionStorage.removeItem('utCCoSurvey');
+                    sessionStorage.removeItem('utCUploadRequested');
+
                     location.href = '/ut-contents/research/c/2_survey.html';
                 });
             });
