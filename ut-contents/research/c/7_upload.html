@@ -38,113 +38,114 @@
 		<script src="/ut-contents/research/c/data/storage-c.js"></script>
 		<script>
 			$(function () {
+				'use strict';
 
-				var WEB_APP_URL = '';
+				var WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxc-IJIOZ8lJ5WxrugOyMlhpJiZ7QkMxT-2h-d81uUn4Bt485Rqqcjr964t_CkU1JkvwA/exec';
 
-				var SEND_LOCK_KEY = 'ut_upload_sent';
-				var SEND_LOCK_VALUE = 'Y';
+				var SEND_LOCK_KEY = 'utCUploadRequested';
+				var $popup = $('.answer_popup');
 
+				// 안내 메시지
 				function setMessage(title, message) {
 					$('.loading_bar').hide();
 					$('.result_title').text(title);
-					$('.result_message').html(message);
+					$('.result_message').text(message);
 				}
 
-				function pad(num) {
-					return String(num).padStart(2, '0');
-				}
-
-				function makeUserId() {
-					var savedId = sessionStorage.getItem('user_ut_id');
-
-					if (savedId) {
-						return savedId;
+				// 세션 데이터 조회
+				function readJson(key) {
+					try {
+						return JSON.parse(
+							sessionStorage.getItem(key) || '{}'
+						);
+					} catch (err) {
+						return {};
 					}
-
-					var group = sessionStorage.getItem('ut_group') || 'A';
-					var now = new Date();
-
-					var yy = String(now.getFullYear()).slice(2);
-					var mm = pad(now.getMonth() + 1);
-					var dd = pad(now.getDate());
-					var dateStr = yy + mm + dd;
-
-					var seqKey = 'ut_seq_' + group + '_' + dateStr;
-					var seq = Number(localStorage.getItem(seqKey) || 0) + 1;
-
-					localStorage.setItem(seqKey, seq);
-
-					var userId = group + '-' + dateStr + '-' + pad(seq);
-					sessionStorage.setItem('user_ut_id', userId);
-
-					return userId;
 				}
 
-				function hasValue(obj) {
-					var hasData = false;
-
-					$.each(obj, function (_, value) {
-						if (value !== null && value !== undefined && String(value).trim() !== '') {
-							hasData = true;
-							return false;
-						}
-					});
-
-					return hasData;
+				// 데이터 값 반환
+				function value(data, key) {
+					return data[key] === undefined ||
+						data[key] === null
+						? ''
+						: data[key];
 				}
 
-				if (sessionStorage.getItem(SEND_LOCK_KEY) === SEND_LOCK_VALUE) {
+				// 저장 스크립트 확인
+				if (typeof UT_C === 'undefined') {
 					setMessage(
-						'이미 제출되었습니다.',
-						'중복 제출을 방지하기 위해 추가 전송하지 않았습니다.'
+						'스크립트를 불러오지 못했습니다.',
+						'storage-c.js 경로를 확인해 주세요.'
 					);
 					return;
 				}
 
-				var surveyData = UT_A.getSurvey();
-				var taskData = UT_A.getTaskResult();
-				var coSurvey = JSON.parse(sessionStorage.getItem('utCoSurvey') || '{}');
-
-				var typeAAsis = taskData.typeAAsis || {};
-				var typeATobe = taskData.typeATobe || {};
-
-				if (!hasValue(surveyData) || !hasValue(typeAAsis) || !hasValue(typeATobe)) {
+				// 중복 전송 방지
+				if (sessionStorage.getItem(SEND_LOCK_KEY) === 'Y') {
 					setMessage(
-						'제출할 데이터가 없습니다.',
-						'테스트를 정상적으로 완료한 뒤 다시 제출해 주세요.'
+						'전송 요청 이력이 있습니다.',
+						'중복 전송을 막기 위해 다시 전송하지 않았습니다. 구글 시트 c 탭에서 저장 여부를 확인해 주세요.'
 					);
 					return;
 				}
 
-				sessionStorage.setItem(SEND_LOCK_KEY, SEND_LOCK_VALUE);
+				// 저장된 데이터 조회
+				var surveyData = UT_C.getSurvey();
+				var taskData = UT_C.getTaskResult();
+				var coSurvey = readJson('utCoSurvey');
 
+				var asis = taskData.typeCAsis || {};
+				var tobe = taskData.typeCTobe || {};
+
+				// 필수 데이터 확인
+				if (
+					!surveyData.age ||
+					!surveyData.experience ||
+					!surveyData.member ||
+					(asis.result !== 'success' && asis.result !== 'fail') ||
+					(tobe.result !== 'success' && tobe.result !== 'fail')
+				) {
+					setMessage(
+						'제출할 데이터가 부족합니다.',
+						'사전 설문과 As-is, To-be 화면 탐색을 모두 완료해야 결과를 제출할 수 있습니다.'
+					);
+					return;
+				}
+
+				// 구글 시트 전송 데이터
 				var resultData = {
-					groupNo: sessionStorage.getItem('ut_group') || 'A',
-					userId: makeUserId(),
-					createdAt: new Date().toISOString(),
+					groupNo: 'C',
 
-					age: surveyData.age || '',
-					experience: surveyData.experience || '',
-					member: surveyData.member || '',
+					// 사전 설문
+					age: value(surveyData, 'age'),
+					experience: value(surveyData, 'experience'),
+					member: value(surveyData, 'member'),
 
-					typeAAsisTargetMenu: typeAAsis.targetMenu || '',
-					typeAAsisFinalClickMenu: typeAAsis.finalClickMenu || '',
-					typeAAsisFailReason: typeAAsis.failReason || '',
-					typeAAsisClickCount: typeAAsis.clickCount || '',
-					typeAAsisDuration: typeAAsis.duration || '',
-					typeAAsisClickPath: typeAAsis.clickPath || '',
+					// AS-IS 결과
+					typeCAsisTargetMenu: value(asis, 'targetMenu'),
+					typeCAsisFinalClickMenu: value(asis, 'finalClickMenu'),
+					typeCAsisFailReason: value(asis, 'failReason'),
+					typeCAsisClickCount: value(asis, 'clickCount'),
+					typeCAsisDuration: value(asis, 'duration'),
+					typeCAsisClickPath: value(asis, 'clickPath'),
 
-					typeATobeTargetMenu: typeATobe.targetMenu || '',
-					typeATobeFinalClickMenu: typeATobe.finalClickMenu || '',
-					typeATobeFailReason: typeATobe.failReason || '',
-					typeATobeClickCount: typeATobe.clickCount || '',
-					typeATobeDuration: typeATobe.duration || '',
-					typeATobeClickPath: typeATobe.clickPath || '',
+					// TO-BE 결과
+					typeCTobeTargetMenu: value(tobe, 'targetMenu'),
+					typeCTobeFinalClickMenu: value(tobe, 'finalClickMenu'),
+					typeCTobeFailReason: value(tobe, 'failReason'),
+					typeCTobeClickCount: value(tobe, 'clickCount'),
+					typeCTobeDuration: value(tobe, 'duration'),
+					typeCTobeClickPath: value(tobe, 'clickPath'),
 
-					improveText: coSurvey.improveText || '',
+					// 주관식 및 브라우저
+					improveText: value(coSurvey, 'improveText'),
 					userAgent: navigator.userAgent
 				};
 
+				// 전송 요청 잠금
+				sessionStorage.setItem(SEND_LOCK_KEY, 'Y');
+
+				// Google Apps Script 전송
 				fetch(WEB_APP_URL, {
 					method: 'POST',
 					mode: 'no-cors',
@@ -154,74 +155,88 @@
 					body: JSON.stringify(resultData)
 				})
 				.then(function () {
-
-					$('.loading_card').html(
-
-						'<strong class="result_title">답변이 제출되었습니다.</strong>' +
-
-						'<p class="result_message">' +
-							'설문이 완료되었습니다. 감사합니다! 😊<br>' +
-							'바쁘신 중에도 끝까지 참여해 주셔서 진심으로 감사드립니다.<br>' +
-							'소중한 의견은 고용24 서비스 개선에 반영하겠습니다.' +
-						'</p>' +
-
-						'<button type="button" class="btn_answer_open">' +
-							'정답이 궁금하신가요?' +
-						'</button>'
-
+					setMessage(
+						'전송 요청이 완료되었습니다.',
+						'실제 저장 여부는 구글 스프레드시트 c 탭에서 확인해 주세요.'
 					);
 
-					UT_A.clearStorage();
+					$('.loading_card').append(
+						'<button type="button" class="btn_answer_open">' +
+						'정답이 궁금하신가요?' +
+						'</button>'
+					);
 
-					sessionStorage.removeItem('utCoSurvey');
-					sessionStorage.removeItem('utFinalResult');
-					sessionStorage.removeItem('ut_group');
-					sessionStorage.removeItem('user_ut_id');
-
+					// 서버 저장 확인 전 데이터 삭제하지 않음
 				})
 				.catch(function () {
 					sessionStorage.removeItem(SEND_LOCK_KEY);
 
 					setMessage(
-						'전송에 실패했습니다.',
-						'새로고침 후 다시 시도해 주세요.'
+						'전송 요청에 실패했습니다.',
+						'인터넷 연결을 확인하고 새로고침해 다시 시도해 주세요.'
 					);
 				});
+
+				// 정답 팝업 열기
 				$(document).on(
 					'click',
 					'.btn_answer_open',
 					function () {
+						$('.result_wrap')
+							.prop('inert', true)
+							.attr('aria-hidden', 'true');
 
-						$('.answer_popup')
-							.stop(true, true)
+						$popup
 							.prop('hidden', false)
 							.hide()
-							.fadeIn(200);
-
+							.fadeIn(200, function () {
+								$(this)
+									.find('.btn_answer_close')
+									.trigger('focus');
+							});
 					}
 				);
+
+				// 정답 팝업 닫기
+				function closeAnswer() {
+					$popup
+						.stop(true, true)
+						.fadeOut(200, function () {
+							$popup.prop('hidden', true);
+
+							$('.result_wrap')
+								.prop('inert', false)
+								.removeAttr('aria-hidden');
+
+							$('.btn_answer_open').trigger('focus');
+						});
+				}
 
 				$(document).on(
 					'click',
 					'.btn_answer_close, .answer_popup_dim',
-					function () {
-
-						$('.answer_popup')
-							.stop(true, true)
-							.fadeOut(
-								200,
-								function () {
-
-									$(this).prop(
-										'hidden',
-										true
-									);
-
-								}
-							);
-
-					}
+					closeAnswer
 				);
+
+				// 팝업 키보드 접근성
+				$(document).on('keydown', function (e) {
+					if ($popup.prop('hidden')) return;
+
+					// ESC 닫기
+					if (e.which === 27) {
+						e.preventDefault();
+						closeAnswer();
+					}
+
+					// 포커스 순환
+					else if (e.which === 9) {
+						e.preventDefault();
+
+						$popup
+							.find('.btn_answer_close')
+							.trigger('focus');
+					}
+				});
 			});
 		</script>
 	</body>

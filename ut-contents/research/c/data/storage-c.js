@@ -1,33 +1,52 @@
-var UT_A = (function () {
+
+/* Group C | 설문 및 화면 탐색 결과 임시 저장 */
+var UT_C = (function () {
     'use strict';
 
+    var surveyKey = 'utCSurveyData';
+    var taskKey = 'utCTaskResult';
+
+    function read(key) {
+        try {
+            var value = JSON.parse(sessionStorage.getItem(key) || '{}');
+
+            return value && typeof value === 'object' && !Array.isArray(value)
+                ? value
+                : {};
+        } catch (e) {
+            return {};
+        }
+    }
+
     function saveSurvey(data) {
-        sessionStorage.setItem('utSurveyData', JSON.stringify(data));
+        sessionStorage.setItem(surveyKey, JSON.stringify(data));
     }
 
     function getSurvey() {
-        return JSON.parse(sessionStorage.getItem('utSurveyData') || '{}');
+        return read(surveyKey);
     }
 
     function saveTask(key, data) {
-        var taskData = getTaskResult();
-        taskData[key] = data;
-        sessionStorage.setItem('utTaskResult', JSON.stringify(taskData));
+        var tasks = getTaskResult();
+
+        tasks[key] = data;
+
+        sessionStorage.setItem(taskKey, JSON.stringify(tasks));
     }
 
     function getTaskResult() {
-        return JSON.parse(sessionStorage.getItem('utTaskResult') || '{}');
+        return read(taskKey);
     }
 
-    function makeClickPath(clickLogs) {
-        return $.map(clickLogs, function (item) {
+    function makeClickPath(logs) {
+        return $.map(logs, function (item) {
             return item.text + '[' + item.second + 's]';
         }).join(' > ');
     }
 
     function clearStorage() {
-        sessionStorage.removeItem('utSurveyData');
-        sessionStorage.removeItem('utTaskResult');
+        sessionStorage.removeItem(surveyKey);
+        sessionStorage.removeItem(taskKey);
     }
 
     return {
