@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>고용24 전체메뉴 AS-IS</title>
-    <link rel="stylesheet" href="../include/css/reset.css">
-    <link rel="stylesheet" href="../include/css/font.css">
-    <link rel="stylesheet" href="../include/css/common.css">
-    <link rel="stylesheet" href="../include/css/contents.css">
+    <link rel="stylesheet" href="../../../include/css/reset.css">
+    <link rel="stylesheet" href="../../../include/css/font.css">
+    <link rel="stylesheet" href="../../../include/css/common.css">
+    <link rel="stylesheet" href="../../../include/css/contents.css">
     <style>
         /* :root { --col_blue:#3F58D4; --col_green:#24A960; --col_green2:#117935;} */
         .tab_wrap.line_type .site_info { background-color: --col_blue;}
@@ -24,15 +24,15 @@
         .site_map {display: grid; grid-template-columns: 340px 400px 380px 300px; grid-gap: 10px;/*min-width:-webkit-fill-available*/}
         .menu_tit {min-width:200px;}
         .btn_link_new {display:inline-block; padding-left:20px;}
-        .btn_link_new:not(.lnb > ul *):before, .lnb .btn_link_new::after {content:'';display:block;position:absolute;left:0;top:5px;width:16px;height:16px;background:url("../include/images/ico16_share.svg") no-repeat 0;}
+        .btn_link_new:not(.lnb > ul *):before, .lnb .btn_link_new::after {content:'';display:block;position:absolute;left:0;top:5px;width:16px;height:16px;background:url("../../../include/images/ico16_share.svg") no-repeat 0;}
         .btn_link_new.right {padding-right:20px;padding-left:0;}
         .btn_link_new:not(.lnb > ul *).right:before, .lnb .btn_link_new.blue.right::after {right:0;left:auto;}
-        .btn_link_new:not(.lnb > ul *).active:before, .lnb .btn_link_new.active::after {background:url("../include/images/ico16_share_green.svg") no-repeat 0;}
+        .btn_link_new:not(.lnb > ul *).active:before, .lnb .btn_link_new.active::after {background:url("../../../include/images/ico16_share_green.svg") no-repeat 0;}
         .site_info li.line::after { content: ''; display: block; position: absolute; left: 185px; top: 50%; width: 1px; height: 12px; margin-top: -14px; background-color: #eee;}
         .site_intro {padding-bottom:16px; border-bottom:1px solid #ddd;}
         .site_input_txt {width:100%;height:36px;padding:0 26px 0 8px;background-color:#f5f5f5;border:1px solid #f5f5f5;border-radius:20px;color:#111;-webkit-appearance:none !important;font-size:16px;vertical-align:top}
-        .siteMap_ico09{background:url("../include/images/ico32_close02.svg") no-repeat;background-size:24px 24px; vertical-align:middle; margin:12px 20px 0px 20px;width:24px;height:24px;}
-        .searchClose{position:absolute;right:12px;top:50%;margin-top:-10px;width:20px;height:20px;background:url("../include/images/ico32_close02.svg") no-repeat; vertical-align:middle; background-size: 20px 20px;}
+        .siteMap_ico09{background:url("../../../include/images/ico32_close02.svg") no-repeat;background-size:24px 24px; vertical-align:middle; margin:12px 20px 0px 20px;width:24px;height:24px;}
+        .searchClose{position:absolute;right:12px;top:50%;margin-top:-10px;width:20px;height:20px;background:url("../../../include/images/ico32_close02.svg") no-repeat; vertical-align:middle; background-size: 20px 20px;}
 
         .tab_wrap.line_type {position:relative}
         .tab_wrap.line_type .site_info {padding-top:10px; margin-left:50px; display:flex;}
@@ -48,12 +48,12 @@
         .full_pop_site.max { min-width:100%;min-height:100%}
         .full_pop_site .head { position:relative;padding:0 0 24px;margin-bottom:24px; padding-right: 30px; border-bottom:1px solid #eee;text-align:left;min-height:auto;z-index: 20998;}
         .full_pop_site .head.type2 {margin-bottom:0;border-bottom:none}
-        .full_pop_site > .closed {display:block;position:absolute;right:40px;top:36px;height:32px;width:32px; background:url("../include/images/ico32_close.svg") no-repeat 0 0;z-index:20999}
+        .full_pop_site > .closed {display:block;position:absolute;right:40px;top:36px;height:32px;width:32px; background:url("../../../include/images/ico32_close.svg") no-repeat 0 0;z-index:20999}
         .full_pop_site > .cont {overflow-y:scroll;height:100%;max-height:calc(100vh - 200px); position:absolute; top:190px; margin:0px 100px 0px 150px;z-index:10;}
         .full_pop_site > .cont.overflow_x {position: relative;}
         .txt_list {line-height:28px;/*font-size: 15px !important;*/margin-top:-5px !important;}
         .site_search_wrap{/* display:none; */z-index:31000;position:absolute;top:55px;left:-30px;width:102%;padding:0px 30px 40px 30px;border-bottom:2px solid var(--col_green);background:var(--col_white);box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.10);}
-        .fixed_Bg {position:fixed; bottom:10px; right:120px; background:url("../include/images/symbol.png") no-repeat;z-index:6;width:500px;height:444px;}
+        .fixed_Bg {position:fixed; bottom:10px; right:120px; background:url("../../../include/images/symbol.png") no-repeat;z-index:6;width:500px;height:444px;}
         .sitemap_wdt { min-width: 1200px; max-width:1248px; margin: 10px auto 0 !important;}
 
 
@@ -163,7 +163,7 @@
         #sitemappopup .menuLevel4 li a::before { content: '-'; overflow: hidden; display: block; height: 18px; margin-right: 4px; background-color: initial;}
         #sitemappopup .box_list_area .txt_list a.is_level4 { position: relative; max-width: 100%; width: 100%;}
         #sitemappopup .box_list_area .txt_list a.is_level4.active { color: var(--col_skyblue); text-decoration: underline;}
-        #sitemappopup .box_list_area .txt_list a.is_level4::after { content: ''; display: block; position: absolute; right: 0; top: 5px; width: 16px; height: 16px; background: url("../include/images/ico16_line_up_gray.svg") no-repeat; transform: rotate(180deg); transition: transform .2s;}
+        #sitemappopup .box_list_area .txt_list a.is_level4::after { content: ''; display: block; position: absolute; right: 0; top: 5px; width: 16px; height: 16px; background: url("../../../include/images/ico16_line_up_gray.svg") no-repeat; transform: rotate(180deg); transition: transform .2s;}
         #sitemappopup .box_list_area .txt_list a.is_level4.active:after { transform: rotate(0);}
         /* 251219 4뎁스 메뉴 end */
 
@@ -2999,10 +2999,10 @@
     <p id="menu-status" class="blind" role="status" aria-live="polite">
         
     </p>
-    <script src="../include/js/jquery-3.6.3.min.js">
+    <script src="../../../include/js/jquery-3.6.3.min.js">
         
     </script>
-    <script src="../include/js/allmenu.js">
+    <script src="../../../include/js/allmenu.js">
         
     </script>
     </body>
