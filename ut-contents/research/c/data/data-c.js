@@ -3,7 +3,7 @@
 $(function () {
     'use strict';
 
-    var basePath = '/ut-contents/research/c/';
+    var basePath = './research/c/';
     var pageName = location.pathname.split('/').pop();
     var isAsis = pageName === '4_survey_asis.html';
     var isTobe = pageName === '5_survey_tobe.html';
