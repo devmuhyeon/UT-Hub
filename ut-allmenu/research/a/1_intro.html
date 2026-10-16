@@ -5,12 +5,12 @@
         <script src="/UT-Hub/include/ut_common/js/not_mobile.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link rel="stylesheet" href="/ut-work24/css/reset.css">
-        <link rel="stylesheet" href="/ut-work24/css/font.css">
-        <link rel="stylesheet" href="/ut-work24/css/common.css">
-        <link rel="stylesheet" href="/ut-work24/css/survey.css">
-        <link rel="stylesheet" href="/ut-work24/css/intro.css">
-        <link rel="stylesheet" href="/ut-work24/css/responsive.css">
+        <link rel="stylesheet" href="/UT-Hub/include/css/reset.css">
+        <link rel="stylesheet" href="/UT-Hub/include/css/font.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/ut-common.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/survey.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/intro.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/responsive.css">
 		<title>고용24 사용자 경험 조사</title>
     </head>
 
@@ -31,14 +31,13 @@
                     </ol>
                 </div>
                 <div class="survey_body">
-                    <section class="fieldset_group" aria-labelledby="intro_title">
+                    <section class="fieldset_group">
                             <p class="intro_text">
                                 안녕하세요, 고용24입니다.<br>
                                 더 편리한 서비스를 만들기 위해 사용자 경험 조사를 진행하고 있습니다.<br>
                                 느끼신 점들을 솔직하게 답해주시면 서비스 개선에 소중하게 반영하겠습니다.<br>
                                 응답 내용은 서비스 개선 목적으로만 활용되며 약 3분 정도 소요됩니다.<br>
                                 <strong>바쁘신 중에도 조사에 참여해주셔서 진심으로 감사드립니다.</strong>
-                                
                             </p>
                     </section>
                     <div class="button_area">
@@ -49,13 +48,19 @@
         </div>
 
         <script src="/UT-Hub/include/js/jquery-3.7.1.min.js"></script>
-        <script src="/ut-work24/js/ut-b-common.js"></script>
         <script src="/UT-Hub/include/ut_common/js/lock_back.js"></script>
+
+        <script src="/UT-Hub/ut-allmenu/research/a/data/storage-a.js"></script>
         <script>
             $(function () {
-                sessionStorage.setItem('ut_group', 'B');
+                sessionStorage.setItem('ut_group', 'A');
+
                 $('#btnStart').on('click', function () {
-                    location.href = '/ut-allmenu/research/2_survey.html';
+                    UT_C.clearStorage();
+                    sessionStorage.removeItem('utCCoSurvey');
+                    sessionStorage.removeItem('utCUploadRequested');
+
+                    location.href = '/UT-Hub/ut-allmenu/research/a/2_survey.html';
                 });
             });
         </script>

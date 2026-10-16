@@ -5,12 +5,13 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 		<title>고용24 사용자 조사 - 결과 전송</title>
-		<link rel="stylesheet" href="/ut-work24/css/reset.css">
-		<link rel="stylesheet" href="/ut-work24/css/font.css">
-		<link rel="stylesheet" href="/ut-work24/css/common.css">
-		<link rel="stylesheet" href="/ut-work24/css/survey.css">
-		<link rel="stylesheet" href="/ut-work24/css/upload.css">
-		<link rel="stylesheet" href="/ut-work24/css/responsive.css">
+		
+		<link rel="stylesheet" href="/UT-Hub/include/css/reset.css">
+        <link rel="stylesheet" href="/UT-Hub/include/css/font.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/ut-common.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/survey.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/responsive.css">
+		<link rel="stylesheet" href="/UT-Hub/include/ut_common/css/upload.css">
 	</head>
 
 	<body>
@@ -27,123 +28,128 @@
 			<div class="answer_popup_inner">
 				<button type="button" class="btn_answer_close" aria-label="팝업 닫기">✕</button>
 				<h5>메뉴 정답 화면</h5>
-				<img src="/ut-work24/images/ttt-a.png" alt="메뉴 정답 예시 화면">
+				<div class="answer_dp_img">
+					<img src="/UT-Hub/ut-allmenu/source/images/employment_trends_asis.jpg" alt="메뉴 정답 예시 화면 As-is">
+					<img src="/UT-Hub/ut-allmenu/source/images/employment_trends_tobe.jpg" alt="메뉴 정답 예시 화면 To-be">
+				</div>
 			</div>
 		</div>
 
 		
 		<script src="/UT-Hub/include/js/jquery-3.7.1.min.js"></script>
-		<script src="/ut-work24/js/ut-a-common.js"></script>
 		<script src="/UT-Hub/include/ut_common/js/lock_back.js"></script>
+		
+		<script src="/UT-Hub/ut-allmenu/research/a/data/storage-a.js"></script>
+
 		<script>
 			$(function () {
+				'use strict';
 
-				var WEB_APP_URL = '';
+				var WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw4fJmHIkRS9xy1AGgs3xax35xue7jEmQtcNNSEiHusZAxL_TldWBfqtLLTBzH5paLSxg/exec';
 
-				var SEND_LOCK_KEY = 'ut_upload_sent';
-				var SEND_LOCK_VALUE = 'Y';
+				var SEND_LOCK_KEY = 'utCUploadRequested';
+				var $popup = $('.answer_popup');
 
+				// 안내 메시지
 				function setMessage(title, message) {
 					$('.loading_bar').hide();
 					$('.result_title').text(title);
-					$('.result_message').html(message);
+					$('.result_message').text(message);
 				}
 
-				function pad(num) {
-					return String(num).padStart(2, '0');
-				}
-
-				function makeUserId() {
-					var savedId = sessionStorage.getItem('user_ut_id');
-
-					if (savedId) {
-						return savedId;
+				// 저장 데이터 조회
+				function readJson(key) {
+					try {
+						return JSON.parse(
+							sessionStorage.getItem(key) || '{}'
+						);
+					} catch (err) {
+						return {};
 					}
-
-					var group = sessionStorage.getItem('ut_group') || 'A';
-					var now = new Date();
-
-					var yy = String(now.getFullYear()).slice(2);
-					var mm = pad(now.getMonth() + 1);
-					var dd = pad(now.getDate());
-					var dateStr = yy + mm + dd;
-
-					var seqKey = 'ut_seq_' + group + '_' + dateStr;
-					var seq = Number(localStorage.getItem(seqKey) || 0) + 1;
-
-					localStorage.setItem(seqKey, seq);
-
-					var userId = group + '-' + dateStr + '-' + pad(seq);
-					sessionStorage.setItem('user_ut_id', userId);
-
-					return userId;
 				}
 
-				function hasValue(obj) {
-					var hasData = false;
-
-					$.each(obj, function (_, value) {
-						if (value !== null && value !== undefined && String(value).trim() !== '') {
-							hasData = true;
-							return false;
-						}
-					});
-
-					return hasData;
+				// 데이터 값 반환
+				function value(data, key) {
+					return data[key] === undefined ||
+						data[key] === null
+						? ''
+						: data[key];
 				}
 
-				if (sessionStorage.getItem(SEND_LOCK_KEY) === SEND_LOCK_VALUE) {
+				// 저장 스크립트 확인
+				if (typeof UT_C === 'undefined') {
 					setMessage(
-						'이미 제출되었습니다.',
-						'중복 제출을 방지하기 위해 추가 전송하지 않았습니다.'
+						'내용을 불러오지 못했습니다.'
 					);
 					return;
 				}
 
-				var surveyData = UT_A.getSurvey();
-				var taskData = UT_A.getTaskResult();
-				var coSurvey = JSON.parse(sessionStorage.getItem('utCoSurvey') || '{}');
-
-				var typeAAsis = taskData.typeAAsis || {};
-				var typeATobe = taskData.typeATobe || {};
-
-				if (!hasValue(surveyData) || !hasValue(typeAAsis) || !hasValue(typeATobe)) {
+				// 중복 전송 방지
+				if (sessionStorage.getItem(SEND_LOCK_KEY) === 'Y') {
 					setMessage(
-						'제출할 데이터가 없습니다.',
-						'테스트를 정상적으로 완료한 뒤 다시 제출해 주세요.'
+						'전송 요청 이력이 있습니다.',
+						'중복 전송을 방지하기 위해 다시 전송하지 않았습니다.'
 					);
 					return;
 				}
 
-				sessionStorage.setItem(SEND_LOCK_KEY, SEND_LOCK_VALUE);
+				// 설문 및 테스트 결과 조회
+				var surveyData = UT_C.getSurvey();
+				var taskData = UT_C.getTaskResult();
+				var coSurvey = readJson('utCCoSurvey');
 
+				var asis = taskData.typeCAsis || {};
+				var tobe = taskData.typeCTobe || {};
+
+				// 필수 데이터 검증
+				if (
+					!surveyData.age ||
+					!surveyData.experience ||
+					!surveyData.member ||
+					(asis.result !== 'success' && asis.result !== 'fail') ||
+					(tobe.result !== 'success' && tobe.result !== 'fail')
+				) {
+					setMessage(
+						'제출할 데이터가 부족합니다.',
+						'사전 설문과 화면 탐색을 모두 완료한 뒤 제출해 주세요.'
+					);
+					return;
+				}
+
+				// C그룹 전송 데이터
 				var resultData = {
-					groupNo: sessionStorage.getItem('ut_group') || 'A',
-					userId: makeUserId(),
-					createdAt: new Date().toISOString(),
+					groupNo: 'C',
 
-					age: surveyData.age || '',
-					experience: surveyData.experience || '',
-					member: surveyData.member || '',
+					// 참여 전 확인
+					age: value(surveyData, 'age'),
+					experience: value(surveyData, 'experience'),
+					member: value(surveyData, 'member'),
 
-					typeAAsisTargetMenu: typeAAsis.targetMenu || '',
-					typeAAsisFinalClickMenu: typeAAsis.finalClickMenu || '',
-					typeAAsisFailReason: typeAAsis.failReason || '',
-					typeAAsisClickCount: typeAAsis.clickCount || '',
-					typeAAsisDuration: typeAAsis.duration || '',
-					typeAAsisClickPath: typeAAsis.clickPath || '',
+					// AS-IS
+					typeCAsisTargetMenu1: value(asis, 'targetMenu1'),
+					typeCAsisFinalClickMenu: value(asis, 'finalClickMenu'),
+					typeCAsisFailReason: value(asis, 'failReason'),
+					typeCAsisClickCount: value(asis, 'clickCount'),
+					typeCAsisDuration: value(asis, 'duration'),
+					typeCAsisClickPath: value(asis, 'clickPath'),
 
-					typeATobeTargetMenu: typeATobe.targetMenu || '',
-					typeATobeFinalClickMenu: typeATobe.finalClickMenu || '',
-					typeATobeFailReason: typeATobe.failReason || '',
-					typeATobeClickCount: typeATobe.clickCount || '',
-					typeATobeDuration: typeATobe.duration || '',
-					typeATobeClickPath: typeATobe.clickPath || '',
+					// TO-BE
+					typeCTobeTargetMenu2: value(tobe, 'targetMenu2'),
+					typeCTobeFinalClickMenu: value(tobe, 'finalClickMenu'),
+					typeCTobeFailReason: value(tobe, 'failReason'),
+					typeCTobeClickCount: value(tobe, 'clickCount'),
+					typeCTobeDuration: value(tobe, 'duration'),
+					typeCTobeClickPath: value(tobe, 'clickPath'),
 
-					improveText: coSurvey.improveText || '',
+					// 주관식 및 브라우저
+					improveText: value(coSurvey, 'improveText'),
 					userAgent: navigator.userAgent
 				};
 
+				// 전송 요청 잠금
+				sessionStorage.setItem(SEND_LOCK_KEY, 'Y');
+
+				// 구글 스프레드시트 전송
 				fetch(WEB_APP_URL, {
 					method: 'POST',
 					mode: 'no-cors',
@@ -154,74 +160,105 @@
 				})
 				.then(function () {
 
-					$('.loading_card').html(
-
-						'<strong class="result_title">답변이 제출되었습니다.</strong>' +
-
-						'<p class="result_message">' +
-							'설문이 완료되었습니다. 감사합니다! 😊<br>' +
-							'바쁘신 중에도 끝까지 참여해 주셔서 진심으로 감사드립니다.<br>' +
-							'소중한 의견은 고용24 서비스 개선에 반영하겠습니다.' +
-						'</p>' +
-
-						'<button type="button" class="btn_answer_open">' +
-							'정답이 궁금하신가요?' +
-						'</button>'
-
+					setMessage(
+						'전송 요청이 완료되었습니다.',
+						'설문에 참여해 주셔서 감사합니다.'
 					);
 
-					UT_A.clearStorage();
+					$('.loading_card').append(
+						'<button type="button" class="btn_answer_open">' +
+						'정답이 궁금하신가요?' +
+						'</button>'
+					);
 
-					sessionStorage.removeItem('utCoSurvey');
-					sessionStorage.removeItem('utFinalResult');
-					sessionStorage.removeItem('ut_group');
-					sessionStorage.removeItem('user_ut_id');
-
+					// 저장 확인 전까지 세션 데이터 유지
 				})
 				.catch(function () {
+
 					sessionStorage.removeItem(SEND_LOCK_KEY);
 
 					setMessage(
-						'전송에 실패했습니다.',
-						'새로고침 후 다시 시도해 주세요.'
+						'전송 요청에 실패했습니다.',
+						'인터넷 연결을 확인한 후 새로고침해 다시 시도해 주세요.'
 					);
 				});
-				$(document).on(
-					'click',
-					'.btn_answer_open',
-					function () {
 
-						$('.answer_popup')
-							.stop(true, true)
-							.prop('hidden', false)
-							.hide()
-							.fadeIn(200);
+				// 팝업 접근성 속성 설정
+				$popup.attr({
+					'role': 'dialog',
+					'aria-modal': 'true',
+					'aria-labelledby': 'answerTitleC'
+				});
 
-					}
-				);
+				$popup.find('h5').first().attr('id', 'answerTitleC');
+				$popup.find('.answer_popup_dim').attr('aria-hidden', 'true');
+
+				// 정답 팝업 열기
+				$(document).on('click', '.btn_answer_open', function () {
+
+					$('.result_wrap')
+						.prop('inert', true)
+						.attr('aria-hidden', 'true');
+
+					$popup
+						.stop(true, true)
+						.prop('hidden', false)
+						.hide()
+						.fadeIn(200, function () {
+							$popup
+								.find('.btn_answer_close')
+								.trigger('focus');
+						});
+				});
+
+				// 정답 팝업 닫기
+				function closeAnswer() {
+
+					$popup
+						.stop(true, true)
+						.fadeOut(200, function () {
+
+							$popup.prop('hidden', true);
+
+							$('.result_wrap')
+								.prop('inert', false)
+								.removeAttr('aria-hidden');
+
+							$('.btn_answer_open').trigger('focus');
+						});
+				}
 
 				$(document).on(
 					'click',
 					'.btn_answer_close, .answer_popup_dim',
 					function () {
-
-						$('.answer_popup')
-							.stop(true, true)
-							.fadeOut(
-								200,
-								function () {
-
-									$(this).prop(
-										'hidden',
-										true
-									);
-
-								}
-							);
-
+						closeAnswer();
 					}
 				);
+
+				// 팝업 키보드 접근성
+				$(document).on('keydown', function (e) {
+
+					if ($popup.prop('hidden')) return;
+
+					// ESC: 팝업 닫기
+					if (e.which === 27) {
+						e.preventDefault();
+						closeAnswer();
+						return;
+					}
+
+					// Tab: 팝업 내부 포커스 유지
+					if (e.which === 9) {
+						e.preventDefault();
+
+						$popup
+							.find('.btn_answer_close')
+							.trigger('focus');
+					}
+				});
 			});
 		</script>
+
 	</body>
 </html>
