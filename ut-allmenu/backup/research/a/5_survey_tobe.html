@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko" style="overflow: hidden;">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>고용24 사용자 조사 - 메뉴 탐색 테스트</title>
+		
+		<link rel="stylesheet" href="/UT-Hub/include/css/reset.css">
+        <link rel="stylesheet" href="/UT-Hub/include/css/font.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/ut-common.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/survey.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/task.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/responsive.css">
+		<link rel="stylesheet" href="/UT-Hub/include/ut_common/css/ut-test.css">
+	</head>
+
+	<body>
+		<div id="utPage" class="ut_page" aria-hidden="true">
+			<iframe id="testFrame" class="ut_frame" title="고용24 화면 탐색 테스트 화면" src="/UT-Hub/ut-allmenu/source/frame/employment_trends-tobe.html"></iframe>
+			<div class="step_floating" role="status" aria-live="polite">
+				<div class="survey_head">
+					<p class="survey_infotxt">화면에서 <span class="aaa_info">'쉽게 보는 고용정보'</span> 메뉴를 찾아주세요.</p>
+
+					<ol class="step_list" aria-label="조사 진행 단계">
+                        <li><span class="sr_only">고용24 사용자 경험 조사</span></li>
+                        <li><span class="sr_only">참여 전 확인</span></li>
+                        <li><span class="sr_only">설문 방법 안내</span></li>
+                        <li class="is_current"><span class="sr_only">현재 단계: 메뉴 탐색 테스트</span></li>
+						<li><span class="sr_only">주관식 의견 조사</span></li>
+                        <li><span class="sr_only">결과 제출</span></li>
+                    </ol>
+				</div>
+			</div>
+		</div>
+
+		<!-- 시작 팝업 -->
+		<div id="utOverlay" class="ut_overlay" role="dialog" aria-modal="true" aria-labelledby="utOverlayTitle" aria-describedby="utOverlayDesc">
+			<div class="ut_alert">
+				<span class="survey_logo"><img src="/UT-Hub/include/images/logo.svg"></span>
+				<h1 id="utOverlayTitle" class="ut_alert_title">총 2개의 메뉴를 찾습니다.<br> 두 번째 테스트를 시작합니다.</h1>
+				<p id="utOverlayDesc" class="ut_alert_desc">아래에 제시된 메뉴를 찾아 클릭해 주세요. <br>'시작하기' 버튼을 누르면 안내창이 사라지고 측정이 시작됩니다.</p>
+				<div class="ut_target_box">
+					<span class="ut_target_tit">찾아야 할 메뉴</span>
+					<strong id="targetMenuName">쉽게 보는 고용정보</strong>
+					<span class="small_trget_txt">(카드뉴스/인포그래픽)</span>
+				</div>
+				<button type="button" id="startTest" class="btn_start">시작하기</button>
+			</div>
+		</div>
+
+
+		<!-- 성공 팝업 -->
+		<div id="successPopup" class="ut_result_overlay" role="dialog" aria-modal="true" aria-labelledby="successTitle" aria-describedby="successDesc" hidden>
+			<div class="ut_result_box">
+				<span class="survey_logo"><img src="/UT-Hub/include/images/logo.svg"></span>
+				<h2 id="successTitle" class="ut_alert_title">메뉴를 찾으셨네요!</h2>
+				<p id="successDesc" class="ut_alert_desc">다음 단계로 넘어갑니다.</p>
+				<button type="button" class="btn_next">다음 단계로 이동</button>
+			</div>
+		</div>
+
+		<!-- 실패 사유 팝업 -->
+		<div id="failPopup" class="ut_result_overlay" role="dialog" aria-modal="true" aria-labelledby="failTitle" aria-describedby="failDesc" hidden>
+			<div class="ut_result_box">
+				<span class="survey_logo"><img src="/UT-Hub/include/images/logo.svg"></span>
+				<h2 id="failTitle" class="ut_alert_title">메뉴를 찾기 어려우셨나요?</h2>
+				<p id="failDesc" class="ut_alert_desc">시간이 초과되었어요. <br>아래 질문에 답해주시면 다음 단계로 넘어갑니다.</p>
+				<fieldset class="fail_radio_group">
+					<legend class="sr_only">실패 이유 선택</legend>
+					<div class="radio_item">
+						<input type="radio" id="failReason01" name="failReason" value="메뉴가 눈에 잘 보이지 않아요.">
+						<label for="failReason01">메뉴가 눈에 잘 보이지 않아요.</label>
+					</div>
+					<div class="radio_item">
+						<input type="radio" id="failReason02" name="failReason" value="다른 메뉴와 모양이 달라서 메뉴인줄 몰랐어요.">
+						<label for="failReason02">다른 메뉴와 모양이 달라서 메뉴인줄 몰랐어요.</label>
+					</div>
+					<div class="radio_item">
+						<input type="radio" id="failReason03" name="failReason" value="어느 메뉴 안에 있는지 모르겠어요.">
+						<label for="failReason03">어느 메뉴 안에 있는지 모르겠어요.</label>
+					</div>
+					<div class="radio_item">
+						<input type="radio" id="failReason04" name="failReason" value="메뉴가 너무 많아요.">
+						<label for="failReason04">메뉴가 너무 많아요.</label>
+					</div>
+					<div class="radio_item">
+						<input type="radio" id="failReason05" name="failReason" value="메뉴 이름이 생소해요.">
+						<label for="failReason05">메뉴 이름이 생소해요.</label>
+					</div>
+					<div class="radio_item">
+						<input type="radio" id="failReason06" name="failReason" value="메뉴 이름이 기억나지 않아요.">
+						<label for="failReason06">메뉴 이름이 기억나지 않아요.</label>
+					</div>
+					<div class="radio_item">
+						<input type="radio" id="failReason07" name="failReason" value="평소에 찾던 경로와 달라요.">
+						<label for="failReason07">평소에 찾던 경로와 달라요.</label>
+					</div>
+					<div class="radio_item">
+						<input type="radio" id="failReason08" name="failReason" value="메뉴를 눌렀는데 화면이 이동하지 않았어요.">
+						<label for="failReason08">메뉴를 눌렀는데 화면이 이동하지 않았어요.</label>
+					</div>
+					<div class="radio_item">
+						<input type="radio" id="failReason09" name="failReason" value="클릭되는 메뉴인지 몰랐어요.">
+						<label for="failReason09">클릭되는 메뉴인지 몰랐어요.</label>
+					</div>
+				</fieldset>
+				<button type="button" class="btn_next">다음 단계로 이동</button>
+			</div>
+		</div>
+
+		<script src="/UT-Hub/include/js/jquery-3.7.1.min.js"></script>
+		<script src="/UT-Hub/include/ut_common/js/lock_back.js"></script>
+
+		<script src="/UT-Hub/ut-allmenu/research/a/data/storage-a.js"></script>
+		<script src="/UT-Hub/ut-allmenu/research/a/data/data-a.js"></script>
+		
+		
+	</body>
+</html>

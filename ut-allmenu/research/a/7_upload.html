@@ -29,8 +29,8 @@
 				<button type="button" class="btn_answer_close" aria-label="팝업 닫기">✕</button>
 				<h5>메뉴 정답 화면</h5>
 				<div class="answer_dp_img">
-					<img src="/UT-Hub/ut-allmenu/source/images/employment_trends_asis.jpg" alt="메뉴 정답 예시 화면 As-is">
-					<img src="/UT-Hub/ut-allmenu/source/images/employment_trends_tobe.jpg" alt="메뉴 정답 예시 화면 To-be">
+					<p>AS-IS: 고객센터 → 고용24 소개 → 사이트 소개</p>
+					<p>TO-BE: 채용정보 → 채용정보 상세검색</p>
 				</div>
 			</div>
 		</div>
@@ -45,9 +45,7 @@
 			$(function () {
 				'use strict';
 
-				var WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw4fJmHIkRS9xy1AGgs3xax35xue7jEmQtcNNSEiHusZAxL_TldWBfqtLLTBzH5paLSxg/exec';
-
-				var SEND_LOCK_KEY = 'utCUploadRequested';
+				var WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxziPxC0tLtgmEcMGoJDJQMAmPmclziT1-ibukm0kXsFC7OzqmIb5NiYw-VMFKh3GOvQg/exec';
 				var $popup = $('.answer_popup');
 
 				// 안내 메시지
@@ -77,29 +75,20 @@
 				}
 
 				// 저장 스크립트 확인
-				if (typeof UT_C === 'undefined') {
+				if (typeof UT_A === 'undefined') {
 					setMessage(
 						'내용을 불러오지 못했습니다.'
 					);
 					return;
 				}
 
-				// 중복 전송 방지
-				if (sessionStorage.getItem(SEND_LOCK_KEY) === 'Y') {
-					setMessage(
-						'전송 요청 이력이 있습니다.',
-						'중복 전송을 방지하기 위해 다시 전송하지 않았습니다.'
-					);
-					return;
-				}
-
 				// 설문 및 테스트 결과 조회
-				var surveyData = UT_C.getSurvey();
-				var taskData = UT_C.getTaskResult();
-				var coSurvey = readJson('utCCoSurvey');
+				var surveyData = UT_A.getSurvey();
+				var taskData = UT_A.getTaskResult();
+				var coSurvey = readJson('utAllmenuACoSurvey');
 
-				var asis = taskData.typeCAsis || {};
-				var tobe = taskData.typeCTobe || {};
+				var asis = taskData.typeAAsis || {};
+				var tobe = taskData.typeATobe || {};
 
 				// 필수 데이터 검증
 				if (
@@ -116,9 +105,9 @@
 					return;
 				}
 
-				// C그룹 전송 데이터
+				// A그룹 전송 데이터
 				var resultData = {
-					groupNo: 'C',
+					groupNo: 'A',
 
 					// 참여 전 확인
 					age: value(surveyData, 'age'),
@@ -126,28 +115,25 @@
 					member: value(surveyData, 'member'),
 
 					// AS-IS
-					typeCAsisTargetMenu1: value(asis, 'targetMenu1'),
-					typeCAsisFinalClickMenu: value(asis, 'finalClickMenu'),
-					typeCAsisFailReason: value(asis, 'failReason'),
-					typeCAsisClickCount: value(asis, 'clickCount'),
-					typeCAsisDuration: value(asis, 'duration'),
-					typeCAsisClickPath: value(asis, 'clickPath'),
+					typeAAsisTargetMenu1: value(asis, 'targetMenu1'),
+					typeAAsisFinalClickMenu: value(asis, 'finalClickMenu'),
+					typeAAsisFailReason: value(asis, 'failReason'),
+					typeAAsisClickCount: value(asis, 'clickCount'),
+					typeAAsisDuration: value(asis, 'duration'),
+					typeAAsisClickPath: value(asis, 'clickPath'),
 
 					// TO-BE
-					typeCTobeTargetMenu2: value(tobe, 'targetMenu2'),
-					typeCTobeFinalClickMenu: value(tobe, 'finalClickMenu'),
-					typeCTobeFailReason: value(tobe, 'failReason'),
-					typeCTobeClickCount: value(tobe, 'clickCount'),
-					typeCTobeDuration: value(tobe, 'duration'),
-					typeCTobeClickPath: value(tobe, 'clickPath'),
+					typeATobeTargetMenu2: value(tobe, 'targetMenu2'),
+					typeATobeFinalClickMenu: value(tobe, 'finalClickMenu'),
+					typeATobeFailReason: value(tobe, 'failReason'),
+					typeATobeClickCount: value(tobe, 'clickCount'),
+					typeATobeDuration: value(tobe, 'duration'),
+					typeATobeClickPath: value(tobe, 'clickPath'),
 
 					// 주관식 및 브라우저
 					improveText: value(coSurvey, 'improveText'),
 					userAgent: navigator.userAgent
 				};
-
-				// 전송 요청 잠금
-				sessionStorage.setItem(SEND_LOCK_KEY, 'Y');
 
 				// 구글 스프레드시트 전송
 				fetch(WEB_APP_URL, {
@@ -175,7 +161,7 @@
 				})
 				.catch(function () {
 
-					sessionStorage.removeItem(SEND_LOCK_KEY);
+					
 
 					setMessage(
 						'전송 요청에 실패했습니다.',

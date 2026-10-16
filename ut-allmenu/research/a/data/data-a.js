@@ -1,9 +1,8 @@
-/* Group A | 고용정책 AS-IS(고객센터) → TO-BE(GNB) */
+/* Group A | 전체메뉴 AS-IS → TO-BE */
 $(function () {
     'use strict';
 
     var basePath = '/UT-Hub/ut-allmenu/research/a/';
-    var frameBase = '/UT-Hub/ut-allmenu/source/frame/';
     var pageName = location.pathname.split('/').pop();
     var isAsis = pageName === '4_survey_asis.html';
     var isTobe = pageName === '5_survey_tobe.html';
@@ -12,7 +11,13 @@ $(function () {
     var taskKey = isAsis ? 'typeAAsis' : 'typeATobe';
     var nextPage = basePath + (isAsis ? '5_survey_tobe.html' : '6_survey_subjective.html');
     var progressKey = 'utAAsisProgress';
-    var targetMenu = '고용정책';
+    // 각 화면의 목표 메뉴는 독립적으로 설정합니다.
+    var taskConfig = {
+        asis: { targetMenu: '사이트 소개', section: '고객센터' },
+        tobe: { targetMenu: '채용정보 상세검색', section: '채용정보' }
+    };
+    var config = isAsis ? taskConfig.asis : taskConfig.tobe;
+    var targetMenu = config.targetMenu;
     var limitTime = 60000;
 
     var $page = $('#utPage');
@@ -149,10 +154,32 @@ $(function () {
         setDialog($fail, 'input[name="failReason"]');
     }
 
+    function getMenuDepth($control) {
+        // TO-BE의 구조가 다르면 해당 a/button에 data-depth="1"~"4" 지정.
+        var explicit = $control.attr('data-depth');
+        if (/^[1-4]$/.test(explicit || '')) return Number(explicit);
+        if ($control.closest('.menuLevel4').length) return 4;
+        if ($control.closest('.site_map').length) return 3;
+        if ($control.closest('.menu_tit').length) return 2;
+        if ($control.closest('.tab_title').length) return 1;
+        return 0;
+    }
+
+    function isAnswer($control, name) {
+        if (name !== targetMenu) return false;
+        // 화면 구조가 달라도 명시적으로 지정한 정답 요소 사용 가능.
+        if ($control.attr('data-answer') === 'true') return true;
+        var section = cleanText(
+            $control.closest('.site_map_div').find('.menu_info_header h5').first().text()
+        );
+        return getMenuDepth($control) >= 2 && section === config.section;
+    }
+
     function logClick($control) {
         var now = Date.now();
         var name = getControlName($control);
-        var pathName = $control.closest('.lnb').length ? 'lnb.' + name : name;
+        var depth = getMenuDepth($control);
+        var pathName = (depth ? depth + 'dp_' : '') + name;
         clickLogs.push({
             text: pathName,
             second: Math.round((now - lastClickTime) / 100) / 10
@@ -173,24 +200,25 @@ $(function () {
             return false;
         }
         if (!doc || doc.readyState === 'loading') return false;
+        if (!$(doc).find('#sitemappopup').length) {
+            frameReady = false;
+            $startButton.prop('disabled', true);
+            $('#utFrameError').remove();
+            $('<p id="utFrameError" role="alert"></p>')
+                .text('전체메뉴 화면을 불러오지 못했습니다. 화면 파일 연결을 확인해 주세요.')
+                .insertBefore($startButton);
+            return false;
+        }
+        $('#utFrameError').remove();
         $(doc).off('click.utA', 'a,button').on('click.utA', 'a,button', function (e) {
             if (!started || finished) return;
             var $control = $(this);
             var name = logClick($control);
 
-            // Correctness is not decided from text matching: promotional links
-            // and other sections also contain the word 고용정책.
-            if ($control.attr('data-answer') === 'true') {
-                e.preventDefault();
+            // 링크 이동은 차단하되 전체메뉴 펼침·탭 동작은 유지합니다.
+            e.preventDefault();
+            if (isAnswer($control, name)) {
                 finishSuccess(name);
-                return;
-            }
-
-            // Keep the AS-IS customer-center transition *inside the iframe*.
-            // Parent wrapper, click count, progress and deadline must survive.
-            if (isAsis && $control.attr('data-ut-route') === 'customer') {
-                e.preventDefault();
-                $frame.attr('src', frameBase + 'employment_policy_asis_cs.html');
             }
         });
         frameReady = true;
@@ -205,7 +233,7 @@ $(function () {
     $startButton.prop('disabled', true);
     $('#utOverlayTitle').attr('tabindex', '-1').trigger('focus');
 
-    // Load the test frame (and rebind when it navigates to customer center).
+    // 프레임 로드 후 메뉴 클릭 기록 연결.
     $frame.on('load.utA', function () {
         bindFrameClicks();
     });

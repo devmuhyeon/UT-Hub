@@ -3,8 +3,8 @@
 var UT_A = (function () {
     'use strict';
 
-    var surveyKey = 'utASurveyData';
-    var taskKey = 'utATaskResult';
+    var surveyKey = 'utAllmenuASurveyData';
+    var taskKey = 'utAllmenuATaskResult';
 
     function read(key) {
         try {
@@ -40,7 +40,7 @@ var UT_A = (function () {
 
     function makeClickPath(logs) {
         return $.map(logs, function (item) {
-            return item.text + '[' + item.second + 's]';
+            return item.text + ' [' + Number(item.second).toFixed(1) + 's]';
         }).join(' > ');
     }
 
