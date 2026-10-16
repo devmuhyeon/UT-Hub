@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>고용24 사용자 조사 - 결과 전송</title>
+		
+		<link rel="stylesheet" href="/UT-Hub/include/css/reset.css">
+        <link rel="stylesheet" href="/UT-Hub/include/css/font.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/ut-common.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/survey.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/responsive.css">
+		<link rel="stylesheet" href="/UT-Hub/include/ut_common/css/upload.css">
+	</head>
+
+	<body>
+		<div class="result_wrap">
+			<div class="loading_card">
+				<strong class="result_title">테스트 결과를 제출중입니다.</strong>
+				<p class="result_message" role="status" aria-live="polite">잠시만 기다려주세요.</p>
+				<div class="loading_bar" aria-hidden="true"></div>
+			</div>
+		</div>
+
+		<div class="answer_popup" hidden>
+			<div class="answer_popup_dim"></div>
+			<div class="answer_popup_inner">
+				<button type="button" class="btn_answer_close" aria-label="팝업 닫기">✕</button>
+				<h5>메뉴 정답 화면</h5>
+				<div class="answer_dp_img">
+					<img src="/UT-Hub/ut-contents/research/images/employment_trends_tobe.jpg" alt="메뉴 정답 예시 화면 To-be">
+					<img src="/UT-Hub/ut-contents/research/images/employment_trends_asis.jpg" alt="메뉴 정답 예시 화면 As-is">
+				</div>
+			</div>
+		</div>
+
+		
+		<script src="/UT-Hub/include/js/jquery-3.7.1.min.js"></script>
+		<script src="/UT-Hub/include/ut_common/js/lock_back.js"></script>
+		
+		<script src="/UT-Hub/ut-contents/research/d/data/storage-d.js"></script>
+
+		<script>
+			$(function () {
+				'use strict';
+
+				var WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw4fJmHIkRS9xy1AGgs3xax35xue7jEmQtcNNSEiHusZAxL_TldWBfqtLLTBzH5paLSxg/exec';
+
+				var SEND_LOCK_KEY = 'utDUploadRequested';
+				var $popup = $('.answer_popup');
+
+				// 안내 메시지
+				function setMessage(title, message) {
+					$('.loading_bar').hide();
+					$('.result_title').text(title);
+					$('.result_message').text(message);
+				}
+
+				// 저장 데이터 조회
+				function readJson(key) {
+					try {
+						return JSON.parse(
+							sessionStorage.getItem(key) || '{}'
+						);
+					} catch (err) {
+						return {};
+					}
+				}
+
+				// 데이터 값 반환
+				function value(data, key) {
+					return data[key] === undefined ||
+						data[key] === null
+						? ''
+						: data[key];
+				}
+
+				// 저장 스크립트 확인
+				if (typeof UT_D === 'undefined') {
+					setMessage(
+						'내용을 불러오지 못했습니다.'
+					);
+					return;
+				}
+
+				// 중복 전송 방지
+				if (sessionStorage.getItem(SEND_LOCK_KEY) === 'Y') {
+					setMessage(
+						'전송 요청 이력이 있습니다.',
+						'중복 전송을 방지하기 위해 다시 전송하지 않았습니다.'
+					);
+					return;
+				}
+
+				// 설문 및 테스트 결과 조회
+				var surveyData = UT_D.getSurvey();
+				var taskData = UT_D.getTaskResult();
+				var coSurvey = readJson('utDCoSurvey');
+
+				var asis = taskData.typeDAsis || {};
+				var tobe = taskData.typeDTobe || {};
+
+				// 필수 데이터 검증
+				if (
+					!surveyData.age ||
+					!surveyData.experience ||
+					!surveyData.member ||
+					(asis.result !== 'success' && asis.result !== 'fail') ||
+					(tobe.result !== 'success' && tobe.result !== 'fail')
+				) {
+					setMessage(
+						'제출할 데이터가 부족합니다.',
+						'사전 설문과 화면 탐색을 모두 완료한 뒤 제출해 주세요.'
+					);
+					return;
+				}
+
+				// D그룹 전송 데이터
+				var resultData = {
+					groupNo: 'D',
+
+					// 참여 전 확인
+					age: value(surveyData, 'age'),
+					experience: value(surveyData, 'experience'),
+					member: value(surveyData, 'member'),
+
+					// AS-IS
+					typeDAsisTargetMenu1: value(asis, 'targetMenu1'),
+					typeDAsisFinalClickMenu: value(asis, 'finalClickMenu'),
+					typeDAsisFailReason: value(asis, 'failReason'),
+					typeDAsisClickCount: value(asis, 'clickCount'),
+					typeDAsisDuration: value(asis, 'duration'),
+					typeDAsisClickPath: value(asis, 'clickPath'),
+
+					// TO-BE
+					typeDTobeTargetMenu: value(tobe, 'targetMenu2'),
+					typeDTobeFinalClickMenu: value(tobe, 'finalClickMenu'),
+					typeDTobeFailReason: value(tobe, 'failReason'),
+					typeDTobeClickCount: value(tobe, 'clickCount'),
+					typeDTobeDuration: value(tobe, 'duration'),
+					typeDTobeClickPath: value(tobe, 'clickPath'),
+
+					// 주관식 및 브라우저
+					improveText: value(coSurvey, 'improveText'),
+					userAgent: navigator.userAgent
+				};
+
+				// 전송 요청 잠금
+				sessionStorage.setItem(SEND_LOCK_KEY, 'Y');
+
+				// 구글 스프레드시트 전송
+				fetch(WEB_APP_URL, {
+					method: 'POST',
+					mode: 'no-cors',
+					headers: {
+						'Content-Type': 'text/plain;charset=utf-8'
+					},
+					body: JSON.stringify(resultData)
+				})
+				.then(function () {
+
+					setMessage(
+						'전송 요청이 완료되었습니다.',
+						'설문에 참여해 주셔서 감사합니다.'
+					);
+
+					$('.loading_card').append(
+						'<button type="button" class="btn_answer_open">' +
+						'정답이 궁금하신가요?' +
+						'</button>'
+					);
+
+					// 저장 확인 전까지 세션 데이터 유지
+				})
+				.catch(function () {
+
+					sessionStorage.removeItem(SEND_LOCK_KEY);
+
+					setMessage(
+						'전송 요청에 실패했습니다.',
+						'인터넷 연결을 확인한 후 새로고침해 다시 시도해 주세요.'
+					);
+				});
+
+				// 팝업 접근성 속성 설정
+				$popup.attr({
+					'role': 'dialog',
+					'aria-modal': 'true',
+					'aria-labelledby': 'answerTitleD'
+				});
+
+				$popup.find('h5').first().attr('id', 'answerTitleD');
+				$popup.find('.answer_popup_dim').attr('aria-hidden', 'true');
+
+				// 정답 팝업 열기
+				$(document).on('click', '.btn_answer_open', function () {
+
+					$('.result_wrap')
+						.prop('inert', true)
+						.attr('aria-hidden', 'true');
+
+					$popup
+						.stop(true, true)
+						.prop('hidden', false)
+						.hide()
+						.fadeIn(200, function () {
+							$popup
+								.find('.btn_answer_close')
+								.trigger('focus');
+						});
+				});
+
+				// 정답 팝업 닫기
+				function closeAnswer() {
+
+					$popup
+						.stop(true, true)
+						.fadeOut(200, function () {
+
+							$popup.prop('hidden', true);
+
+							$('.result_wrap')
+								.prop('inert', false)
+								.removeAttr('aria-hidden');
+
+							$('.btn_answer_open').trigger('focus');
+						});
+				}
+
+				$(document).on(
+					'click',
+					'.btn_answer_close, .answer_popup_dim',
+					function () {
+						closeAnswer();
+					}
+				);
+
+				// 팝업 키보드 접근성
+				$(document).on('keydown', function (e) {
+
+					if ($popup.prop('hidden')) return;
+
+					// ESC: 팝업 닫기
+					if (e.which === 27) {
+						e.preventDefault();
+						closeAnswer();
+						return;
+					}
+
+					// Tab: 팝업 내부 포커스 유지
+					if (e.which === 9) {
+						e.preventDefault();
+
+						$popup
+							.find('.btn_answer_close')
+							.trigger('focus');
+					}
+				});
+			});
+		</script>
+
+	</body>
+</html>
