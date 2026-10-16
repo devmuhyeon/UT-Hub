@@ -12,8 +12,10 @@ $(function () {
 
     var taskKey = isAsis ? 'typeCAsis' : 'typeCTobe';
     var nextPage = basePath + (isAsis ? '5_survey_tobe.html' : '6_survey-subjective.html');
-    var targetMenu = '쉽게 보는 고용정보';
-    var limitTime = 60000;
+    var targetMenu1 = '취업동향 모아보기';
+    var targetMenu2 = '쉽게 보는 고용정보';
+    var targetMenu = isAsis ? targetMenu1 : targetMenu2;
+    var limitTime = 60000;ㅇ
 
     var $page = $('#utPage');
     var $frame = $('#testFrame');
@@ -130,7 +132,8 @@ $(function () {
         var endTime = Date.now();
 
         return {
-            targetMenu: targetMenu,
+            targetMenu1: isAsis ? targetMenu1 : '',
+            targetMenu2: isTobe ? targetMenu2 : '',
             finalClickMenu: finalClickMenu || '',
             failReason: '',
             clickCount: clickLogs.length,
