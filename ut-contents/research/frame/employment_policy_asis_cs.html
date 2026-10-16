@@ -16,11 +16,11 @@
 	<link rel="stylesheet" href="/UT-Hub/include/ut_common/css/responsive.css">
 		<title>고용24</title>
     </head>
-    <body style="zoom: 1;">
-        
+
+    <body style="zoom: 1;  overflow-x: hidden !important; overflow-y: auto !important;" >
         <input type="hidden" id="currentMenuId" value="EBG020000001572">
         
-        <div id="wrap" class="person">
+        <div id="wrap" class="person" style="z-index: 999;">
             
             <nav id="skipnav">
                 <a>본문 바로가기</a>
@@ -74,7 +74,7 @@
 
                             <!-- 251210 글자·화면 설정 다크모드 선택 추가 -->
                             <li class="line">
-                                <button type="button" class="btn_screen JS-screenToggle" aria-controls="fontSize" aria-expanded="false"><span>글자·화면 설정</span></button>
+                                <button type="button" class="btn_screen " aria-controls="fontSize" aria-expanded="false"><span>글자·화면 설정</span></button>
                             </li>
                             <!-- 251210 글자·화면 설정 다크모드 선택 추가 end -->
                             <!-- // 20250625 GNB 화면/확대축소 설정(임정규) -->
@@ -425,7 +425,8 @@
 
                      <!-- //#lnb -->
 
-                    <div class="cont_wrap">
+                    <div class="cont_wrap in_blur" style="position: relative;">
+                    <div class="dimmed_blur"></div>
                                 <!-- location -->
                                 <div class="location">
                                     
@@ -570,256 +571,12 @@
                                             <strong class="title b1_sb arr_right underline_no">(국민내일배움카드)훈련장려금은 언제 지급 되나요?</strong>
                                         </a>
                                         
-                                        <a class="box_line pd24">
-                                            <p class="tbl_label_set inline_block w100 mb16">
-                                                <span class="tbl_label fill skyblue">직업능력개발</span>
-                                            </p>
-                                            <strong class="title b1_sb arr_right underline_no">(국민내일배움카드) 카드를 분실했는데 어떻게 해야하나요?</strong>
-                                        </a>
-                                        
-                                        <a class="box_line pd24">
-                                            <p class="tbl_label_set inline_block w100 mb16">
-                                                <span class="tbl_label fill skyblue">직업능력개발</span>
-                                            </p>
-                                            <strong class="title b1_sb arr_right underline_no">(국민내일배움카드) 카드발급 이후 지원대상(근로자, 실업자, 자영업자 구분) 변경</strong>
-                                        </a>
-                                        
-                                        <a class="box_line pd24">
-                                            <p class="tbl_label_set inline_block w100 mb16">
-                                                <span class="tbl_label fill skyblue">공통</span>
-                                            </p>
-                                            <strong class="title b1_sb arr_right underline_no">[회원] 기업회원 가입 안내 및 로그인은 인증서로만 사용 가능한가요?</strong>
-                                        </a>
-                                        
                                     </div>
 
                                 </div>
                                 <a class="btn_more">더보기<i class="ico16_arrow"></i></a>
                             </div>
 
-                                <div class="cont_customer">
-                                    <h3 class="t1_sb">유형별 고객센터 전화상담 및 상담채널 안내</h3>
-                                    <div class="cntr_contact">
-                                        <div class="box_message_wrap left">
-                                            <div class="flex_box">
-                                                <div class="menu_type">
-                                                    <div class="title">
-                                                    <span class="ico_employ">고용 · 노동 분야 제도</span>
-                                                    <!-- 도움말 -->
-                                                    <div class="box_tooltip type2 bottom">
-                                                        <button type="button" tabindex="-1" class="btn_help dis vttop" aria-expanded="false"><span class="blind">고용 · 노동 분야 제도 도움말</span></button>
-                                                        <div class="box_help-data new">
-                                                            <p class="s1_r">예시) 국민취업지원 제도가 뭔가요?</p>
-                                                            <button type="button" tabindex="-1" class="ico16_delete tooltip_close"><span class="blind">닫기</span></button>
-                                                        </div>
-                                                    </div>
-                                                    </div>
-                                                    <div class="title">
-                                                        <span class="ico_apply">지원자격, 절차, 신고 · 신청</span>
-                                                        <!-- 도움말 -->
-                                                        <div class="box_tooltip type2 bottom">
-                                                            <button type="button" tabindex="-1" class="btn_help dis vttop" aria-expanded="false"><span class="blind">지원자격, 절차, 신고 · 신청 도움말</span></button>
-                                                            <div class="box_help-data new">
-                                                                <p class="s1_r">실업급여, 피보험자, 고용안정, 모성보호 등 지원자격 및 절차, 신고/신청 처리현황 등에 대한 문의. 예시) 제가 실업급여 수급자격이 될까요?</p>
-                                                                <button type="button" tabindex="-1" class="ico16_delete tooltip_close"><span class="blind">닫기</span></button>
-                                                            </div>
-                                                        </div>
-                                                        <!-- 도움말 -->
-                                                    </div>
-                                                    <div class="title">
-                                                        <span class="ico_report">노동 민원신청 및 진정 · 신고</span>
-                                                        <!-- 도움말 -->
-                                                        <div class="box_tooltip type2 bottom">
-                                                            <button type="button" tabindex="-1" class="btn_help dis vttop" aria-expanded="false"><span class="blind">노동 민원신청 및 진정 · 신고 도움말</span></button>
-                                                            <div class="box_help-data new">
-                                                                <p class="s1_r">임금체불, 부당해고, 노동 관계법 위반 진정 및 신고민원 신청</p>
-                                                                <button type="button" tabindex="-1" class="ico16_delete tooltip_close"><span class="blind">닫기</span></button>
-                                                            </div>
-                                                        </div>
-                                                        <!-- 도움말 -->
-                                                    </div>
-                                                </div>
-                                                <div class="info">
-                                                    <p class="cntr_box_blue">
-                                                        <span class="ico_call"><em class="num">1350</em> (유료)</span>
-                                                        <span class="block">평일 9시~18시</span>
-                                                    </p>
-                                                    <div class="btn_group flex_d_col mt16">
-                                                        <a class="btn small type02 btn_share" target="_blank" title="새창 열림">고용부 고객상담센터</a> 
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="btm_text">
-                                                <p class="s1_r">
-                                                    지원자격, 절차, 신고·신청은 <a class="blank_link" target="_blank" title="새창 열림">국민신문고</a>에서 문의 가능하며, 노동 민원신청 및 진정·신고는 <a class="blank_link" target="_blank" title="새창 열림">노동포털</a>에서도 가능합니다.
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div class="box_message_wrap right">
-                                            <div class="menu_type">
-                                                <div class="title"><span class="ico_system">고용24 홈페이지 이용 문의</span></div>
-                                            </div>
-                                            <div class="info mt16">
-                                                <p class="cntr_box_blue">
-                                                    <span class="ico_call"><em class="num">1577-7114</em> (유료)</span>
-                                                    <span class="block">평일 9시~18시</span>
-                                                </p>
-                                            </div>
-                                            <div class="btn_group mt16">
-                                                <a class="btn small type02">이용가이드</a>
-                                                <a class="btn small type02">고용24 활용하기</a>
-                                                <a class="btn small type02">자주 찾는 도움말</a>
-                                                <a class="btn small type02">개선 및 제안</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- 로그인 전 -->
-                                <div class="cntr_box_blue flex_box mt24">
-                                    <p class="b1_r bg_center flex1">
-                                        <strong class="block">고용 관련 법령·제도·지침 등 관련 민원 접수 및 행정 처리는?</strong>
-                                        관할 고용센터 및 취업기관에서 담당하고 있으며 관할 고용센터 담당자에게 문의하시면 상세히 안내받으실 수 있습니다.
-                                    </p>
-                                    <a class="txt_ico_arr">기관찾기</a>
-                                </div>
-                                <!-- 로그인 전/후 동일 사용 -->
-                                <div class="cntr_box_blue type_gray flex_box mt24">
-                                    <p class="b1_r bg_center flex1">
-                                        <strong class="block">원하는 정보를 찾기 어려우신가요?</strong>
-                                        더 궁금한 점이 있으시다면 언제든지 문의하실 수 있습니다.
-                                    </p>
-                                    <a class="txt_ico_arr">문의하기</a>
-                                </div>
-                                <div class="cont_customer">
-                                    <h3 class="t1_sb">
-                                        나의 문의 내역
-                                        <span class="inline_block s1_r ml12">최근 일년 내의 문의 내역만 노출됩니다.</span>
-                                    </h3>
-                                    <div class="box_rnd_gray pd4024 txt_c" id="div_general">
-                                        <p class="b1_r">
-                                            <strong class="block">문의 내역은 <span class="clr_blue">로그인 또는 문의 등록 시 입력한 정보</span>를 통해 확인하실 수 있습니다.</strong>
-                                            (이름, 이메일, 전화번호, 등록 시 입력한 비밀번호)
-                                        </p>
-                                        <div class="mt24">
-                                            <a class="btn medium type01" id="btnNonMem"><span>비회원 문의 확인하기</span></a>
-                                            <a class="btn medium type01 fill ml04"><span>로그인</span></a>
-                                        </div>
-                                    </div>
-                                    <div id="div_nonInfo" class="box_rnd_gray pd2440" style="display:none;">
-                                        <div class="form_user_info">
-                                            <p class="text_right mb16">
-                                                <span class="cir_required">(<span></span>표시된 부분은 필수 입력 항목입니다.)</span>
-                                            </p>
-                                            <div class="flex_box">
-                                                <div class="form_area left">
-                                                <div class="flex_box flex_js_s">
-                                                        <p class="th">작성자<span class="essential"><i class="blind">필수</i></span></p>
-                                                    </div>
-                                                    <div class="box_table_group box_email_area">
-                                                        <div class="cell errorDsp" style="flex:1;">
-                                                            <div class="cell_wrap">
-                                                                <span class="box_ipt">
-                                                                    <input type="text" class="input_txt" title="성명을 입력해 주세요." id="userNm" name="userNm" maxlength="40" placeholder="성명을 입력해 주세요.">
-                                                                    <button type="reset" class="ico16_delete"><span class="blind">삭제</span></button>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form_area right">
-                                                    <div class="flex_box flex_js_s">
-                                                        <p class="th">연락처 (택1)<span class="essential"><i class="blind">필수</i></span></p>
-                                                        <div class="box_chk-group radio_group">
-                                                            <span>
-                                                                <input type="radio" name="nonType" id="rdo_nonType_hp" value="hp" checked="">
-                                                                <label for="rdo_nonType_hp" class="fw400">휴대전화</label>
-                                                            </span>
-                                                            <span>
-                                                                <input type="radio" name="nonType" id="rdo_nonType_tel" value="tel">
-                                                                <label for="rdo_nonType_tel" class="fw400">일반전화</label>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- 이메일 -->
-                                                    <div class="errorDsp" id="div_hp">
-                                                        <div class="box_table_group box_email_area">
-                                                            <div class="cell">
-                                                                <span class="sel medium w_xsmall03">
-                                                                    <select title="휴대전화 앞자리를 선택해 주세요." id="hp1" name="hp1">
-                                                                        <option value="">선택</option>
-                                                                            <option value="010">010</option>
-                                                                            <option value="011">011</option>
-                                                                            <option value="019">019</option>
-                                                                            <option value="017">017</option>
-                                                                            <option value="018">018</option>
-                                                                            <option value="016">016</option>
-                                                                    </select>
-                                                                </span>
-                                                            </div>
-                                                            <div class="cell flex1">
-                                                                <span class="box_ipt">
-                                                                    <input type="tel" class="input_txt medium" id="hp2" name="hp2" title="휴대전화 앞 세자리 제외 번호 입력" maxlength="8">
-                                                                            <button type="reset" class="ico16_delete"><span class="blind">삭제</span></button>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- //이메일 -->
-
-                                                    <!-- 일반전화 -->
-                                                    <div class="errorDsp" id="div_tel" style="display:none; ">
-                                                        <div class="box_table_group box_email_area">
-                                                            <div class="cell">
-                                                                <span class="sel medium w_xsmall03">
-                                                                    <select title="전화번호 앞자리를 선택해 주세요." id="tel1" name="tel1">
-                                                                        <option value="">선택</option>
-                                                                        <option value="02">02</option>
-                                                                        <option value="031">031</option>
-                                                                        <option value="032">032</option>
-                                                                        <option value="033">033</option>
-                                                                        <option value="041">041</option>
-                                                                        <option value="042">042</option>
-                                                                        <option value="043">043</option>
-                                                                        <option value="044">044</option>
-                                                                        <option value="051">051</option>
-                                                                        <option value="052">052</option>
-                                                                        <option value="053">053</option>
-                                                                        <option value="054">054</option>
-                                                                        <option value="055">055</option>
-                                                                        <option value="061">061</option>
-                                                                        <option value="062">062</option>
-                                                                        <option value="063">063</option>
-                                                                        <option value="064">064</option>
-                                                                        <option value="0502">0502</option>
-                                                                        <option value="0504">0504</option>
-                                                                        <option value="0505">0505</option>
-                                                                        <option value="0507">0507</option>
-                                                                        <option value="0508">0508</option>
-                                                                        <option value="070">070</option>
-                                                                    </select>
-                                                                </span>
-                                                            </div>
-                                                            <div class="cell flex1">
-                                                                <span class="box_ipt">
-                                                                    <input type="tel" class="input_txt medium" id="tel2" name="tel2" title="지역번호 제외 일반전화 번호 입력" maxlength="8">
-                                                                    <button type="reset" class="ico16_delete"><span class="blind">삭제</span></button>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- //일반전화 -->
-                                                </div>
-                                            </div>
-                                            <div class="box_btn_wrap flex_al_c mt24">
-                                                <a class="btn medium fill type01">문의 확인하기</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -1029,4 +786,5 @@
         <!--// #footer -->
     </div>
 
-</body></html>
+</body>
+</html>
