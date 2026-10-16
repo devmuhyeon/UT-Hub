@@ -3,423 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="/ut-work24/css/responsive.css">
-	<title>고용24 UT - 전체메뉴 페이지</title>
-<style>
-@charset "utf-8";
-
-:root {
-	--width:1900;
-	--designWidth:1248;
-	--col_blue:#3F58D4;
-	--col_skyblue:#408cff;
-	--col_skyblue_light:#F3F8FF;
-	--col_darkblue:#3043a1;
-	--col_green:#24A960;
-	--col_green2:#117935;
-	--col_lightgreen:#71a125;
-	--col_darkgreen:#145c34;
-	--col_orange:#F0651F;
-	--col_navy:#39425D;
-	--col_cyan:#06a3bf;
-	--col_pink:#FF0046;
-	--col_pink2:#ec6793;
-	--col_magenta:#FF00D6;
-	--col_yellow:#bf8738;
-	--col_purple:#9353ea;
-	--col_h:#111;
-	--col_body:#333;
-	--col_p:#555;
-	--col_dis:#888;
-	--col_white:#fff;
-	--col_tabe:#ccc;
-	--col_btn:#ddd;
-	--col_button:#757575;
-	--col_border:#eee;
-	--col_bg:#f5f5f5;
-	--col_bluegray:#f5f6f8;
-	--col_box_bg:#f8f8f8;
-	--col_red:#E0024B;
-	--col_darkred:#b21116;
-	--col_gray:#757575;
-	--col_brown:#A95A12;
-	--col_brown2:#978f3d;
-	--col_header_line:#5DC488;
-	--col_homegreen:#29C78E;
-		--col_brightyellow:#fef101;
-}
-
-* {
-	box-sizing:border-box;
-}
-
-body {
-	margin:0;
-	min-height:100vh;
-	font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo",sans-serif;
-	color:var(--col_h);
-	background:
-		radial-gradient(circle at 12% 8%, rgba(64,140,255,.22), transparent 30%),
-		radial-gradient(circle at 88% 18%, rgba(63,88,212,.18), transparent 28%),
-		linear-gradient(
-			135deg,
-			var(--col_white) 0%,
-			var(--col_skyblue_light) 48%,
-			var(--col_bluegray) 100%
-		);
-}
-
-.index_wrap {
-	width:100%;
-	max-width:1080px;
-	margin:0 auto;
-	padding:72px 24px;
-}
-
-.hero {
-	position:relative;
-	overflow:hidden;
-	padding:52px;
-	border:1px solid rgba(255,255,255,.72);
-	border-radius:36px;
-	background:
-		linear-gradient(
-			135deg,
-			var(--col_navy),
-			var(--col_blue) 58%,
-			var(--col_skyblue)
-		);
-	color:var(--col_white);
-	box-shadow:0 30px 90px rgba(31,45,120,.24);
-}
-
-.hero_badge {
-	display:inline-flex;
-	align-items:center;
-	height:36px;
-	padding:0 16px;
-	border:1px solid rgba(255,255,255,.26);
-	border-radius:999px;
-	background:rgba(255,255,255,.14);
-	font-size:13px;
-	font-weight:700;
-	letter-spacing:.04em;
-}
-
-.hero_title {
-	margin:20px 0 0;
-	font-size:38px;
-	line-height:1.2;
-	font-weight:800;
-	letter-spacing:-.05em;
-}
-
-.hero_desc {
-	max-width:700px;
-	margin:16px 0 0;
-	color:rgba(255,255,255,.88);
-	font-size:17px;
-	line-height:1.7;
-	word-break:keep-all;
-}
-
-.flow_area {
-	margin-top:30px;
-	padding:30px;
-	border:1px solid rgba(255,255,255,.7);
-	border-radius:30px;
-	background:rgba(255,255,255,.76);
-	backdrop-filter:blur(18px);
-	box-shadow:0 22px 60px rgba(17,24,39,.08);
-}
-
-.flow_top {
-	display:flex;
-	align-items:flex-end;
-	justify-content:space-between;
-	gap:20px;
-	margin-bottom:28px;
-	flex-wrap:wrap;
-}
-
-.flow_title {
-	margin:0;
-	font-size:26px;
-	font-weight:800;
-	letter-spacing:-.04em;
-}
-
-.flow_desc {
-	margin:8px 0 0;
-	color:var(--col_p);
-	font-size:14px;
-	line-height:1.6;
-}
-
-.flow_btn_group {
-	display:flex;
-	align-items:center;
-	gap:12px;
-	flex-wrap:wrap;
-}
-
-.start_link,
-.sheet_link {
-	display:inline-flex;
-	align-items:center;
-	justify-content:center;
-	min-height:56px;
-	padding:0 24px;
-	border-radius:999px;
-	font-size:16px;
-	font-weight:700;
-	text-decoration:none;
-	transition:
-		transform .18s ease,
-		box-shadow .18s ease,
-		border-color .18s ease,
-		background-color .18s ease;
-}
-
-.start_link {
-	background:
-		linear-gradient(
-			135deg,
-			var(--col_navy),
-			var(--col_blue) 58%,
-			var(--col_skyblue)
-		);
-	color:var(--col_white);
-	box-shadow:0 16px 34px rgba(63,88,212,.24);
-}
-
-.sheet_link {
-	border:1px solid rgba(63,88,212,.18);
-	background:rgba(255,255,255,.9);
-	color:var(--col_blue);
-	box-shadow:0 10px 24px rgba(17,24,39,.06);
-}
-
-.start_link:hover,
-.sheet_link:hover,
-.page_link:hover {
-	transform:translateY(-3px);
-}
-
-.sheet_link:hover {
-	border-color:rgba(63,88,212,.4);
-	background:var(--col_skyblue_light);
-}
-
-.start_link:focus-visible,
-.sheet_link:focus-visible,
-.page_link:focus-visible {
-	outline:4px solid rgba(64,140,255,.34);
-	outline-offset:4px;
-}
-
-.page_list {
-	display:flex;
-	flex-direction:column;
-	gap:16px;
-	margin:0;
-	padding:0;
-	list-style:none;
-	counter-reset:step;
-}
-
-.page_item {
-	counter-increment:step;
-}
-
-.page_link {
-	display:flex;
-	align-items:center;
-	gap:16px;
-	padding:22px;
-	border:1px solid rgba(63,88,212,.12);
-	border-radius:24px;
-	background:rgba(255,255,255,.94);
-	color:inherit;
-	text-decoration:none;
-	box-shadow:0 10px 28px rgba(17,24,39,.05);
-	transition:
-		transform .18s ease,
-		box-shadow .18s ease,
-		border-color .18s ease;
-}
-
-.page_link:hover {
-	border-color:rgba(63,88,212,.34);
-	box-shadow:0 18px 38px rgba(63,88,212,.12);
-}
-
-.page_num {
-	display:inline-flex;
-	align-items:center;
-	justify-content:center;
-	flex:0 0 auto;
-	width:48px;
-	height:48px;
-	border-radius:16px;
-	background:
-		linear-gradient(
-			135deg,
-			var(--col_skyblue_light),
-			var(--col_white)
-		);
-	color:var(--col_blue);
-	font-size:15px;
-	font-weight:900;
-	box-shadow:
-		inset 0 0 0 1px rgba(63,88,212,.10);
-}
-
-.page_num::before {
-	content:counter(step, decimal-leading-zero);
-}
-
-.page_info {
-	min-width:0;
-	flex:1;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.page_name {
-	display:block;
-	font-size:18px;
-	font-weight:800;
-	letter-spacing:-.035em;
-}
-
-.page_meta {
-	display:flex;
-	align-items:center;
-	flex-wrap:wrap;
-	gap:8px;
-}
-
-.page_file {
-	display:inline-block;
-	color:var(--col_p);
-	font-size:14px;
-}
-
-.page_state {
-	display:inline-flex;
-	align-items:center;
-	justify-content:center;
-	min-height:28px;
-	padding:0 12px;
-	border-radius:999px;
-	font-size:12px;
-	font-weight:700;
-	letter-spacing:-0.02em;
-	border:1px solid transparent;
-	white-space:nowrap;
-}
-
-/* 작업전 */
-.page_state.is_before {
-	color:#666;
-	background:#F2F4F7;
-	border-color:#D9DEE5;
-}
-
-/* 텍스트 확인필요 */
-.page_state.is_check {
-	color:#A95A12;
-	background:#FFF4E8;
-	border-color:#FFD7B0;
-}
-
-/* 작업중 */
-.page_state.is_work {
-	color:#3043A1;
-	background:#EEF3FF;
-	border-color:#C9D7FF;
-}
-
-/* 프로토 타입 완료 */
-.page_state.is_proto {
-	color:#117935;
-	background:#ECFFF3;
-	border-color:#B9E7C8;
-}
-
-/* 페이지 연결 필요 */
-.page_state.is_link {
-	color:#9353EA;
-	background:#F5EEFF;
-	border-color:#DAC4FF;
-}
-
-/* 완료 */
-.page_state.is_done {
-	color:#fff;
-	background:
-		linear-gradient(
-			135deg,
-			var(--col_blue),
-			var(--col_skyblue)
-		);
-	border-color:transparent;
-}
-
-.page_arrow {
-	display:inline-flex;
-	align-items:center;
-	justify-content:center;
-	flex:0 0 auto;
-	width:38px;
-	height:38px;
-	border-radius:50%;
-	background:var(--col_skyblue_light);
-	color:var(--col_blue);
-	font-weight:900;
-}
-
-.page_arrow::before {
-	content:"→";
-}
-
-.txt_ver {font-size: 14px; color: var(--col_button);}
-
-@media (max-width:768px) {
-
-	.index_wrap {
-		padding:40px 16px;
-	}
-
-	.hero {
-		padding:32px 24px;
-		border-radius:28px;
-	}
-
-	.hero_title {
-		font-size:30px;
-	}
-
-	.page_link {
-		align-items:flex-start;
-	}
-
-	.page_arrow {
-		display:none;
-	}
-}
-
-@media (prefers-reduced-motion:reduce) {
-
-	* {
-		scroll-behavior:auto !important;
-		transition:none !important;
-		animation:none !important;
-	}
-}
-</style>
+	<link rel="stylesheet" href="/UT-Hub/include/css/font.css">
+	<link rel="stylesheet" href="/UT-Hub/include/ut_common/css/index.css">
+	<link rel="stylesheet" href="/UT-Hub/include/ut_common/css/responsive.css">
+	<title>고용24 UT - 콘텐츠</title>
 </head>
 
 <body>
@@ -428,7 +15,7 @@ body {
 	<section class="hero" aria-labelledby="pageTitle">
 		<span class="hero_badge">고용24 UT</span>
 		<h1 id="pageTitle" class="hero_title">
-			고용24 UT - 전체메뉴
+			고용24 UT - 콘텐츠
 		</h1>
 		<p class="hero_desc">
 			사용자 테스트 진행 순서에 따라 사전 설문부터 최종 제출까지 각 페이지를 확인할 수 있습니다.
@@ -438,27 +25,38 @@ body {
 	<section class="flow_area" aria-labelledby="flowTitle">
 		<div class="flow_top">
 			<div>
-				<h2 id="flowTitle" class="flow_title">UT 그룹별 페이지 URL <span class="txt_ver">(v0.0.1)</span></h2>
+				<h2 id="flowTitle" class="flow_title">UT 그룹별 페이지 <span class="txt_ver"> (V0.0.1)</span></h2>
 				<p class="flow_desc">각 단계별 페이지와 응답 결과 시트를 확인할 수 있습니다.</p>
 			</div>
 			<div class="flow_btn_group">
-				<a href="#" class="sheet_link" target="_blank" rel="noopener noreferrer" aria-label="UT 응답 결과 구글 시트 새 창 열기">DB 확인</a>
+				<a href="https://docs.google.com/spreadsheets/d/1o6YfpFruOZdzdHwj1wXQuYY5mT3du4YCeZvXUd-E0Ww/edit?gid=0#gid=0" class="sheet_link" target="_blank" rel="noopener noreferrer" aria-label="UT 응답 결과 구글 시트 새 창 열기">DB 확인</a>
 			</div>
 		</div>
 		<ol class="page_list">
 			<li class="page_item">
-				<a href="/ut-allmenu/research/1_intro.html" class="page_link"> 
+				<a href="/UT-Hub/ut-allmenu/research/a/1_intro.html" class="page_link"> 
 					<span class="page_num"></span>
 					<span class="page_info">
-						<span class="page_name">그룹 A (Type A)</span>
+						<span class="page_name">Group A</span>
 						<span class="page_meta">
-							<span class="page_file">As-is → To-be</span>
+							<span class="page_file">전체메뉴 As-is → To-be</span>
 						</span>
 					</span>
 					<span class="page_arrow"></span>
 				</a>
 			</li>
-
+			<li class="page_item">
+				<a href="/UT-Hub/ut-allmenu/research/b/1_intro.html" class="page_link"> 
+					<span class="page_num"></span>
+					<span class="page_info">
+						<span class="page_name">Group B</span>
+						<span class="page_meta">
+							<span class="page_file">전체메뉴 To-be → As-is</span>
+						</span>
+					</span>
+					<span class="page_arrow"></span>
+				</a>
+			</li>
 		</ol>
 	</section>
 </main>
