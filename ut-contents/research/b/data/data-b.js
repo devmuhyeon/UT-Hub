@@ -3,7 +3,7 @@ $(function () {
     'use strict';
 
     var basePath = '/UT-Hub/ut-contents/research/b/';
-    var frameBase = '/UT-Hub/ut-contents/research/frame/';
+    var frameBase = '/UT-Hub/ut-contents/research/source/frame/';
     var pageName = location.pathname.split('/').pop();
     var isAsis = pageName === '5_survey_asis.html';
     var isTobe = pageName === '4_survey_tobe.html';
