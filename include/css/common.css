@@ -911,7 +911,7 @@ body.level .quick_top { z-index: 20;}
 .location ul li:not(.location_list > li):last-child::after { display:none}
 .location ul li.home a:not(.location_list > li > a) { position:relative;padding-left:24px}
 .location ul li.home a:not(.location_list > li > a)::before { display:block;content:"";position:absolute;top:50%;transform:translateY(-50%);left:0px;width:16px;height:16px;background:url("/UT-Hub/include/images/ico16_home.svg") no-repeat;  }
-.location ul li select, .location ul li .btn_downgrill {display: block;font-size: 14px;line-height:44px;background: url(/UT-Hub/include/images/login_new/arrow16_circle_down.svg) no-repeat right;padding: 0 24px 0 0;-webkit-appearance: none;appearance: none;max-width: 120px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;text-align: left;} /* 수정 */
+.location ul li select, .location ul li .btn_downgrill {display: block;font-size: 14px;line-height:44px;background: url(/UT-Hub/include/images/arrow16_circle_down.svg) no-repeat right;padding: 0 24px 0 0;-webkit-appearance: none;appearance: none;max-width: 120px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;text-align: left;} /* 수정 */
 
 /* layer type */
 .location ul li.sub button { font-size: 14px; line-height:44px; background: url("/UT-Hub/include/images/arrow16_circle_down.svg") no-repeat right; padding: 0 24px 0 0; }
@@ -3439,7 +3439,7 @@ input:focus { outline: 2px dashed var(--col_dis); z-index:0;}
 
 /* 현재위치 CSS 추가 */
 .location_list > li > a span:not(.location_list > li > a span)::after { position: relative; padding-right: 18px; background: url(/UT-Hub/include/images/ico16_ui_checked03.svg) no-repeat right 0;}
-.location ul li:not(.location_list > li)::after { background: url(/UT-Hub/include/images/login_new/ico16_line_right_gray.png) no-repeat;}
+.location ul li:not(.location_list > li)::after { background: url(/UT-Hub/include/images/ico16_line_right_gray.png) no-repeat;}
 .location .layer_search { top: 40px !important;}
 
 /* 로그인 CSS 추가 */
@@ -3459,19 +3459,19 @@ input:focus { outline: 2px dashed var(--col_dis); z-index:0;}
 .login--style .box_join_person { display: flex; flex-wrap: wrap; max-width: initial !important; padding: 0; margin:40px auto 0 !important;} /* 250713 수정 */
 .login--style .box_join_person a { display: flex; align-items: center; width: calc(50% - 16px); height: 128px; margin: 16px 0 0 16px; padding: 0 32px; border: 3px solid var(--col_bg); background-color: var(--col_bg); border-radius: 8px; transition: all ease-out .2s;}
 .login--style .box_join_person a::before { content: ''; display: block; width: 60px; height: 60px; margin-right: 24px;}
-.login--style .box_join_person a.link-bnk::before { background: url(/UT-Hub/include/images/login_new/ico60_join1.png) no-repeat;}
+.login--style .box_join_person a.link-bnk::before { background: url(/UT-Hub/include/images/ico60_join1.png) no-repeat;}
 .login--style .box_join_person a.link-bnk-anyId::before { background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTUuODg5IDMuNkgyNC4xMWEyLjI4OSAyLjI4OSAwIDAxMi4yOSAyLjI4OVYxMC4yYS44LjggMCAwMDEuNiAwVjUuODg5QTMuODg5IDMuODg5IDAgMDAyNC4xMTEgMkg1Ljg5QTMuODg5IDMuODg5IDAgMDAyIDUuODg5VjI0LjExQTMuODg5IDMuODg5IDAgMDA1Ljg4OSAyOEgxNy4zMWEuOC44IDAgMDAwLTEuNkg1Ljg5YTIuMjg5IDIuMjg5IDAgMDEtMi4yOS0yLjI4OVY1Ljg5QTIuMjg5IDIuMjg5IDAgMDE1Ljg4OSAzLjZ6IiBmaWxsPSIjMkQyRDJEIi8+PHBhdGggZD0iTTcuOCA5YS44LjggMCAxMDAgMS42aDEwLjRhLjguOCAwIDAwMC0xLjZINy44ek03IDE1LjhhLjguOCAwIDAxLjgtLjhoNi40YS44LjggMCAwMTAgMS42SDcuOGEuOC44IDAgMDEtLjgtLjh6IiBmaWxsPSIjMkQyRDJEIi8+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xOCAxOWMwIDEuNzc3Ljc3MyAzLjM3NCAyIDQuNDcydjQuODQ0YTEgMSAwIDAwMS40NzkuODc4TDI0IDI3LjgybDIuNTIxIDEuMzc0QTEgMSAwIDAwMjggMjguMzE2di00Ljg0NEE2IDYgMCAxMDE4IDE5em0xMC40IDBhNC40IDQuNCAwIDExLTguOCAwIDQuNCA0LjQgMCAwMTguOCAwem0tMi4wODQgNS41MzdBNS45ODEgNS45ODEgMCAwMTI0IDI1Yy0uODIgMC0xLjYwMy0uMTY1LTIuMzE2LS40NjN2Mi44OUwyNCAyNi4xNjVsMi4zMTYgMS4yNjJ2LTIuODl6IiBmaWxsPSIjMkQyRDJEIi8+PC9zdmc+") no-repeat;background-size:56px 56px;}
-.login--style .box_join_person a.link-cmn::before { background: url(/UT-Hub/include/images/login_new/ico60_join2.png) no-repeat;}
+.login--style .box_join_person a.link-cmn::before { background: url(/UT-Hub/include/images/ico60_join2.png) no-repeat;}
 .login--style .box_join_person a.link-cmn-anyId::before { background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTI0LjE3MiA1Ljk0OGMtMy4zMzcgMC02LjI3Mi0xLjU2MS04LjE3Ni0zLjk0OC0xLjkwMyAyLjM4Ny00LjgzOCAzLjk0OC04LjE3NSAzLjk0OC0xLjM1MSAwLTIuNjM4LS4yNy0zLjgyMS0uNzI4djkuNDgzQzQgMjcuMDMgMTYgMzAgMTYgMzBzMTItMi45NSAxMi0xNS4yOTdWNS4yMmMtMS4xODYuNDU4LTIuNDcuNzI4LTMuODIuNzI4aC0uMDA4eiIgc3Ryb2tlPSIjMkQyRDJEIiBzdHJva2Utd2lkdGg9IjEuNiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTEwLjA5NCAxNS4yNzJsNC4yNzUgNC42NDkgNy45Ni03Ljg0MyIgc3Ryb2tlPSIjMkQyRDJEIiBzdHJva2Utd2lkdGg9IjEuNiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9zdmc+") no-repeat;background-size:56px 56px;}
-.login--style .box_join_person a.link-easy::before { background: url(/UT-Hub/include/images/login_new/ico60_join3.png) no-repeat;}
+.login--style .box_join_person a.link-easy::before { background: url(/UT-Hub/include/images/ico60_join3.png) no-repeat;}
 .login--style .box_join_person a.link-easy-anyId::before { background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEyLjM2MiA4LjM3YTQuNTA4IDQuNTA4IDAgMTAtOS4wMTYgMCA0LjUwOCA0LjUwOCAwIDAwOS4wMTYgMHptMTYuMjg5LjAwOGE0LjUwOCA0LjUwOCAwIDEwLTkuMDE2IDAgNC41MDggNC41MDggMCAwMDkuMDE2IDB6bS0xNi4yODcgMTUuMjVhNC41MDggNC41MDggMCAxMC05LjAxNiAwIDQuNTA4IDQuNTA4IDAgMDA5LjAxNiAweiIgc3Ryb2tlPSIjMkQyRDJEIiBzdHJva2Utd2lkdGg9IjEuNiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik04LjQxMSA3LjU4aDExLjI5NGE0LjUzMiA0LjUzMiAwIDAwMCAxLjZIOC40MWEuOC44IDAgMTEwLTEuNnptMTMuMTYgNC41MDNhNC41MzUgNC41MzUgMCAwMS0xLjEzMS0xLjEzMWwtOS40NDQgOS40NDNjLjM4OS4zNzguNzEuODI1Ljk0MiAxLjMyMmw5LjYzNC05LjYzNHptLTkuMjggMTAuNzQzYTQuNTMgNC41MyAwIDAxMCAxLjZoMTEuODUzYS44LjggMCAxMDAtMS42SDEyLjI5eiIgZmlsbD0iIzJEMkQyRCIvPjxwYXRoIGQ9Ik0yNC4xNDcgMjguMTM4YTQuNTA4IDQuNTA4IDAgMTAwLTkuMDE1IDQuNTA4IDQuNTA4IDAgMDAwIDkuMDE1eiIgc3Ryb2tlPSIjMkQyRDJEIiBzdHJva2Utd2lkdGg9IjEuNiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9zdmc+")  no-repeat;background-size:56px 56px;}
 .login--style .box_join_person a.link-easy .certification_box { display: block; margin: 4px 0 0 0;}
 .login--style .box_join_person a.link-easy .certification_box .btn { width: 20px; height: 20px; border-radius: 4px; background-size: 20px;}
-.login--style .box_join_person a.link-mobile::before { background: url(/UT-Hub/include/images/login_new/ic-mobileidcard.svg) no-repeat;background-size:56px 56px}
+.login--style .box_join_person a.link-mobile::before { background: url(/UT-Hub/include/images/ic-mobileidcard.svg) no-repeat;background-size:56px 56px}
 .login--style .box_join_person a.link-mobile-anyId::before { background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yLjAwNCAyNC4yOWw1LjMyNS00LjQ5NyA3LjM4IDIuNjYgOS45Ny04LjQxOCA1LjMyNSAxLjkxOHYuMDA0TDE2LjIxMyAyNy41OTlhMy40MTYgMy40MTYgMCAwMS0zLjM2LjYwMkwyLjAwMyAyNC4yOXoiIGZpbGw9IiMyRDJEMkQiLz48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTE1Ljc5MSA0LjQwNGEzLjQwOCAzLjQwOCAwIDAxMy4zNTYtLjYwMWwxMC44NTcgMy45MS0xNS41IDEyLjc4OUwyIDE2LjA0NyAxNS43OTEgNC40MDR6bTIuODEyLjkwM2ExLjgwOSAxLjgwOSAwIDAwLTEuNzguMzJMNS4xNSAxNS40OGwzLjM2NSAxLjIxMiA4LjQ1LTcuMTMzIDUuODY4IDIuMTE0IDQuMDItMy4zOTYtOC4yNS0yLjk3eiIgZmlsbD0iIzJEMkQyRCIvPjwvc3ZnPg==") no-repeat;background-size:56px 56px;}
-.login--style .box_join_person a.link-ipin::before { background: url(/UT-Hub/include/images/login_new/ico60_join4.png) no-repeat;}
-.login--style .box_join_person a.link-id::before { background: url(/UT-Hub/include/images/login_new/ico60_join5.png) no-repeat;}
-.login--style .box_join_person a::after { content: ''; display: block; width: 32px; height: 32px; margin-left: 24px; background: url(/UT-Hub/include/images/login_new/ico32_join_arrow.png) no-repeat;}
+.login--style .box_join_person a.link-ipin::before { background: url(/UT-Hub/include/images/ico60_join4.png) no-repeat;}
+.login--style .box_join_person a.link-id::before { background: url(/UT-Hub/include/images/ico60_join5.png) no-repeat;}
+.login--style .box_join_person a::after { content: ''; display: block; width: 32px; height: 32px; margin-left: 24px; background: url(/UT-Hub/include/images/ico32_join_arrow.png) no-repeat;}
 .login--style .box_join_person a:hover { border-color: var(--col_blue); background-color: rgba(77, 101, 225, 0.04);}
 .login--style .box_join_person a:hover .btn_ico { color: var(--col_blue); text-decoration: underline;}
 .login--style .box_join_person a:hover .b1_r { color: var(--col_blue);}
@@ -3489,20 +3489,20 @@ input:focus { outline: 2px dashed var(--col_dis); z-index:0;}
 .login--style .tab_cont .certification_btn_group.type3.row2 [class^='btn'].big { height: initial; padding: 0;}
 .login--style .tab_cont .certification_btn_group.type3 .cert_info { padding: 0;}
 .login--style .tab_cont .certification_btn_group.active_2 [class^='btn']:not(li *):hover { color: initial; background-color: transparent;}
-.login--style .box_join_person .btn.kakao { background-image: url(/UT-Hub/include/images/login_new/logo80_80_kakao.png);}
-.login--style .box_join_person .btn.kb_bank { background-image: url(/UT-Hub/include/images/login_new/logo80_80_kb.png);}
-.login--style .box_join_person .btn.payco { background-image: url(/UT-Hub/include/images/login_new/logo80_80_payco.png);}
-.login--style .box_join_person .btn.pass { background-image: url(/UT-Hub/include/images/login_new/logo80_80_pass.png);}
-.login--style .box_join_person .btn.samsung_pass { background-image: url(/UT-Hub/include/images/login_new/logo80_80_samsungpass.png);}
-.login--style .box_join_person .btn.naver { background-image: url(/UT-Hub/include/images/login_new/logo80_80_naver.png);}
-.login--style .box_join_person .btn.shinhan_bank { background-image: url(/UT-Hub/include/images/login_new/logo80_80_shinhan.png);}
-.login--style .box_join_person .btn.toss { background-image: url(/UT-Hub/include/images/login_new/logo80_80_toss.png);}
-.login--style .box_join_person .btn.banksalad { background-image: url(/UT-Hub/include/images/login_new/logo80_80_banksalad.png);}
-.login--style .box_join_person .btn.hana_bank { background-image: url(/UT-Hub/include/images/login_new/logo80_80_hana.png);}
-.login--style .box_join_person .btn.nh { background-image: url(/UT-Hub/include/images/login_new/logo80_80_nh.png);}
-.login--style .box_join_person .btn.kakaobank { background-image: url(/UT-Hub/include/images/login_new/logo80_80_kakaobank.png);}
-.login--style .box_join_person .btn.woori { background-image: url(/UT-Hub/include/images/login_new/logo80_80_woori.png);}
-.login--style .box_join_person .btn.payco { background-image: url(/UT-Hub/include/images/login_new/logo80_80_payco.png);} /* 250713 추가 */
+.login--style .box_join_person .btn.kakao { background-image: url(/UT-Hub/include/images/logo80_80_kakao.png);}
+.login--style .box_join_person .btn.kb_bank { background-image: url(/UT-Hub/include/images/logo80_80_kb.png);}
+.login--style .box_join_person .btn.payco { background-image: url(/UT-Hub/include/images/logo80_80_payco.png);}
+.login--style .box_join_person .btn.pass { background-image: url(/UT-Hub/include/images/logo80_80_pass.png);}
+.login--style .box_join_person .btn.samsung_pass { background-image: url(/UT-Hub/include/images/logo80_80_samsungpass.png);}
+.login--style .box_join_person .btn.naver { background-image: url(/UT-Hub/include/images/logo80_80_naver.png);}
+.login--style .box_join_person .btn.shinhan_bank { background-image: url(/UT-Hub/include/images/logo80_80_shinhan.png);}
+.login--style .box_join_person .btn.toss { background-image: url(/UT-Hub/include/images/logo80_80_toss.png);}
+.login--style .box_join_person .btn.banksalad { background-image: url(/UT-Hub/include/images/logo80_80_banksalad.png);}
+.login--style .box_join_person .btn.hana_bank { background-image: url(/UT-Hub/include/images/logo80_80_hana.png);}
+.login--style .box_join_person .btn.nh { background-image: url(/UT-Hub/include/images/logo80_80_nh.png);}
+.login--style .box_join_person .btn.kakaobank { background-image: url(/UT-Hub/include/images/logo80_80_kakaobank.png);}
+.login--style .box_join_person .btn.woori { background-image: url(/UT-Hub/include/images/logo80_80_woori.png);}
+.login--style .box_join_person .btn.payco { background-image: url(/UT-Hub/include/images/logo80_80_payco.png);} /* 250713 추가 */
 .login--style .point_color { font-weight: 600;}
 
 #contents .login--style .box_bot_txt { position: relative; margin-top: 60px; padding: 32px 24px 32px 60px; border: none;}

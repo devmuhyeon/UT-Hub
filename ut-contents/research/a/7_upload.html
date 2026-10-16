@@ -23,17 +23,17 @@
 			</div>
 		</div>
 
+		
+
 		<div class="answer_popup" hidden>
 			<div class="answer_popup_dim"></div>
 			<div class="answer_popup_inner">
 				<button type="button" class="btn_answer_close" aria-label="팝업 닫기">✕</button>
 				<h5>메뉴 정답 화면</h5>
-				<div class="answer_dp_img" style="display:block; text-align:left;">
-                    <p><strong>AS-IS</strong></p>
-                    <p>고용24 메인 → 고객센터 → 정책/제도 → 고용정책</p>
-                    <p style="margin-top:20px;"><strong>TO-BE</strong></p>
-                    <p>GNB → 고용정보 콘텐츠 → 정책/제도 → 고용정책</p>
-                </div>
+				<div class="answer_dp_img">
+					<img src="/UT-Hub/ut-contents/research/images/employment_policy_asis.jpg" alt="메뉴 정답 예시 화면 As-is">
+					<img src="/UT-Hub/ut-contents/research/images/employment_policy_tobe.jpg" alt="메뉴 정답 예시 화면 To-be">
+				</div>
 			</div>
 		</div>
 
@@ -151,8 +151,8 @@
 				.then(function () {
 
 					setMessage(
-						'전송 요청을 보냈습니다.',
-						'서버 저장 여부는 관리자 측 스프레드시트에서 확인해 주세요. 설문에 참여해 주셔서 감사합니다.'
+						'전송 요청이 완료되었습니다.',
+						'설문에 참여해 주셔서 감사합니다.'
 					);
 
 					$('.loading_card').append(

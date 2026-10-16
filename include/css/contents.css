@@ -2331,16 +2331,16 @@ span.box_ipt.w530 { position: relative; width: 530px;}
 .login--style .login_wrp .box_form_login .box_form_table .list_tit:before, .login--style .login_wrp .btn_ico:before { display: none;}
 .login--style .login_wrp .tab_cont .certification_btn_group .cert_list { display: flex; flex-direction: column; justify-content: center;}
 .login--style .login_wrp .cert_list dt { padding-top: 72px;}
-.login--style .login_wrp .link-mobile-anyId .cert_list dt { background: url("/UT-Hub/include/images/login_new/ico48_certi_mobile.svg") 0 0 no-repeat;}
-.login--style .login_wrp .link-easy-anyId .cert_list dt { background: url("/UT-Hub/include/images/login_new/ico48_certi_easy.svg") 0 0 no-repeat;}
-.login--style .login_wrp .link-cmn-anyId .cert_list dt { background: url("/UT-Hub/include/images/login_new/ico48_certi_public.svg") 0 0 no-repeat;}
-.login--style .login_wrp .link-bnk-anyId .cert_list dt { background: url("/UT-Hub/include/images/login_new/ico48_certi_financial.svg") 0 0 no-repeat;}
-.login--style .login_wrp .link-ipin .cert_list dt { background: url("/UT-Hub/include/images/login_new/ico48_certi_ipin.svg") 0 0 no-repeat;}
-.login--style .login_wrp .link-id .cert_list dt { background: url("/UT-Hub/include/images/login_new/ico48_certi_id.svg") 0 0 no-repeat;}
-.login--style .login_wrp .link-mobile-anyId:hover .cert_list dt { background: url("/UT-Hub/include/images/login_new/ico48_certi_mobile_hover.svg") 0 0 no-repeat;}
-.login--style .login_wrp .link-easy-anyId:hover .cert_list dt { background: url("/UT-Hub/include/images/login_new/ico48_certi_easy_hover.svg") 0 0 no-repeat;}
-.login--style .login_wrp .link-cmn-anyId:hover .cert_list dt { background: url("/UT-Hub/include/images/login_new/ico48_certi_public_hover.svg") 0 0 no-repeat;}
-.login--style .login_wrp .link-bnk-anyId:hover .cert_list dt { background: url("/UT-Hub/include/images/login_new/ico48_certi_financial_hover.svg") 0 0 no-repeat;}
+.login--style .login_wrp .link-mobile-anyId .cert_list dt { background: url("/UT-Hub/include/images/ico48_certi_mobile.svg") 0 0 no-repeat;}
+.login--style .login_wrp .link-easy-anyId .cert_list dt { background: url("/UT-Hub/include/images/ico48_certi_easy.svg") 0 0 no-repeat;}
+.login--style .login_wrp .link-cmn-anyId .cert_list dt { background: url("/UT-Hub/include/images/ico48_certi_public.svg") 0 0 no-repeat;}
+.login--style .login_wrp .link-bnk-anyId .cert_list dt { background: url("/UT-Hub/include/images/ico48_certi_financial.svg") 0 0 no-repeat;}
+.login--style .login_wrp .link-ipin .cert_list dt { background: url("/UT-Hub/include/images/ico48_certi_ipin.svg") 0 0 no-repeat;}
+.login--style .login_wrp .link-id .cert_list dt { background: url("/UT-Hub/include/images/ico48_certi_id.svg") 0 0 no-repeat;}
+.login--style .login_wrp .link-mobile-anyId:hover .cert_list dt { background: url("/UT-Hub/include/images/ico48_certi_mobile_hover.svg") 0 0 no-repeat;}
+.login--style .login_wrp .link-easy-anyId:hover .cert_list dt { background: url("/UT-Hub/include/images/ico48_certi_easy_hover.svg") 0 0 no-repeat;}
+.login--style .login_wrp .link-cmn-anyId:hover .cert_list dt { background: url("/UT-Hub/include/images/ico48_certi_public_hover.svg") 0 0 no-repeat;}
+.login--style .login_wrp .link-bnk-anyId:hover .cert_list dt { background: url("/UT-Hub/include/images/ico48_certi_financial_hover.svg") 0 0 no-repeat;}
 .login--style .login_wrp .cert_list dt .tit { display: inline-block; padding-right: 28px; line-height: 30px; background: url("/UT-Hub/include/images/ico24_arrow2_right_black.svg") right center no-repeat; font-size: 20px; color: var(--col_body);}
 .login--style .login_wrp .tab_cont .certification_btn_group.type3 .cert_list dd { margin-top: 8px;}
 .login--style .login_wrp .cert_info .s1_r { letter-spacing: -0.3px;}
