@@ -131,9 +131,19 @@ $(function () {
     function makeResult(status, finalClickMenu) {
         var endTime = Date.now();
 
+        var menuName = isAsis ? targetMenu1 : targetMenu2;
+
         return {
-            targetMenu1: isAsis ? targetMenu1 : '',
-            targetMenu2: isTobe ? targetMenu2 : '',
+            groupNo: 'C', // 그룹 정보 명시
+            
+            // AS-IS 관련 키 (어떤 걸 찾든 매칭되도록 전부 포함)
+            targetMenu1: isAsis ? menuName : '',
+            typeCAsisTargetMenu1: isAsis ? menuName : '',
+            
+            // TO-BE 관련 키
+            targetMenu2: isTobe ? menuName : '',
+            typeCTobeTargetMenu2: isTobe ? menuName : '',
+            
             finalClickMenu: finalClickMenu || '',
             failReason: '',
             clickCount: clickLogs.length,

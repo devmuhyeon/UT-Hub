@@ -18,5 +18,5 @@
 .answer_popup_inner h5 {margin: 0 0 24px; padding-right: 60px; font-size: 24px; font-weight: 700; line-height: 1.4;}
 .answer_popup_inner img {display: block; width: 100%; height: auto;}
 .btn_answer_close {position: absolute; top: 16px; right: 16px; width: 48px; height: 48px; border: 0; border-radius: 50%; color: #111; font-size: 28px; font-weight: 700; line-height: 1; cursor: pointer; transition: .2s;}
-.answer_dp_img {display: flex; flex-direction: column; gap: 24px; align-items: center; justify-content: center;}
+.answer_dp_img {display: flex; flex-direction: column; gap: 100px; align-items: center; justify-content: center;}
 .answer_dp_img img {width: 100%; object-fit: contain;}
