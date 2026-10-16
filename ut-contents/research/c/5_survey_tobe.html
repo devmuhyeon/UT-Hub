@@ -17,10 +17,10 @@
 
 	<body>
 		<div id="utPage" class="ut_page" aria-hidden="true">
-			<iframe id="testFrame" class="ut_frame" title="고용24 화면 탐색 테스트 화면" src="/UT-Hub/ut-contents/research/c/frame/c-tobe.html"></iframe>
+			<iframe id="testFrame" class="ut_frame" title="고용24 화면 탐색 테스트 화면" src="/UT-Hub/ut-contents/research/frame/employment_trends-tobe.html"></iframe>
 			<div class="step_floating" role="status" aria-live="polite">
 				<div class="survey_head">
-					<p class="survey_infotxt">화면에서 <span class="aaa_info">'취업동향 모아보기'</span> 메뉴를 찾아주세요.</p>
+					<p class="survey_infotxt">화면에서 <span class="aaa_info">'쉽게 보는 고용정보'</span> 메뉴를 찾아주세요.</p>
 
 					<ol class="step_list" aria-label="조사 진행 단계">
                         <li><span class="sr_only">고용24 사용자 경험 조사</span></li>
@@ -42,7 +42,7 @@
 				<p id="utOverlayDesc" class="ut_alert_desc">아래에 제시된 메뉴를 찾아 클릭해 주세요. <br>'시작하기' 버튼을 누르면 안내창이 사라지고 측정이 시작됩니다.</p>
 				<div class="ut_target_box">
 					<span class="ut_target_tit">찾아야 할 메뉴</span>
-					<strong id="targetMenuName">취업동향 모아보기</strong>
+					<strong id="targetMenuName">쉽게 보는 고용정보</strong>
 					<span class="small_trget_txt">(카드뉴스/인포그래픽)</span>
 				</div>
 				<button type="button" id="startTest" class="btn_start">시작하기</button>
@@ -95,6 +95,14 @@
 					<div class="radio_item">
 						<input type="radio" id="failReason07" name="failReason" value="평소에 찾던 경로와 달라요.">
 						<label for="failReason07">평소에 찾던 경로와 달라요.</label>
+					</div>
+					<div class="radio_item">
+						<input type="radio" id="failReason08" name="failReason" value="메뉴를 눌렀는데 화면이 이동하지 않았어요.">
+						<label for="failReason08">메뉴를 눌렀는데 화면이 이동하지 않았어요.</label>
+					</div>
+					<div class="radio_item">
+						<input type="radio" id="failReason09" name="failReason" value="클릭되는 메뉴인지 몰랐어요.">
+						<label for="failReason09">클릭되는 메뉴인지 몰랐어요.</label>
 					</div>
 				</fieldset>
 				<button type="button" class="btn_next">다음 단계로 이동</button>

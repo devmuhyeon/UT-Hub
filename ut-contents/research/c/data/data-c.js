@@ -12,7 +12,7 @@ $(function () {
 
     var taskKey = isAsis ? 'typeCAsis' : 'typeCTobe';
     var nextPage = basePath + (isAsis ? '5_survey_tobe.html' : '6_survey-subjective.html');
-    var targetMenu = '취업동향 모아보기';
+    var targetMenu = '쉽게 보는 고용정보';
     var limitTime = 60000;
 
     var $page = $('#utPage');

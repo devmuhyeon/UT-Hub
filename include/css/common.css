@@ -3272,7 +3272,7 @@ input:focus { outline: 2px dashed var(--col_dis); z-index:0;}
 #header_top .header_lt { display: flex; justify-content: space-between; align-items: center; width: 1248px; margin: 0 auto}
 #header_top .get_top { display: flex; align-items: center; height: 36px;}
 /* 241120 아이콘 변경*/
-#header_top .get_top .icon { display: block; width: 28px; height: 20px; margin-right: 8px; background:url(/UT-Hub/include/images/main_241120/header_flag2.png) no-repeat;}
+#header_top .get_top .icon { display: block; width: 28px; height: 20px; margin-right: 8px; background:url(/UT-Hub/include/images/header_flag2.png) no-repeat;}
 #header_top .get_top .text { font-size: 15px; color: #1d1d1d;}
 #header_top .header_info { display:flex;align-items:center; }
 #header_top .header_info li { display: flex; align-items: center; position: relative;}
@@ -3312,9 +3312,9 @@ input:focus { outline: 2px dashed var(--col_dis); z-index:0;}
 #header_bottom .header_bottom_area { position:relative;display:flex; align-items:start;width:1248px;margin:0 auto}
 #header_bottom .header_bottom_area h1 {display:flex;}
 .go24_ci{ display:flex;width: 136px; height: 48px; margin-top: 15px; background: url(/UT-Hub/include/images/h1_ci.png) no-repeat;}
-.wknet_ci { display:flex;width: 115px; height: 48px; margin-top: 15px; background: url(/UT-Hub/include/images/ci/BI_worknet.png) no-repeat;}
-.callabo_ci { display:flex;width: 16px; height: 16px; margin: 30px 5px 0px 5px; background: url(/UT-Hub/include/images/ci/ico16_callabo.png) no-repeat;}
-.hrnet_ci { display:flex;width: 100px; height: 48px; margin-top: 15px; background: url(/UT-Hub/include/images/ci/BI_hrdnet.png) no-repeat !important;}
+.wknet_ci { display:flex;width: 115px; height: 48px; margin-top: 15px; background: url(/UT-Hub/include/images/BI_worknet.png) no-repeat;}
+.callabo_ci { display:flex;width: 16px; height: 16px; margin: 30px 5px 0px 5px; background: url(/UT-Hub/include/images/ico16_callabo.png) no-repeat;}
+.hrnet_ci { display:flex;width: 100px; height: 48px; margin-top: 15px; background: url(/UT-Hub/include/images/BI_hrdnet.png) no-repeat !important;}
 
 #gnb { display:flex; flex: 1; justify-content: center; margin-top: 0; scroll-margin-top: 206px;} /* 수정 */
 #gnb > ul { display:flex;justify-content:flex-start; width: initial;}
@@ -3798,9 +3798,9 @@ header.new { position: sticky; transition: transform .3s ease;}
 .sx_but { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin: 24px 0;}
 .sx_but .sx_bt { display: flex; align-items: center; gap: 16px; position: relative; width: 100%; height: 80px; padding: 0 24px; border: 1px solid var(--col_btn); border-radius: 12px;}
 .sx_but .sx_bt .icon { display: block; width: 40px; height: 40px;}
-.sx_but .sx_bt .icon.i01 { background: url(/UT-Hub/include/images/customer/icon_landing01.svg) no-repeat;}
-.sx_but .sx_bt .icon.i02 { background: url(/UT-Hub/include/images/customer/icon_landing02.svg) no-repeat;}
-.sx_but .sx_bt .icon.i03 { background: url(/UT-Hub/include/images/customer/icon_landing03.svg) no-repeat;}
+.sx_but .sx_bt .icon.i01 { background: url(/UT-Hub/include/images/icon_landing01.svg) no-repeat;}
+.sx_but .sx_bt .icon.i02 { background: url(/UT-Hub/include/images/icon_landing02.svg) no-repeat;}
+.sx_but .sx_bt .icon.i03 { background: url(/UT-Hub/include/images/icon_landing03.svg) no-repeat;}
 .sx_but .sx_bt span { font-size: 18px; font-weight: 600; letter-spacing: -0.32px;}
 .sx_but .sx_bt::after { content: ''; display: block; position: absolute; right: 24px; top: 50%; width: 16px; height: 16px; margin-top: -8px; background:url("/UT-Hub/include/images/icon/16/ico16_line_right_black.svg") no-repeat;}
 .btn_tooltip { display: inline-block; width: 24px; height: 24px; background: url("/UT-Hub/include/images/ico16_question_on.svg") no-repeat center/contain;}

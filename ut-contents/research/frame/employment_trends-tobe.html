@@ -15,13 +15,15 @@
 <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/tobe.css">
 <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/responsive.css">
 
+<style></style>
+
 
 <script type="text/javascript" src="/UT-Hub/include/js/jquery-3.6.3.min.js"></script>
 <script type="text/javascript" src="/UT-Hub/include/js/ui.js"></script> 
 
 		<title>고용24</title>
 </head>
-<body class="" style="zoom: 0.9;">
+<body id="body" class="" style="zoom: 0.9;">
 	<div id="wrap" class="person">
 		<!-- main layer popup -->
 
@@ -197,6 +199,8 @@
 												<li class="txt_list"><a href="javascript:void(0)"><span>직업심리검사</span></a></li>
 												<li class="txt_list"><a href="javascript:void(0)" class="btn_link_new right" title="새창 열림"><span>취업똑똑 온라인 취업상담</span></a></li>
 												<li class="txt_list"><a href="javascript:void(0)" class="btn_link_new right" title="새창 열림"><span>사이버진로교육센터</span></a></li>
+												<li class="txt_list"><a href="javascript:void(0)"><span>취업동향 모아보기</span></a></li>
+												<li class="txt_list"><a href="javascript:void(0)"><span>취업뉴스</span></a></li>
 												<li class="txt_list"><a href="javascript:void(0)" class="btn_link_new right" title="새창 열림"><span>직업정보</span></a></li>
 												<li class="txt_list"><a href="javascript:void(0)" class="btn_link_new right" title="새창 열림"><span>학과정보</span></a></li>
 											</ul>
@@ -325,55 +329,36 @@
 										</li>
 									</ul>
 								</li>
-								<li id="mm_spec_li">
-									<a href="javascript:void(0)" aria-expanded="false" id="mm_txt"><span>고용정보 콘텐츠<i class="ico_tobe"></i></span></a>
-									<ul class="gnb2depth">
-										<li>
-											<a href="javascript:void(0)"><span>정책/제도</span></a>
-											<ul class="gnb3depth">
-												<li class="txt_list"><a href="javascript:void(0)"><span>고용정책</span></a></li>
-												<li class="txt_list"><a href="javascript:void(0)"><span>지원금 모의계산</span></a></li>
-												<li class="txt_list"><a href="javascript:void(0)"><span>직종별 임금정보</span></a></li>
-											</ul>
-										</li>
-										<li data-answer="true">
-											<a href="javascript:void(0)" data-answer="true"><span data-answer="true">취업동향 모아보기</span></a>
-											<ul class="gnb3depth">
-												<li class="txt_list"><a href="javascript:void(0)"><span>취업카드</span></a></li>
-												<li class="txt_list"><a href="javascript:void(0)"><span>인포그래픽 취업동향</span></a></li>
-												<li class="txt_list"><a href="javascript:void(0)"><span>취업뉴스</span></a></li>
-											</ul>
-										</li>
-										<li>
-											<a href="javascript:void(0)"><span>공지사항</span></a>
-											<ul class="gnb3depth">
-												<li class="txt_list"><a href="javascript:void(0)"><span>공지사항</span></a></li>
-												<li class="txt_list"><a href="javascript:void(0)"><span>이벤트</span></a></li>
-												<li class="txt_list"><a href="javascript:void(0)"><span>설문조사</span></a></li>
-												<li class="txt_list"><a href="javascript:void(0)"><span>홍보자료실</span></a></li>
-											</ul>
-										</li>
-										<li>
-											<a href="javascript:void(0)"><span>자료실</span></a>
-											<ul class="gnb3depth">
-												<li class="txt_list"><a href="javascript:void(0)"><span>서식자료실</span></a></li>
-												<li class="txt_list"><a href="javascript:void(0)"><span>뉴스레터 모아보기</span></a></li>
-											</ul>
-										</li>
-									</ul>
-								</li>
 							</ul>
 						</div>
-						<!-- //gnb -->
-						<a class="header_allmenu" title="전체메뉴 버튼"style="position: relative; pointer-events: none; touch-action:none; cursor: default;">
-							<div class="lines">
-								<span class="t"></span>
-								<span class="c"></span>
-								<span class="b"></span>
-							</div>
-							<span>전체 메뉴</span>
-							<div class="dimmed_blur blur_mx"></div>
-						</a>
+						<div class="menu_group">
+                            <!-- 고용24 '콘텐츠 홈' UI - 수정v4 -->
+                            <div class="cb_depth1">
+                                <a href="javascript:void(0);" class="con_bnt" aria-expanded="false"><span class="text">고용정보 콘텐츠</span><i class="icon"></i></a>
+                                <ul class="cb_depth2">
+                                    <li class="cb_menu1"><a href="javascript:void(0)" class="g_t3_sb"><span>고용정보 콘텐츠</span><i class="homeico"></i></a></li>
+                                    <li class="cb_menu2"><span class="solo g_t3_sb">정책/제도</span>
+                                        <ul class="cb_depth3">
+                                            <li><a href="javascript:void(0)"><span>정책/제도 안내</span></a></li>
+                                            <li><a href="javascript:void(0)"><span>고용정책</span></a></li>
+                                            <li><a href="javascript:void(0)"><span>지원금 모의계산</span></a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="cb_menu3" data-answer="true"><a href="javascript:void(0)" class="g_t3_sb" data-answer="true"><span data-answer="true">쉽게 보는 고용정보</span></a></li>
+                                    <li class="cb_menu4"><a href="javascript:void(0)" class="g_t3_sb"><span>뉴스레터 모아보기</span></a></li>
+                                </ul>
+                            </div>
+                            <!-- 고용24 '콘텐츠 홈' UI - 수정v4 end -->
+                            <a href="javascript:void(0)" class="header_allmenu" aria-controls="sitemappopup" style="position: relative; pointer-events: none; touch-action:none; cursor: default;">
+                                <div class="lines">
+                                    <span class="t"></span>
+                                    <span class="c"></span>
+                                    <span class="b"></span>
+                                </div>
+                                <span>전체 메뉴</span>
+								<div class="dimmed_blur blur_mx"></div>
+                            </a>
+                        </div>
 					</div>
 				</div>
 			</div>
