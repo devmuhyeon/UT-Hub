@@ -11,7 +11,7 @@ $(function () {
     if (!isAsis && !isTobe) return;
 
     var taskKey = isAsis ? 'typeDAsis' : 'typeDTobe';
-    var nextPage = basePath + (isTobe ? '5_survey_asis.html' : '6_survey-subjective.html');
+    var nextPage = basePath + (isTobe ? '5_survey_asis.html' : '6_survey_subjective.html');
     var targetMenu1 = '취업동향 모아보기';
     var targetMenu2 = '쉽게 보는 고용정보';
     var targetMenu = isAsis ? targetMenu1 : targetMenu2;
