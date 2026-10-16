@@ -3,15 +3,17 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="stylesheet" href="/ut-work24/css/reset.css">
-		<link rel="stylesheet" href="/ut-work24/css/font.css">
-		<link rel="stylesheet" href="/ut-work24/css/common.css">
-		<link rel="stylesheet" href="/ut-work24/css/survey.css">
-		<link rel="stylesheet" href="/ut-work24/css/co-survey.css">
-		<link rel="stylesheet" href="/ut-work24/css/responsive.css">
+
+		<link rel="stylesheet" href="/UT-Hub/include/css/reset.css">
+        <link rel="stylesheet" href="/UT-Hub/include/css/font.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/ut-common.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/survey.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/responsive.css">
+		<link rel="stylesheet" href="/UT-Hub/include/ut_common/css/subjective.css">
 		<title>고용24 사용자 조사</title>
 	</head>
 	<body>
+
 		<div class="survey_wrap">
 			<form id="surveyForm" class="survey_box" novalidate>
 				<input type="hidden" id="user_ut_id" name="user_ut_id">
@@ -46,8 +48,9 @@
 			</form>
 		</div>
 		<script src="/UT-Hub/include/js/jquery-3.7.1.min.js"></script>
-		<script src="/ut-work24/js/ut-c-common.js"></script>
 		<script src="/UT-Hub/include/ut_common/js/lock_back.js"></script>
+		
+		<script src="/UT-Hub/ut-contents/research/a/data/storage-a.js"></script>
 		<script>
 			document.addEventListener('DOMContentLoaded', function () {
 
@@ -71,13 +74,13 @@
 					var improveText = textarea ? textarea.value.trim() : '';
 
 					sessionStorage.setItem(
-						'utCoSurvey',
+						'utACoSurvey',
 						JSON.stringify({
 							improveText: improveText
 						})
 					);
 
-					location.href = '/ut-work24/group_c/upload.html';
+					location.href = '/UT-Hub/ut-contents/research/a/7_upload.html';
 				}
 
 				/* form 기본 GET 전송 강제 차단 */

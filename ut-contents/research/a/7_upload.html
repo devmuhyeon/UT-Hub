@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>고용24 사용자 조사 - 결과 전송</title>
+		
+		<link rel="stylesheet" href="/UT-Hub/include/css/reset.css">
+        <link rel="stylesheet" href="/UT-Hub/include/css/font.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/ut-common.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/survey.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/responsive.css">
+		<link rel="stylesheet" href="/UT-Hub/include/ut_common/css/upload.css">
+	</head>
+
+	<body>
+		<div class="result_wrap">
+			<div class="loading_card">
+				<strong class="result_title">테스트 결과를 제출중입니다.</strong>
+				<p class="result_message" role="status" aria-live="polite">잠시만 기다려주세요.</p>
+				<div class="loading_bar" aria-hidden="true"></div>
+			</div>
+		</div>
+
+		<div class="answer_popup" hidden>
+			<div class="answer_popup_dim"></div>
+			<div class="answer_popup_inner">
+				<button type="button" class="btn_answer_close" aria-label="팝업 닫기">✕</button>
+				<h5>메뉴 정답 화면</h5>
+				<div class="answer_dp_img" style="display:block; text-align:left;">
+                    <p><strong>AS-IS</strong></p>
+                    <p>고용24 메인 → 고객센터 → 정책/제도 → 고용정책</p>
+                    <p style="margin-top:20px;"><strong>TO-BE</strong></p>
+                    <p>GNB → 고용정보 콘텐츠 → 정책/제도 → 고용정책</p>
+                </div>
+			</div>
+		</div>
+
+		
+		<script src="/UT-Hub/include/js/jquery-3.7.1.min.js"></script>
+		<script src="/UT-Hub/include/ut_common/js/lock_back.js"></script>
+		
+		<script src="/UT-Hub/ut-contents/research/a/data/storage-a.js"></script>
+
+		<script>
+			$(function () {
+				'use strict';
+
+				var WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw4fJmHIkRS9xy1AGgs3xax35xue7jEmQtcNNSEiHusZAxL_TldWBfqtLLTBzH5paLSxg/exec';
+
+				var $popup = $('.answer_popup');
+
+				// 안내 메시지
+				function setMessage(title, message) {
+					$('.loading_bar').hide();
+					$('.result_title').text(title);
+					$('.result_message').text(message);
+				}
+
+				// 저장 데이터 조회
+				function readJson(key) {
+					try {
+						return JSON.parse(
+							sessionStorage.getItem(key) || '{}'
+						);
+					} catch (err) {
+						return {};
+					}
+				}
+
+				// 데이터 값 반환
+				function value(data, key) {
+					return data[key] === undefined ||
+						data[key] === null
+						? ''
+						: data[key];
+				}
+
+				// 저장 스크립트 확인
+				if (typeof UT_A === 'undefined') {
+					setMessage(
+						'내용을 불러오지 못했습니다.'
+					);
+					return;
+				}
+
+				// 설문 및 테스트 결과 조회
+				var surveyData = UT_A.getSurvey();
+				var taskData = UT_A.getTaskResult();
+				var coSurvey = readJson('utACoSurvey');
+
+				var asis = taskData.typeAAsis || {};
+				var tobe = taskData.typeATobe || {};
+
+				// 필수 데이터 검증
+				if (
+					!surveyData.age ||
+					!surveyData.experience ||
+					!surveyData.member ||
+					(asis.result !== 'success' && asis.result !== 'fail') ||
+					(tobe.result !== 'success' && tobe.result !== 'fail')
+				) {
+					setMessage(
+						'제출할 데이터가 부족합니다.',
+						'사전 설문과 화면 탐색을 모두 완료한 뒤 제출해 주세요.'
+					);
+					return;
+				}
+
+				// A그룹 전송 데이터
+				var resultData = {
+					groupNo: 'A',
+
+					// 참여 전 확인
+					age: value(surveyData, 'age'),
+					experience: value(surveyData, 'experience'),
+					member: value(surveyData, 'member'),
+
+					// AS-IS
+					typeAAsisTargetMenu1: value(asis, 'targetMenu1'),
+					typeAAsisFinalClickMenu: value(asis, 'finalClickMenu'),
+					typeAAsisFailReason: value(asis, 'failReason'),
+					typeAAsisClickCount: value(asis, 'clickCount'),
+					typeAAsisDuration: value(asis, 'duration'),
+					typeAAsisClickPath: value(asis, 'clickPath'),
+
+					// TO-BE
+					typeATobeTargetMenu2: value(tobe, 'targetMenu2'),
+					typeATobeFinalClickMenu: value(tobe, 'finalClickMenu'),
+					typeATobeFailReason: value(tobe, 'failReason'),
+					typeATobeClickCount: value(tobe, 'clickCount'),
+					typeATobeDuration: value(tobe, 'duration'),
+					typeATobeClickPath: value(tobe, 'clickPath'),
+
+					// 주관식 및 브라우저
+					improveText: value(coSurvey, 'improveText'),
+					userAgent: navigator.userAgent
+				};
+
+
+				// 구글 스프레드시트 전송
+				fetch(WEB_APP_URL, {
+					method: 'POST',
+					mode: 'no-cors',
+					headers: {
+						'Content-Type': 'text/plain;charset=utf-8'
+					},
+					body: JSON.stringify(resultData)
+				})
+				.then(function () {
+
+					setMessage(
+						'전송 요청을 보냈습니다.',
+						'서버 저장 여부는 관리자 측 스프레드시트에서 확인해 주세요. 설문에 참여해 주셔서 감사합니다.'
+					);
+
+					$('.loading_card').append(
+						'<button type="button" class="btn_answer_open">' +
+						'정답이 궁금하신가요?' +
+						'</button>'
+					);
+
+					// 저장 확인 전까지 세션 데이터 유지
+				})
+				.catch(function () {
+
+
+					setMessage(
+						'전송 요청에 실패했습니다.',
+						'인터넷 연결을 확인한 후 새로고침해 다시 시도해 주세요.'
+					);
+				});
+
+				// 팝업 접근성 속성 설정
+				$popup.attr({
+					'role': 'dialog',
+					'aria-modal': 'true',
+					'aria-labelledby': 'answerTitleA'
+				});
+
+				$popup.find('h5').first().attr('id', 'answerTitleA');
+				$popup.find('.answer_popup_dim').attr('aria-hidden', 'true');
+
+				// 정답 팝업 열기
+				$(document).on('click', '.btn_answer_open', function () {
+
+					$('.result_wrap')
+						.prop('inert', true)
+						.attr('aria-hidden', 'true');
+
+					$popup
+						.stop(true, true)
+						.prop('hidden', false)
+						.hide()
+						.fadeIn(200, function () {
+							$popup
+								.find('.btn_answer_close')
+								.trigger('focus');
+						});
+				});
+
+				// 정답 팝업 닫기
+				function closeAnswer() {
+
+					$popup
+						.stop(true, true)
+						.fadeOut(200, function () {
+
+							$popup.prop('hidden', true);
+
+							$('.result_wrap')
+								.prop('inert', false)
+								.removeAttr('aria-hidden');
+
+							$('.btn_answer_open').trigger('focus');
+						});
+				}
+
+				$(document).on(
+					'click',
+					'.btn_answer_close, .answer_popup_dim',
+					function () {
+						closeAnswer();
+					}
+				);
+
+				// 팝업 키보드 접근성
+				$(document).on('keydown', function (e) {
+
+					if ($popup.prop('hidden')) return;
+
+					// ESC: 팝업 닫기
+					if (e.which === 27) {
+						e.preventDefault();
+						closeAnswer();
+						return;
+					}
+
+					// Tab: 팝업 내부 포커스 유지
+					if (e.which === 9) {
+						e.preventDefault();
+
+						$popup
+							.find('.btn_answer_close')
+							.trigger('focus');
+					}
+				});
+			});
+		</script>
+
+	</body>
+</html>

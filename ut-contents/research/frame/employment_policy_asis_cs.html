@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>고용24 고객센터 - 정책/제도 (A그룹 테스트 대체 화면)</title>
+<link rel="stylesheet" href="/UT-Hub/include/css/reset.css">
+<link rel="stylesheet" href="/UT-Hub/include/css/font.css">
+<style>
+* {box-sizing:border-box}
+body{margin:0;font-family:"Pretendard", "Malgun Gothic",sans-serif;color:#252b35;background:#fff;font-size:16px}
+a{color:inherit;text-decoration:none}
+a:hover{text-decoration:underline}
+a:focus-visible,button:focus-visible{outline:3px solid #1664cf;outline-offset:3px}
+.top{height:44px;background:#f5f7fa;border-bottom:1px solid #e3e8ee}
+.top .shell{display:flex;justify-content:space-between;align-items:center;height:100%}
+.shell{width:calc(100% - 64px);max-width:1200px;margin:auto}
+.top a{font-size:14px;font-weight:600}
+.mast{border-bottom:1px solid #dce2e9}
+.mast .shell{display:flex;align-items:center;justify-content:space-between;min-height:92px}
+.brand{font-weight:800;color:#134f9f;font-size:27px}
+.mast nav ul{display:flex;gap:32px;margin:0;padding:0;list-style:none}
+.mast nav a{font-size:18px;font-weight:700}
+.bread{background:#f7f9fc;border-bottom:1px solid #e4e8ed;padding:16px 0;font-size:14px}
+.layout{display:grid;grid-template-columns:260px 1fr;gap:52px;padding:48px 0 85px}
+.lnb_title{margin:0 0 16px;font-size:26px;color:#1e3d74;font-weight:800}
+.lnb{border-top:2px solid #233d62}
+.lnb button,.lnb a{width:100%;display:block;text-align:left;background:#fff;border:0;border-bottom:1px solid #e1e5eb;padding:17px 18px;font:inherit;cursor:pointer}
+.lnb button[aria-expanded="true"]{font-weight:800;background:#eef4fc;color:#123d81}
+.lnb .submenu{margin:0;padding:0;list-style:none;background:#f9fbfe}
+.lnb .submenu a{padding:13px 24px;font-size:15px}
+.lnb .submenu a:hover{background:#ebf4ff;color:#134fa2}
+main h1{font-size:32px;margin:0 0 24px}
+main .notice{border-top:2px solid #223f69;border-bottom:1px solid #d5dbe5;padding:30px 26px;line-height:1.8}
+main .notice h2{font-size:20px;margin:0 0 14px}
+main .notice p{margin:0}
+@media(max-width:800px){.shell{width:calc(100% - 32px)}.layout{grid-template-columns:1fr;gap:28px}.mast nav{display:none}}
+</style>
+</head>
+<body>
+<div class="top"><div class="shell"><span>대한민국 공식 전자정부 누리집</span><a href="/UT-Hub/ut-contents/research/frame/employment_policy_asis_main.html">고용24 메인</a></div></div>
+<header class="mast"><div class="shell"><div class="brand">고용24</div><nav aria-label="주요 메뉴"><ul><li><a href="#">채용정보</a></li><li><a href="#">취업지원</a></li><li><a href="#">직업훈련</a></li><li><a href="#">고객센터</a></li></ul></nav></div></header>
+<div class="bread"><div class="shell">홈 &gt; 고객센터</div></div>
+<div class="shell layout">
+<aside aria-label="고객센터 탐색"><h2 class="lnb_title">고객센터</h2>
+<nav class="lnb" aria-label="고객센터 메뉴">
+<button type="button" class="policy_toggle" aria-controls="policySubmenu" aria-expanded="false">정책/제도</button>
+<ul class="submenu" id="policySubmenu" hidden>
+<li><a href="#">정책/제도 안내</a></li>
+<li><a href="javascript:void(0)" data-answer="true">고용정책</a></li>
+<li><a href="#">관련 제도</a></li>
+</ul>
+<a href="#">자주 묻는 질문</a><a href="#">이용 안내</a><a href="#">공지사항</a>
+</nav></aside>
+<main id="content"><h1>고객센터</h1><div class="notice"><h2>고객센터 이용 안내</h2><p>왼쪽 고객센터 메뉴에서 원하는 항목을 선택해 주세요.</p></div></main>
+</div>
+<script src="/UT-Hub/include/js/jquery-3.7.1.min.js"></script>
+<script>
+$(function(){
+  $('.policy_toggle').on('click',function(){
+    var $button=$(this), expanded=$button.attr('aria-expanded')==='true';
+    $button.attr('aria-expanded',String(!expanded));
+    $('#policySubmenu').prop('hidden',expanded);
+  });
+});
+</script>
+</body></html>
