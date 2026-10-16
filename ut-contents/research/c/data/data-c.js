@@ -15,7 +15,7 @@ $(function () {
     var targetMenu1 = '취업동향 모아보기';
     var targetMenu2 = '쉽게 보는 고용정보';
     var targetMenu = isAsis ? targetMenu1 : targetMenu2;
-    var limitTime = 60000;ㅇ
+    var limitTime = 60000;
 
     var $page = $('#utPage');
     var $frame = $('#testFrame');
