@@ -152,7 +152,7 @@ $(function () {
     function logClick($control) {
         var now = Date.now();
         var name = getControlName($control);
-        var pathName = $control.closest('.lnb').length ? 'lnb.' + name : name;
+        var pathName = $control.closest('.lnb').length ? 'lnb_' + name : name;
         clickLogs.push({
             text: pathName,
             second: Math.round((now - lastClickTime) / 100) / 10
