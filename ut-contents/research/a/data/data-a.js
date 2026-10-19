@@ -121,7 +121,10 @@ $(function () {
             finalClickMenu: finalClickMenu || lastMenu || '',
             failReason: '',
             clickCount: clickLogs.length,
-            duration: Math.round((endTime - startTime) / 1000),
+            duration: Math.min(
+                Math.round((endTime - startTime) / 1000),
+                limitTime / 1000
+            ),
             clickPath: UT_A.makeClickPath(clickLogs),
             result: status,
             startTime: new Date(startTime).toISOString(),
