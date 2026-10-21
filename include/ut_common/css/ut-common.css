@@ -53,3 +53,6 @@ body {margin: 0; font-family: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo
 .step_list li {flex: 1; height: 9px; border-radius: 999px; background: rgba(255, 255, 255, .32);}
 .step_list li.is_current {background: var(--col_white); box-shadow: 0 0 0 4px rgba(255, 255, 255, .16);}
 .sr_only {position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;}
+#failError {margin-top: 16px; color: #E0024B; font-weight: 600; padding: 4px;}
+#failError+.btn_next {margin-top: 8px;}
+#failError[hidden]+.btn_next {margin-top: 24px;}

@@ -303,6 +303,10 @@ $(function () {
                 );
 
                 if (!$reason.length) {
+                    $fail.find('#failError').prop('hidden', false);
+                    $fail.find('input[name="failReason"]')
+                        .attr('aria-invalid', 'true')
+                        .attr('aria-describedby', 'failError');
                     $fail
                         .find('input[name="failReason"]')
                         .first()
@@ -318,4 +322,10 @@ $(function () {
             navigating = true;
             location.href = nextPage;
         });
+
+    $fail.find('input[name="failReason"]').on('change.utD', function () {
+        $fail.find('#failError').prop('hidden', true);
+        $fail.find('input[name="failReason"]')
+            .removeAttr('aria-invalid aria-describedby');
+    });
 });
