@@ -53,3 +53,5 @@ button:focus-within {outline: #666 dashed 2px;}
 .survey_infotxt .aaa_info {font-size: 24px; color: var(--col_white); font-weight: 700;}
 
 .ut_result_box .fail_radio_group {max-height: 300px; overflow: auto; padding-right: 12px;}
+
+.txt_highlight{display: inline; box-shadow: inset 0 -10px 0 #b7ccff;} 

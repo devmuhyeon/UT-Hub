@@ -10,3 +10,5 @@ body {overflow: hidden;}
 .quick_top {z-index: 95;}
 .main_wrap .favorite_swiper .swiper-wrapper {display: grid; grid-template-columns: repeat(6, 1fr);}
 .main_inner.in_blur .dimmed_blur {background: rgba(0, 0, 0, 0.75);}
+.in_blurx {pointer-events: none;  touch-action:none; cursor: default; position: relative; cursor: default;}
+.in_blurx .dimmed_blur {min-width: 40px; min-height: 40px; top: 50%; left: 50%; transform: translate(-50%, -50%);}

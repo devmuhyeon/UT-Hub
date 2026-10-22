@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="/UT-Hub/include/css/font.css">
     <link rel="stylesheet" href="/UT-Hub/include/css/common.css">
     <link rel="stylesheet" href="/UT-Hub/include/css/contents.css">
+	<link rel="stylesheet" href="/UT-Hub/include/ut_common/css/main-correction.css">
+
     <style>
         /* :root { --col_blue:#3F58D4; --col_green:#24A960; --col_green2:#117935;} */
         .tab_wrap.line_type .site_info { background-color: --col_blue;}
@@ -204,7 +206,9 @@
                             <button type="button" class="btn small type02">다음</button>
                         </span>
                     </div>
-                    <div class="keyword_search_box" style="margin-top:5px">
+                    <div class="keyword_search_box in_blur" style="margin-top:5px">
+
+                        <div class="dimmed_blur"></div>
                         <!-- 키워드 입력시 focus 클래스 추가 -->
                         <div class="box_table_group">
                             <div class="cell">
@@ -236,8 +240,9 @@
                     </div>
                     <!-- 검색영역 끝 -->
                 </div>
-                <a href="#" class="siteMap_ico09">
+                <a href="#" class="siteMap_ico09 in_blurx" disabled>
                     <span class="blind">팝업 닫기</span>
+                    <div class="dimmed_blur"></div>
                 </a>
             </div>
             </div>
