@@ -50,7 +50,7 @@
 							</div>
 						</div>
 					</fieldset>
-					<fieldset class="fieldset_group mt40" id="question2" aria-labelledby="improve_title" hidden>
+					<fieldset class="fieldset_group mt48" id="question2" aria-labelledby="improve_title" hidden>
 						<p class="question_desc" id="improve_title">2. 개선 사항이나 의견이 있으시면 작성해 주세요.<span class="question_sub">(선택 사항)</span>
 						</p>
 						<div class="textarea_wrap">
@@ -147,7 +147,7 @@
         <script>
             $(function () {
                 function showNextQuestion() {
-                    var $target = $('#question1');
+                    var $target = $('#question2');
                     if (!$('input[name="priorParticipation"]:checked').length || !$target.prop('hidden')) return;
 
                     var duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 240;

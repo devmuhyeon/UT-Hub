@@ -21,4 +21,4 @@
 .btn_submit:hover {transform: translateY(-2px); box-shadow: 0 20px 42px rgba(63, 88, 212, .34);}
 .question_desc {margin-bottom: 16px; font-size: 18px; color: var(--col_h); font-weight: 600; line-height: 150%}
 @media (prefers-reduced-motion: reduce) {* {scroll-behavior: auto !important; transition: none !important; animation: none !important;}}
-.fieldset_group + .fieldset_group.mt40 {margin-top: 40px !important;}
+.fieldset_group + .fieldset_group.mt48 {margin-top: 48px !important;}
