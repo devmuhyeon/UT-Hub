@@ -64,45 +64,33 @@
 		<div id="failPopup" class="ut_result_overlay" role="dialog" aria-modal="true" aria-labelledby="failTitle" aria-describedby="failDesc" hidden>
 			<div class="ut_result_box">
 				<span class="survey_logo"><img src="/UT-Hub/include/images/logo.svg" alt="고용24"></span>
-				<h2 id="failTitle" class="ut_alert_title">메뉴를 찾기 어려우셨나요?</h2>
+				<h2 id="failTitle" class="ut_alert_title">메뉴를 찾지 못한 이유가 무엇인가요?</h2>
 				<p id="failDesc" class="ut_alert_desc">시간이 초과되었어요. <br>아래 질문에 답해주시면 다음 단계로 넘어갑니다.</p>
 				<fieldset class="fail_radio_group">
 					<legend class="sr_only">실패 이유 선택</legend>
 					<div class="radio_item">
-						<input type="radio" id="failReason01" name="failReason" value="메뉴가 눈에 잘 보이지 않아요.">
-						<label for="failReason01">메뉴가 눈에 잘 보이지 않아요.</label>
+						<input type="radio" id="failReason01" name="failReason" value="어느 메뉴안에 있는지 모르겠어요.">
+						<label for="failReason01">어느 메뉴안에 있는지 모르겠어요.</label>
 					</div>
 					<div class="radio_item">
-						<input type="radio" id="failReason02" name="failReason" value="다른 메뉴와 모양이 달라서 메뉴인줄 몰랐어요.">
-						<label for="failReason02">다른 메뉴와 모양이 달라서 메뉴인줄 몰랐어요.</label>
+						<input type="radio" id="failReason02" name="failReason" value="메뉴가 너무 많아서 찾기 어려워요.">
+						<label for="failReason02">메뉴가 너무 많아서 찾기 어려워요.</label>
 					</div>
 					<div class="radio_item">
-						<input type="radio" id="failReason03" name="failReason" value="어느 메뉴 안에 있는지 모르겠어요.">
-						<label for="failReason03">어느 메뉴 안에 있는지 모르겠어요.</label>
+						<input type="radio" id="failReason03" name="failReason" value="클릭되는 메뉴인지 몰랐어요.">
+						<label for="failReason03">클릭되는 메뉴인지 몰랐어요.</label>
 					</div>
 					<div class="radio_item">
-						<input type="radio" id="failReason04" name="failReason" value="메뉴가 너무 많아요.">
-						<label for="failReason04">메뉴가 너무 많아요.</label>
+						<input type="radio" id="failReason04" name="failReason" value="평소 찾던 위치에 메뉴가 없어 찾기 어려웠어요.">
+						<label for="failReason04">평소 찾던 위치에 메뉴가 없어 찾기 어려웠어요.</label>
 					</div>
 					<div class="radio_item">
-						<input type="radio" id="failReason05" name="failReason" value="메뉴 이름이 생소해요.">
-						<label for="failReason05">메뉴 이름이 생소해요.</label>
+						<input type="radio" id="failReason05" name="failReason" value="다른 메뉴와 디자인이 달라 메뉴인지 알아보기 어려웠어요.">
+						<label for="failReason05">다른 메뉴와 디자인이 달라 메뉴인지 알아보기 어려웠어요.</label>
 					</div>
 					<div class="radio_item">
-						<input type="radio" id="failReason06" name="failReason" value="메뉴 이름이 기억나지 않아요.">
-						<label for="failReason06">메뉴 이름이 기억나지 않아요.</label>
-					</div>
-					<div class="radio_item">
-						<input type="radio" id="failReason07" name="failReason" value="평소에 찾던 경로와 달라요.">
-						<label for="failReason07">평소에 찾던 경로와 달라요.</label>
-					</div>
-					<div class="radio_item">
-						<input type="radio" id="failReason08" name="failReason" value="메뉴를 눌렀는데 화면이 이동하지 않았어요.">
-						<label for="failReason08">메뉴를 눌렀는데 화면이 이동하지 않았어요.</label>
-					</div>
-					<div class="radio_item">
-						<input type="radio" id="failReason09" name="failReason" value="클릭되는 메뉴인지 몰랐어요.">
-						<label for="failReason09">클릭되는 메뉴인지 몰랐어요.</label>
+						<input type="radio" id="failReason06" name="failReason" value="메뉴 이름이 잘 기억나지 않아요.">
+						<label for="failReason06">메뉴 이름이 잘 기억나지 않아요.</label>
 					</div>
 				</fieldset>
 				<p id="failError" role="alert" hidden>실패 이유를 선택해 주세요.</p>
