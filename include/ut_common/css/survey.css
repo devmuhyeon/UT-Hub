@@ -4,7 +4,7 @@
 .form_title {margin: 0 0 8px; color: var(--col_h); font-size: 26px; font-weight: 600; letter-spacing: -.035em;}
 .form_desc {margin: 0 0 34px; color: var(--col_p); font-size: 15px;}
 .fieldset_group {margin: 0; padding: 30px; border: 1px solid var(--col_border); border-radius: 26px; background: linear-gradient(180deg, var(--col_white) 0%, var(--col_box_bg) 100%); box-shadow: 0 12px 34px rgba(17, 17, 17, .06);}
-.fieldset_group + .fieldset_group {margin-top: 26px;}
+.fieldset_group + .fieldset_group {margin-top: 24px;}
 .legend_title {display: flex; align-items: center; gap: 12px; margin-bottom: 8px; color: var(--col_h); font-size: 20px; font-weight: 600; letter-spacing: -.03em;}
 .option_list {display: grid; grid-template-columns: repeat(3, 2fr); gap: 14px;}
 .option_item {position: relative;}
@@ -21,3 +21,4 @@
 .btn_submit:hover {transform: translateY(-2px); box-shadow: 0 20px 42px rgba(63, 88, 212, .34);}
 .question_desc {margin-bottom: 16px; font-size: 18px; color: var(--col_h); font-weight: 600; line-height: 150%}
 @media (prefers-reduced-motion: reduce) {* {scroll-behavior: auto !important; transition: none !important; animation: none !important;}}
+.fieldset_group + .fieldset_group.mt40 {margin-top: 40px !important;}

@@ -10,6 +10,11 @@
         <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/survey.css">
         <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/responsive.css">
 		<link rel="stylesheet" href="/UT-Hub/include/ut_common/css/subjective.css">
+        <style>
+            #question1[hidden], #submitArea[hidden] {display: none;}
+            #prior_question .option_list {grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));}
+            #prior_question input:focus + label {outline: 2px solid #111; outline-offset: 3px;}
+        </style>
 		<title>고용24 사용자 조사</title>
 	</head>
 	<body>
@@ -32,8 +37,21 @@
 				</div>
 
 				<div class="survey_body">
-					<fieldset class="fieldset_group" id="question1" >
-						<p class="question_desc">개선 사항이나 의견이 있으시면 작성해 주세요.<span class="question_sub">(선택 사항)</span>
+					<fieldset class="fieldset_group" id="question1" role="radiogroup" aria-labelledby="prior_title">
+						<p class="question_desc" id="prior_title">1. [6월]에 고용24 뉴스레터로 받은 설문(메뉴 탐색 테스트, 콘텐츠 홈 선호도 조사)에 참여하신 적이 있나요?</p>
+						<div class="option_list">
+							<div class="option_item">
+								<input type="radio" id="prior_yes" name="priorParticipation" value="참여함" required>
+								<label for="prior_yes">참여함</label>
+							</div>
+							<div class="option_item">
+								<input type="radio" id="prior_no" name="priorParticipation" value="참여하지 않음" required>
+								<label for="prior_no">참여하지 않음</label>
+							</div>
+						</div>
+					</fieldset>
+					<fieldset class="fieldset_group mt40" id="question2" aria-labelledby="improve_title" hidden>
+						<p class="question_desc" id="improve_title">2. 개선 사항이나 의견이 있으시면 작성해 주세요.<span class="question_sub">(선택 사항)</span>
 						</p>
 						<div class="textarea_wrap">
 							<label for="improve_text" class="sr_only">개선 의견 입력</label>
@@ -41,7 +59,7 @@
 							<p class="text_count" id="improve_count" aria-live="polite"><span class="current_count">0</span> / 100</p>
 						</div>
 					</fieldset> 
-					<div class="button_area" id="submitArea">
+					<div class="button_area" id="submitArea" hidden>
 						<button type="button" class="btn_submit" id="btnSubmit">최종 제출</button>
 					</div>
 				</div>
@@ -71,10 +89,18 @@
                 }
 
                 function saveAndMove() {
+                    var priorParticipation = $('input[name="priorParticipation"]:checked').val();
+                    if (!priorParticipation) {
+                        alert('사전평가 참여 유무를 선택해 주세요.');
+                        $('#prior_yes').trigger('focus');
+                        return;
+                    }
+
                     if (moving) return;
                     moving = true;
                     sessionStorage.setItem('utBCoSurvey', JSON.stringify({
-                        improveText: $.trim($textarea.val() || '')
+                        improveText: $.trim($textarea.val() || ''),
+                        priorParticipation: priorParticipation
                     }));
                     location.href = '/UT-Hub/ut-contents/research/b/7_upload.html';
                 }
@@ -86,6 +112,23 @@
                 $textarea.on('input', updateCount);
                 $('#btnSubmit').on('click', saveAndMove);
                 updateCount();
+            });
+        </script>
+        <script>
+            $(function () {
+                function showNextQuestion() {
+                    var $target = $('#question1');
+                    if (!$('input[name="priorParticipation"]:checked').length || !$target.prop('hidden')) return;
+
+                    var duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 240;
+                    $target.prop('hidden', false).hide().slideDown(duration, function () {
+                        $target.find('.question_desc').attr('tabindex', '-1').trigger('focus');
+                    });
+                    $('#submitArea').prop('hidden', false).css('display', 'flex').hide().slideDown(duration);
+                }
+
+                $('input[name="priorParticipation"]').on('change', showNextQuestion);
+                showNextQuestion();
             });
         </script>
 	</body>

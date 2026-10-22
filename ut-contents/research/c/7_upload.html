@@ -45,7 +45,7 @@
 			$(function () {
 				'use strict';
 
-				var WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw4fJmHIkRS9xy1AGgs3xax35xue7jEmQtcNNSEiHusZAxL_TldWBfqtLLTBzH5paLSxg/exec';
+				var WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzZxmJuqI6XgW3yi7VbyKjo5pVI02_fdnLrpw4GPeRTBrYxHHcaG9351ZtR-n2KwfzUIg/exec';
 
 				var SEND_LOCK_KEY = 'utCUploadRequested';
 				var $popup = $('.answer_popup');
@@ -143,6 +143,7 @@
 
 					// 주관식 및 브라우저
 					improveText: value(coSurvey, 'improveText'),
+					priorParticipation: value(coSurvey, 'priorParticipation'),
 					userAgent: navigator.userAgent
 				};
 
