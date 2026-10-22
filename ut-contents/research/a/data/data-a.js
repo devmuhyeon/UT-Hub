@@ -10,7 +10,7 @@ $(function () {
     if (!isAsis && !isTobe) return;
 
     var taskKey = isAsis ? 'typeAAsis' : 'typeATobe';
-    var nextPage = basePath + (isAsis ? '5_survey_tobe.html' : '6_survey_subjective.html');
+    var nextPage = basePath + (isAsis ? '5_survey_tobe.html' : '6_survey_prior.html');
     var progressKey = 'utAAsisProgress';
     var targetMenu = '고용정책';
     var limitTime = 60000;

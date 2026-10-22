@@ -10,7 +10,7 @@ $(function () {
     if (!isAsis && !isTobe) return;
 
     var taskKey = isTobe ? 'typeBTobe' : 'typeBAsis';
-    var nextPage = basePath + (isTobe ? '5_survey_asis.html' : '6_survey_subjective.html');
+    var nextPage = basePath + (isTobe ? '5_survey_asis.html' : '6_survey_prior.html');
     var progressKey = 'utBAsisProgress';
     var targetMenu = '고용정책';
     var limitTime = 60000;

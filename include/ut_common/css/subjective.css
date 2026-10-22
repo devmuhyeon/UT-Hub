@@ -11,4 +11,4 @@
 .question_sub {margin-left: 8px; font-size: 14px; color: var(--col_gray);}
 #question2[hidden], #submitArea[hidden] {display: none;}
 #question1 .option_list {grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));}
-#question1 input:focus + label {outline: 2px solid #111; outline-offset: 3px;}
+#question1 input:focus + label {outline: 2px dashed #888; outline-offset: 3px;}

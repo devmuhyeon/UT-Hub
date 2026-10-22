@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<link rel="stylesheet" href="/UT-Hub/include/css/reset.css">
+        <link rel="stylesheet" href="/UT-Hub/include/css/font.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/ut-common.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/survey.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/responsive.css">
+		<link rel="stylesheet" href="/UT-Hub/include/ut_common/css/subjective.css">
+		<title>고용24 사용자 조사 - 주관식 의견 조사</title>
+	</head>
+	<body>
+
+		<div class="survey_wrap">
+			<form id="surveyForm" class="survey_box" novalidate>
+				<input type="hidden" id="user_ut_id" name="user_ut_id">
+				<div class="survey_head">
+					<span class="survey_badge">고용24 사용자 경험 조사</span>
+					<h1 class="survey_title">주관식 의견 조사</h1>
+					<p class="survey_desc">앞서 확인한 화면들에 대한 사용 경험과 느낀 점을 자유롭게 작성해 주세요.</p>
+					<ol class="step_list" aria-label="조사 진행 단계">
+						<li><span class="sr_only">고용24 사용자 경험 조사</span></li>
+						<li><span class="sr_only">참여 전 확인</span></li>
+						<li><span class="sr_only">설문 방법 안내</span></li>
+						<li><span class="sr_only">메뉴 탐색 테스트</span></li>
+						<li><span class="sr_only">이전 조사 참여 확인</span></li>
+						<li class="is_current" aria-current="step"><span class="sr_only">현재 단계: 주관식 의견 조사</span></li>
+						<li><span class="sr_only">결과 제출</span></li>
+					</ol>
+				</div>
+
+				<div class="survey_body">
+					<div role="group" class="fieldset_group" id="question2" aria-labelledby="improve_title">
+						<p class="question_desc" id="improve_title">개선 사항이나 의견이 있으시면 작성해 주세요.<span class="question_sub">(선택 사항)</span>
+						</p>
+						<div class="textarea_wrap">
+							<label for="improve_text" class="sr_only">개선 의견 입력</label>
+							<textarea id="improve_text" name="improve_text" class="survey_textarea" rows="6" maxlength="100" placeholder="답변을 입력해주세요." aria-describedby="improve_count"></textarea>
+							<p class="text_count" id="improve_count" aria-live="polite"><span class="current_count">0</span> / 100</p>
+						</div>
+					</div>
+					<div class="button_area" id="submitArea">
+						<button type="submit" class="btn_submit" id="btnSubmit">최종 제출</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<script src="/UT-Hub/include/js/jquery-3.7.1.min.js"></script>
+		<script src="/UT-Hub/include/ut_common/js/lock_back.js"></script>
+		
+		<script src="/UT-Hub/ut-contents/research/d/data/storage-d.js"></script>
+		
+        <script>
+            $(function () {
+                var key = 'utDCoSurvey';
+                var saved = {};
+                try {
+                    saved = JSON.parse(sessionStorage.getItem(key) || '{}') || {};
+                } catch (err) {
+                    saved = {};
+                }
+                if (saved.priorParticipation !== '참여함' && saved.priorParticipation !== '참여하지 않음') {
+                    location.replace('/UT-Hub/ut-contents/research/d/6_survey_prior.html');
+                    return;
+                }
+                var $textarea = $('#improve_text');
+                var maxLength = Number($textarea.attr('maxlength')) || 100;
+                function updateCount() {
+                    var text = $textarea.val().slice(0, maxLength);
+                    $textarea.val(text);
+                    $('#improve_count .current_count').text(text.length);
+                }
+                $textarea.val(saved.improveText || '').on('input', updateCount);
+                updateCount();
+                $('#surveyForm').on('submit', function (e) {
+                    e.preventDefault();
+                    saved.improveText = $textarea.val().trim();
+                    sessionStorage.setItem(key, JSON.stringify(saved));
+                    location.href = '/UT-Hub/ut-contents/research/d/8_upload.html';
+                });
+            });
+        </script>
+    </body>
+</html>
