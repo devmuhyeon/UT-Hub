@@ -176,6 +176,356 @@
                 location.href = '/UT-Hub/ut-contents/research/b/3_task.html';
 
             });
+
+            $(function () {
+                var $active_row = null;
+                var list_index = 0;
+                var announce_timer = null;
+
+                var toggle_selector = '.period_cont .bnt_toggle';
+                var delete_selector = '.ul_select_days button';
+                var open_selector = '[open-full-pop="layer_workday_picker"]';
+
+                /* 스크린리더 안내 영역 */
+                var $status = $('#workday_table_status');
+
+                if (!$status.length) {
+                    $status = $('<div>', {
+                        'id': 'workday_table_status',
+                        'class': 'blind',
+                        'role': 'status',
+                        'aria-live': 'polite',
+                        'aria-atomic': 'true'
+                    }).appendTo('body');
+                }
+
+                function announce(message) {
+                    window.clearTimeout(announce_timer);
+                    $status.empty();
+
+                    announce_timer = window.setTimeout(function () {
+                        $status.text(message);
+                    }, 50);
+                }
+
+                /* 실제 존재하는 YYYY-MM-DD 날짜인지 확인 */
+                function is_valid_date(value) {
+                    if (
+                        typeof value !== 'string' ||
+                        !/^\d{4}-\d{2}-\d{2}$/.test(value)
+                    ) {
+                        return false;
+                    }
+
+                    var parts = value.split('-');
+                    var year = Number(parts[0]);
+                    var month = Number(parts[1]);
+                    var day = Number(parts[2]);
+                    var date = new Date(year, month - 1, day);
+
+                    return (
+                        date.getFullYear() === year &&
+                        date.getMonth() === month - 1 &&
+                        date.getDate() === day
+                    );
+                }
+
+                /* 해당 행의 선택 날짜 개수 반영 */
+                function update_count($row) {
+                    var count = $row
+                        .find('.ul_select_days')
+                        .first()
+                        .children('li')
+                        .length;
+
+                    $row
+                        .find('input.ipt_num[readonly]')
+                        .first()
+                        .val(count);
+
+                    return count;
+                }
+
+                /* 목록 펼침 / 접힘 */
+                function set_expanded($row, expanded) {
+                    var $box = $row.find('.bx_select_days').first();
+                    var $button = $row.find('.bnt_toggle').first();
+
+                    $box
+                        .toggleClass('is_active', expanded)
+                        .prop('hidden', !expanded)
+                        .toggle(expanded);
+
+                    $button.attr('aria-expanded', String(expanded));
+
+                    $button.find('.blind').text(
+                        expanded ? '접기' : '펼치기'
+                    );
+
+                    $button.find('i').css(
+                        'transform',
+                        expanded ? 'rotate(180deg)' : ''
+                    );
+                }
+
+                /* 최초 행 설정 */
+                function init_row($row) {
+                    var $box = $row.find('.bx_select_days').first();
+                    var $list = $row.find('.ul_select_days').first();
+                    var $button = $row.find('.bnt_toggle').first();
+
+                    if (
+                        !$box.length ||
+                        !$list.length ||
+                        $row.data('workday_table_ready')
+                    ) {
+                        return;
+                    }
+
+                    $row.data('workday_table_ready', true);
+
+                    /* aria-controls 연결용 고유 ID */
+                    if (!$box.attr('id')) {
+                        do {
+                            list_index += 1;
+                        } while ($('#workday_list_' + list_index).length);
+
+                        $box.attr('id', 'workday_list_' + list_index);
+                    }
+
+                    $button.attr('aria-controls', $box.attr('id'));
+
+                    /* 기존 날짜 버튼의 접근 가능한 이름 */
+                    $list.find('button').each(function () {
+                        var $date_button = $(this);
+                        var label = $date_button.attr('aria-label') ||
+                            $date_button.attr('title');
+
+                        if (!label) {
+                            label = $.trim(
+                                $date_button.find('span').first().text()
+                            ) + ' 선택 해제';
+                        }
+
+                        $date_button.attr({
+                            'type': 'button',
+                            'aria-label': label
+                        });
+
+                        $date_button.find('i').attr('aria-hidden', 'true');
+                    });
+
+                    var count = update_count($row);
+                    var expanded_value = $button.attr('aria-expanded');
+
+                    var expanded = expanded_value !== undefined
+                        ? expanded_value === 'true'
+                        : $box.hasClass('is_active');
+
+                    $row.find('.bx_toggle').toggle(count > 0);
+
+                    set_expanded($row, count > 0 && expanded);
+                }
+
+                /* 적용할 날짜 배열 정리 */
+                function normalize_dates(values) {
+                    if (!$.isArray(values)) {
+                        return null;
+                    }
+
+                    var dates = [];
+                    var selected_month = null;
+                    var valid = true;
+
+                    $.each(values, function (_, value) {
+                        if (!is_valid_date(value)) {
+                            valid = false;
+                            return false;
+                        }
+
+                        var month = value.slice(0, 7);
+
+                        /* 한 행에는 같은 연월의 날짜만 허용 */
+                        if (selected_month !== null && selected_month !== month) {
+                            valid = false;
+                            return false;
+                        }
+
+                        selected_month = month;
+
+                        if ($.inArray(value, dates) === -1) {
+                            dates.push(value);
+                        }
+                    });
+
+                    if (!valid) {
+                        return null;
+                    }
+
+                    return dates.sort();
+                }
+
+                /* 팝업 적용 결과를 행에 표시 */
+                function render_dates($row, dates) {
+                    var $list = $row.find('.ul_select_days').first();
+
+                    $list.empty();
+
+                    $.each(dates, function (_, date) {
+                        var parts = date.split('-');
+                        var month = Number(parts[1]);
+                        var day = Number(parts[2]);
+
+                        var label = parts[0] + '년 ' +
+                            month + '월 ' + day + '일 선택 해제';
+
+                        var $button = $('<button>', {
+                            'type': 'button',
+                            'class': 'btn small type02 clear status_type',
+                            'data-date': date,
+                            'aria-label': label
+                        });
+
+                        $('<span>')
+                            .text(day + '일')
+                            .appendTo($button);
+
+                        $('<i>', {
+                            'class': 'icon16_close_black',
+                            'aria-hidden': 'true'
+                        }).appendTo($button);
+
+                        $('<li>')
+                            .append($button)
+                            .appendTo($list);
+                    });
+
+                    var count = update_count($row);
+
+                    $row.find('.bx_toggle').toggle(count > 0);
+                    set_expanded($row, count > 0);
+
+                    announce('보수지급 기초일수 총 ' + count + '일 적용.');
+                }
+
+                /* 기존 행 초기화 */
+                $('.ul_select_days').each(function () {
+                    init_row($(this).closest('tr'));
+                });
+
+                /* 이 코드의 이벤트 중복 등록 방지 */
+                $(document).off('.workday_table');
+
+                /* 선택한 근로일 펼침 / 접힘 */
+                $(document).on(
+                    'click.workday_table',
+                    toggle_selector,
+                    function () {
+                        var $button = $(this);
+                        var $row = $button.closest('tr');
+
+                        init_row($row);
+
+                        set_expanded(
+                            $row,
+                            $button.attr('aria-expanded') !== 'true'
+                        );
+                    }
+                );
+
+                /* 개별 날짜 삭제 */
+                $(document).on(
+                    'click.workday_table',
+                    delete_selector,
+                    function () {
+                        var $button = $(this);
+                        var $item = $button.closest('li');
+                        var $row = $button.closest('tr');
+
+                        init_row($row);
+
+                        var label = $.trim(
+                            $button.find('span').first().text()
+                        );
+
+                        /* 삭제 후 다음 날짜 → 이전 날짜 순서로 이동 */
+                        var $next_focus = $item
+                            .next('li')
+                            .find('button')
+                            .first();
+
+                        if (!$next_focus.length) {
+                            $next_focus = $item
+                                .prev('li')
+                                .find('button')
+                                .first();
+                        }
+
+                        $item.remove();
+
+                        var count = update_count($row);
+
+                        /* 마지막 날짜 삭제 */
+                        if (count === 0) {
+                            set_expanded($row, false);
+                            $row.find('.bx_toggle').hide();
+
+                            $next_focus = $row
+                                .find(open_selector)
+                                .first();
+                        }
+
+                        $next_focus.trigger('focus');
+
+                        announce(
+                            label + ' 선택 해제. 보수지급 기초일수 총 ' +
+                            count + '일.'
+                        );
+                    }
+                );
+
+                /* 팝업을 실행한 행 기억 */
+                $(document).on(
+                    'click.workday_table',
+                    open_selector,
+                    function () {
+                        $active_row = $(this).closest('tr');
+
+                        init_row($active_row);
+                    }
+                );
+
+                /* 팝업 적용 이벤트 수신 */
+                $(document).on(
+                    'workday:apply.workday_table',
+                    function (event, result) {
+                        if (
+                            !$active_row ||
+                            !$.contains(document, $active_row[0]) ||
+                            !result
+                        ) {
+                            return;
+                        }
+
+                        var dates = normalize_dates(result.dates);
+
+                        if (dates === null) {
+                            announce(
+                                '선택 날짜를 반영하지 못했습니다. ' +
+                                '같은 연월의 올바른 날짜인지 확인해 주세요.'
+                            );
+                            return;
+                        }
+
+                        render_dates($active_row, dates);
+
+                        /*
+                        * 팝업 닫기와 실행 버튼으로의 포커스 복귀는
+                        * 기존 팝업 스크립트에서 처리합니다.
+                        */
+                    }
+                );
+            });
         </script>
 
 

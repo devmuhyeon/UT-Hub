@@ -57,13 +57,10 @@
                 sessionStorage.setItem('ut_group', 'C');
 
                 $('#btnStart').on('click', function () {
-                    // 새 테스트 시작 시 이전 전송 잠금 초기화
-                    sessionStorage.removeItem('utAllmenuAUploadRequested');
-                    sessionStorage.removeItem('utAUploadRequested');
+                    // 새 테스트 시작 시 해당 그룹의 전송 잠금만 초기화
                     sessionStorage.removeItem('utCUploadRequested');
                     UT_C.clearStorage();
                     sessionStorage.removeItem('utCCoSurvey');
-                    sessionStorage.removeItem('utCUploadRequested');
 
                     location.href = '/UT-Hub/ut-contents/research/c/2_survey.html';
                 });

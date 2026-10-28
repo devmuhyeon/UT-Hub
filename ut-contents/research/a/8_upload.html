@@ -49,6 +49,7 @@
 
 				var WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzZxmJuqI6XgW3yi7VbyKjo5pVI02_fdnLrpw4GPeRTBrYxHHcaG9351ZtR-n2KwfzUIg/exec';
 
+				var SEND_LOCK_KEY = 'utAUploadRequested';
 				var $popup = $('.answer_popup');
 
 				// 안내 메시지
@@ -57,121 +58,6 @@
 					$('.result_title').text(title);
 					$('.result_message').text(message);
 				}
-
-				// 저장 데이터 조회
-				function readJson(key) {
-					try {
-						return JSON.parse(
-							sessionStorage.getItem(key) || '{}'
-						);
-					} catch (err) {
-						return {};
-					}
-				}
-
-				// 데이터 값 반환
-				function value(data, key) {
-					return data[key] === undefined ||
-						data[key] === null
-						? ''
-						: data[key];
-				}
-
-				// 저장 스크립트 확인
-				if (typeof UT_A === 'undefined') {
-					setMessage(
-						'내용을 불러오지 못했습니다.'
-					);
-					return;
-				}
-
-				// 설문 및 테스트 결과 조회
-				var surveyData = UT_A.getSurvey();
-				var taskData = UT_A.getTaskResult();
-				var coSurvey = readJson('utACoSurvey');
-
-				var asis = taskData.typeAAsis || {};
-				var tobe = taskData.typeATobe || {};
-
-				// 필수 데이터 검증
-				if (
-					!surveyData.age ||
-					!surveyData.experience ||
-					!surveyData.member ||
-					(asis.result !== 'success' && asis.result !== 'fail') ||
-					(tobe.result !== 'success' && tobe.result !== 'fail')
-				) {
-					setMessage(
-						'제출할 데이터가 부족합니다.',
-						'사전 설문과 화면 탐색을 모두 완료한 뒤 제출해 주세요.'
-					);
-					return;
-				}
-
-				// A그룹 전송 데이터
-				var resultData = {
-					groupNo: 'A',
-
-					// 참여 전 확인
-					age: value(surveyData, 'age'),
-					experience: value(surveyData, 'experience'),
-					member: value(surveyData, 'member'),
-
-					// AS-IS
-					typeAAsisTargetMenu1: value(asis, 'targetMenu1'),
-					typeAAsisFinalClickMenu: value(asis, 'finalClickMenu'),
-					typeAAsisFailReason: value(asis, 'failReason'),
-					typeAAsisClickCount: value(asis, 'clickCount'),
-					typeAAsisDuration: value(asis, 'duration'),
-					typeAAsisClickPath: value(asis, 'clickPath'),
-
-					// TO-BE
-					typeATobeTargetMenu2: value(tobe, 'targetMenu2'),
-					typeATobeFinalClickMenu: value(tobe, 'finalClickMenu'),
-					typeATobeFailReason: value(tobe, 'failReason'),
-					typeATobeClickCount: value(tobe, 'clickCount'),
-					typeATobeDuration: value(tobe, 'duration'),
-					typeATobeClickPath: value(tobe, 'clickPath'),
-
-					// 주관식 및 브라우저
-					improveText: value(coSurvey, 'improveText'),
-					priorParticipation: value(coSurvey, 'priorParticipation'),
-					userAgent: navigator.userAgent
-				};
-
-
-				// 구글 스프레드시트 전송
-				fetch(WEB_APP_URL, {
-					method: 'POST',
-					mode: 'no-cors',
-					headers: {
-						'Content-Type': 'text/plain;charset=utf-8'
-					},
-					body: JSON.stringify(resultData)
-				})
-				.then(function () {
-
-					setMessage(
-						'전송 요청이 완료되었습니다.',
-						'설문에 참여해 주셔서 감사합니다.'
-					);
-
-					$('.loading_card').append(
-						'<button type="button" class="btn_answer_open">' +
-						'정답이 궁금하신가요?' +
-						'</button>'
-					);
-
-					// 저장 확인 전까지 세션 데이터 유지
-				})
-				.catch(function () {
-
-
-					setMessage(
-						'전송 요청에 실패했습니다.',
-						'인터넷 연결을 확인한 후 새로고침해 다시 시도해 주세요.'
-					);
-				});
 
 				// 팝업 접근성 속성 설정
 				$popup.attr({
@@ -247,6 +133,159 @@
 							.trigger('focus');
 					}
 				});
+
+				// 저장 데이터 조회
+				function readJson(key) {
+					try {
+						return JSON.parse(
+							sessionStorage.getItem(key) || '{}'
+						);
+					} catch (err) {
+						return {};
+					}
+				}
+
+				// 데이터 값 반환
+				function value(data, key) {
+					return data[key] === undefined ||
+						data[key] === null
+						? ''
+						: data[key];
+				}
+
+				// 저장 스크립트 확인
+				if (typeof UT_A === 'undefined') {
+					setMessage(
+						'내용을 불러오지 못했습니다.'
+					);
+					return;
+				}
+
+				// 같은 탭에서 새로고침해도 전송 중/완료 이력이 있으면 재전송하지 않음
+				var sendState;
+				try {
+					sendState = sessionStorage.getItem(SEND_LOCK_KEY);
+				} catch (err) {
+					setMessage('전송을 시작하지 않았습니다.', '브라우저 저장소를 사용할 수 없습니다. 저장소 설정을 확인해 주세요.');
+					return;
+				}
+				if (sendState) {
+					if (sendState === 'completed') {
+						setMessage('이미 전송 요청이 완료되었습니다.', '중복 전송하지 않았습니다. 설문에 참여해 주셔서 감사합니다.');
+						$('.loading_card').append(
+						'<button type="button" class="btn_answer_open">' +
+						'정답이 궁금하신가요?' +
+						'</button>'
+					);
+					} else {
+						setMessage('전송 요청 이력이 있습니다.', '새로고침을 사용할 수 없습니다.');
+					}
+					return;
+				}
+
+				// 설문 및 테스트 결과 조회
+				var surveyData = UT_A.getSurvey();
+				var taskData = UT_A.getTaskResult();
+				var coSurvey = readJson('utACoSurvey');
+
+				var asis = taskData.typeAAsis || {};
+				var tobe = taskData.typeATobe || {};
+
+				// 필수 데이터 검증
+				if (
+					!surveyData.age ||
+					!surveyData.experience ||
+					!surveyData.member ||
+					(asis.result !== 'success' && asis.result !== 'fail') ||
+					(tobe.result !== 'success' && tobe.result !== 'fail')
+				) {
+					setMessage(
+						'제출할 데이터가 부족합니다.',
+						'사전 설문과 화면 탐색을 모두 완료한 뒤 제출해 주세요.'
+					);
+					return;
+				}
+
+				// A그룹 전송 데이터
+				var resultData = {
+					groupNo: 'A',
+
+					// 참여 전 확인
+					age: value(surveyData, 'age'),
+					experience: value(surveyData, 'experience'),
+					member: value(surveyData, 'member'),
+
+					// AS-IS
+					typeAAsisTargetMenu1: value(asis, 'targetMenu1'),
+					typeAAsisFinalClickMenu: value(asis, 'finalClickMenu'),
+					typeAAsisFailReason: value(asis, 'failReason'),
+					typeAAsisClickCount: value(asis, 'clickCount'),
+					typeAAsisDuration: value(asis, 'duration'),
+					typeAAsisClickPath: value(asis, 'clickPath'),
+
+					// TO-BE
+					typeATobeTargetMenu2: value(tobe, 'targetMenu2'),
+					typeATobeFinalClickMenu: value(tobe, 'finalClickMenu'),
+					typeATobeFailReason: value(tobe, 'failReason'),
+					typeATobeClickCount: value(tobe, 'clickCount'),
+					typeATobeDuration: value(tobe, 'duration'),
+					typeATobeClickPath: value(tobe, 'clickPath'),
+
+					// 주관식 및 브라우저
+					improveText: value(coSurvey, 'improveText'),
+					priorParticipation: value(coSurvey, 'priorParticipation'),
+					userAgent: navigator.userAgent
+				};
+
+
+				// 요청 전에 잠금: 응답 대기 중 새로고침도 재전송하지 않음
+				try {
+					sessionStorage.setItem(SEND_LOCK_KEY, 'pending');
+				} catch (err) {
+					setMessage('전송을 시작하지 않았습니다.', '전송 이력을 저장할 수 없습니다. 브라우저 저장소 설정을 확인해 주세요.');
+					return;
+				}
+
+				// 구글 스프레드시트 전송
+				fetch(WEB_APP_URL, {
+					method: 'POST',
+					mode: 'no-cors',
+					headers: {
+						'Content-Type': 'text/plain;charset=utf-8'
+					},
+					body: JSON.stringify(resultData)
+				})
+				.then(function () {
+					// no-cors 응답은 서버 저장 성공 여부를 확인할 수 없음
+					try {
+						sessionStorage.setItem(SEND_LOCK_KEY, 'completed');
+					} catch (err) {
+						// 기존 pending 잠금을 유지
+					}
+
+					setMessage(
+						'전송 요청이 완료되었습니다.',
+						'설문에 참여해 주셔서 감사합니다.'
+					);
+
+					$('.loading_card').append(
+						'<button type="button" class="btn_answer_open">' +
+						'정답이 궁금하신가요?' +
+						'</button>'
+					);
+
+					// 저장 확인 전까지 세션 데이터 유지
+				})
+				.catch(function () {
+
+
+					setMessage(
+						'전송 결과를 확인하지 못했습니다.',
+						'중복 전송 방지를 위해 자동 재전송하지 않습니다. 저장 여부는 조사 담당자에게 확인해 주세요.'
+					);
+				});
+
+
 			});
 		</script>
 
