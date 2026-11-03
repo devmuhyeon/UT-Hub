@@ -1,10 +1,13 @@
+
 /* 전체메뉴에 필요한 동작만 유지. jQuery 3.6.3 */
 jQuery(function ($) {
     var active = 'tab_person', results = $(), resultIndex = -1;
     var $menu = $('#sitemappopup');
+
     // UT에서는 실제 서비스로 이동하지 않는다.
     $menu.find('[onclick]').removeAttr('onclick');
     $menu.find('a').removeAttr('target').attr('href', '#');
+
     var categoryMoving = false, categoryScrollTop = null;
 
     function status(text) {
@@ -41,7 +44,7 @@ jQuery(function ($) {
         if (move) {
             var top = $section[0].offsetTop - 60;
 
-            // 수정: 자동 이동 중에는 클릭한 탭의 색상 유지.
+            // 자동 이동 중에는 클릭한 탭의 색상 유지.
             categoryMoving = true;
 
             $menu.stop(true).animate(
@@ -65,7 +68,7 @@ jQuery(function ($) {
     }
 
     function switchTab(tab) {
-        // 수정: 이전 탭의 자동 이동 중단.
+        // 이전 탭의 자동 이동 중단.
         $menu.stop(true);
         categoryMoving = false;
         categoryScrollTop = null;
@@ -157,31 +160,35 @@ jQuery(function ($) {
         $(this).removeAttr('data-original-action');
     });
 
+    /*
+     * 4뎁스 메뉴
+     * a.is_level4 태그 유지
+     * 클릭 시 바로 다음 .menuLevel4 펼침/접힘
+     */
     $('.menuLevel4').each(function (index) {
-        var $list = $(this), $link = $list.prev('a');
+        var $list = $(this);
+        var $link = $list.prev('a.is_level4');
+
+        if (!$link.length) return;
 
         if (!$list.text().trim()) {
             $list.remove();
             return;
         }
 
-        var id = 'submenu-' + index;
+        var id = $list.attr('id') || 'submenu-' + index;
+
         $list.attr('id', id).hide();
 
-        var $button = $('<button type="button" class="is_level4"></button>')
-            .html($link.html())
-            .attr({
-                'aria-controls': id,
-                'aria-expanded': 'false'
-            });
+        $link.attr({
+            'role': 'button',
+            'aria-controls': id,
+            'aria-expanded': 'false'
+        });
 
-        if ($link.attr('id')) {
-            $button.attr('id', $link.attr('id'));
-        }
+        $link.on('click', function (e) {
+            e.preventDefault();
 
-        $link.replaceWith($button);
-
-        $button.on('click', function () {
             var open = $(this).attr('aria-expanded') !== 'true';
 
             $(this)
@@ -189,6 +196,11 @@ jQuery(function ($) {
                 .toggleClass('active', open);
 
             $list.toggle(open);
+        }).on('keydown', function (e) {
+            if (e.key === ' ' || e.key === 'Spacebar') {
+                e.preventDefault();
+                $(this).trigger('click');
+            }
         });
     });
 
@@ -202,18 +214,23 @@ jQuery(function ($) {
 
         $result.parents('.menuLevel4')
             .show()
-            .prev('button')
+            .prev('a.is_level4')
             .attr('aria-expanded', 'true')
             .addClass('active');
 
         $result.trigger('focus');
-        status(results.length + '건 중 ' + (resultIndex + 1) + '번째 결과');
+
+        status(
+            results.length + '건 중 ' +
+            (resultIndex + 1) + '번째 결과'
+        );
     }
 
     function search() {
         var keyword = $.trim($('#searchTxt').val());
 
-        $menu.find('.match,.match_on').removeClass('match match_on');
+        $menu.find('.match,.match_on')
+            .removeClass('match match_on');
 
         if (!keyword) {
             status('검색어를 입력해 주세요.');
@@ -222,7 +239,7 @@ jQuery(function ($) {
         }
 
         results = $('#' + active + '_cont')
-            .find('a,button.is_level4')
+            .find('a')
             .filter(function () {
                 return $(this).text().indexOf(keyword) !== -1;
             })
@@ -237,7 +254,9 @@ jQuery(function ($) {
         status('검색 결과 ' + results.length + '건');
         resultIndex = -1;
 
-        if (results.length) focusResult(0);
+        if (results.length) {
+            focusResult(0);
+        }
     }
 
     $('#btn_searchSiteMap').on('click', search);
@@ -249,24 +268,31 @@ jQuery(function ($) {
         }
     });
 
-    $('.stit_area .box_btn_group button').eq(0).on('click', function () {
-        focusResult(resultIndex - 1);
-    });
+    $('.stit_area .box_btn_group button')
+        .eq(0)
+        .on('click', function () {
+            focusResult(resultIndex - 1);
+        });
 
-    $('.stit_area .box_btn_group button').eq(1).on('click', function () {
-        focusResult(resultIndex + 1);
-    });
+    $('.stit_area .box_btn_group button')
+        .eq(1)
+        .on('click', function () {
+            focusResult(resultIndex + 1);
+        });
 
     $menu.find('a[href="#"]').on('click', function (e) {
         e.preventDefault();
     });
 
     $(window).on('resize', function () {
-        $menu.toggleClass('resize', $(window).width() <= 1248);
+        $menu.toggleClass(
+            'resize',
+            $(window).width() <= 1248
+        );
     }).trigger('resize');
 
     function syncScrollCategory(e) {
-        // 수정: 자동 이동 중 활성 탭 변경 방지.
+        // 자동 이동 중 활성 탭 변경 방지.
         if (categoryMoving) return;
 
         // 자동 이동 종료 직후 남은 scroll 이벤트도 무시.
@@ -299,7 +325,9 @@ jQuery(function ($) {
 
         if (
             $menu.scrollTop() > 0 &&
-            element.scrollHeight - element.clientHeight - $menu.scrollTop() <= 2
+            element.scrollHeight -
+            element.clientHeight -
+            $menu.scrollTop() <= 2
         ) {
             id = $sections.last().attr('id');
         }
@@ -309,45 +337,78 @@ jQuery(function ($) {
 
     $menu.on('scroll.allmenu', syncScrollCategory);
 
-    // 수정: 직접 스크롤하면 자동 이동을 중단하고 위치 동기화 재개.
-    $menu.on('wheel.allmenu touchstart.allmenu keydown.allmenu', function (e) {
-        if (
-            e.type === 'keydown' &&
-            !/^(ArrowUp|ArrowDown|PageUp|PageDown|Home|End| )$/.test(e.key)
-        ) {
-            return;
+    // 직접 스크롤하면 자동 이동을 중단하고 위치 동기화 재개.
+    $menu.on(
+        'wheel.allmenu touchstart.allmenu keydown.allmenu',
+        function (e) {
+            if (
+                e.type === 'keydown' &&
+                !/^(ArrowUp|ArrowDown|PageUp|PageDown|Home|End| )$/.test(e.key)
+            ) {
+                return;
+            }
+
+            if (!categoryMoving) return;
+
+            $menu.stop(true);
+            categoryMoving = false;
+            categoryScrollTop = null;
+            syncScrollCategory();
         }
+    );
 
-        if (!categoryMoving) return;
+    $(window).on(
+        'resize.allmenu load.allmenu',
+        syncScrollCategory
+    );
 
-        $menu.stop(true);
-        categoryMoving = false;
-        categoryScrollTop = null;
-        syncScrollCategory();
-    });
+    $menu.on(
+        'click.allmenu',
+        '.is_level4',
+        syncScrollCategory
+    );
 
-    $(window).on('resize.allmenu load.allmenu', syncScrollCategory);
-    $menu.on('click.allmenu', '.is_level4', syncScrollCategory);
-
-    // 설명은 토글 상태로만 제어한다. hover/focus가 숨김 상태를 바꾸지 않는다.
+    /*
+     * 메뉴 설명 토글
+     * hover/focus는 숨김 상태를 변경하지 않음
+     */
     var $toggle = $('#order_check_all');
+
     $menu.find('[aria-describedby]').each(function () {
-        $(this).data('descriptionId', $(this).attr('aria-describedby'));
+        $(this).data(
+            'descriptionId',
+            $(this).attr('aria-describedby')
+        );
     });
+
     function syncDescriptions() {
         var show = $toggle.prop('checked');
-        $menu.find('.site_map_cn').stop(true, true).prop('hidden', !show).toggle(show);
+
+        $menu.find('.site_map_cn')
+            .stop(true, true)
+            .prop('hidden', !show)
+            .toggle(show);
+
         $toggle.attr('aria-checked', String(show));
+
         $menu.find('a,button').each(function () {
             var id = $(this).data('descriptionId');
+
             if (id) {
-                if (show) $(this).attr('aria-describedby', id);
-                else $(this).removeAttr('aria-describedby');
+                if (show) {
+                    $(this).attr('aria-describedby', id);
+                } else {
+                    $(this).removeAttr('aria-describedby');
+                }
             }
         });
     }
-    $toggle.on('change.allmenuDescriptions', syncDescriptions);
-    syncDescriptions();
 
+    $toggle.on(
+        'change.allmenuDescriptions',
+        syncDescriptions
+    );
+
+    syncDescriptions();
     switchTab(active);
 });
