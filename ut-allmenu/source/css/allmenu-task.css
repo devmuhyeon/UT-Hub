@@ -1,0 +1,4 @@
+@charset "utf-8";
+#taskProgress {background: #000; border-radius: 9999px; padding: 4px 12px; color: #fff;}
+.ut_task_question {font-weight: 600;}
+.ut_timer {color: #fff !important;}

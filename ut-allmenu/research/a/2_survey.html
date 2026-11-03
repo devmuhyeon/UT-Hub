@@ -34,8 +34,8 @@
                 </div>
                 <div class="survey_body">
                     <!-- Q1 -->
-                    <fieldset class="fieldset_group" id="question1">
-                        <p class="question_desc"><span class="question_number">1.</span> 연령대를 선택해주세요</p>
+                    <fieldset class="fieldset_group" id="question1" aria-labelledby="ageQuestion">
+                        <p class="question_desc" id="ageQuestion"><span class="question_number">1.</span> 연령대를 선택해주세요</p>
                         <div class="option_list">
                             <div class="option_item">
                                 <input type="radio" id="age_20" name="age" value="20~30대">
@@ -55,8 +55,8 @@
                     </fieldset>
 
                     <!-- Q2 -->
-                    <fieldset class="fieldset_group" id="question2" hidden>
-                        <p class="question_desc"><span class="question_number">2.</span> 고용24 이용 경험이 있으신가요?</p>
+                    <fieldset class="fieldset_group" id="question2" aria-labelledby="experienceQuestion" hidden>
+                        <p class="question_desc" id="experienceQuestion"><span class="question_number">2.</span> 고용24 이용 경험이 있으신가요?</p>
 
                         <div class="option_list">
                             <div class="option_item">
@@ -72,8 +72,8 @@
                     </fieldset>
 
                     <!-- Q3 -->
-                    <fieldset class="fieldset_group" id="question3" hidden>
-                        <p class="question_desc"><span class="question_number">3.</span> 고용24 회원이신가요?</p>
+                    <fieldset class="fieldset_group" id="question3" aria-labelledby="memberQuestion" hidden>
+                        <p class="question_desc" id="memberQuestion"><span class="question_number">3.</span> 고용24 회원이신가요?</p>
                         <div class="option_list">
                             <div class="option_item">
                                 <input type="radio" id="member_person" name="member" value="개인회원">
@@ -91,8 +91,8 @@
                     </fieldset>
 
                     <!-- Q4 -->
-                    <fieldset class="fieldset_group" id="question4" hidden>
-                        <p class="question_desc"><span class="question_number">4.</span> 본 설문은 익명으로 진행되며, 응답 결과는 서비스 개선 및 사용자 경험 분석 목적으로만 활용됩니다.</p>
+                    <fieldset class="fieldset_group" id="question4" aria-labelledby="agreeQuestion" hidden>
+                        <p class="question_desc" id="agreeQuestion"><span class="question_number">4.</span> 본 설문은 익명으로 진행되며, 응답 결과는 서비스 개선 및 사용자 경험 분석 목적으로만 활용됩니다.</p>
                         <div class="option_list">
                             <div class="option_item">
                                 <input type="radio" id="svry_yes" name="svry" value="예">
@@ -112,6 +112,7 @@
         <script src="/UT-Hub/include/ut_common/js/lock_back.js"></script>
 
         <script src="/UT-Hub/ut-allmenu/research/a/data/storage-a.js"></script>
+        <script src="/UT-Hub/ut-allmenu/research/a/data/dropout-a.js"></script>
         <script>
             $('#submitArea').hide();
 
@@ -173,6 +174,7 @@
 
                 UT_A.saveSurvey(surveyData);
 
+                UT_A_TRACK.navigate('과업 안내');
                 location.href = '/UT-Hub/ut-allmenu/research/a/3_task.html';
 
             });

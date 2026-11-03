@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고용24 사용자 조사 - 설문 완료</title>
+    <link rel="stylesheet" href="/UT-Hub/include/css/reset.css">
+    <link rel="stylesheet" href="/UT-Hub/include/css/font.css">
+    <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/ut-common.css">
+    <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/survey.css">
+    <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/responsive.css">
+    <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/upload.css">
+    <style>
+        .btn_answer_open[hidden], .answer_popup[hidden] {display:none!important}
+        .answer_popup_inner h2 {margin:0 0 24px;padding-right:60px;font-size:24px;font-weight:700;line-height:1.4}
+        .answer_dp_img p {margin:0 0 12px;line-height:1.6}
+    </style>
+</head>
+<body>
+    <div class="result_wrap">
+        <main class="loading_card">
+            <h1 class="result_title">결과를 확인하고 있습니다.</h1>
+            <p class="result_message" role="status" aria-live="polite">잠시만 기다려 주세요.</p>
+            <div class="loading_bar" aria-hidden="true"></div>
+            <button type="button" class="btn_answer_open" hidden>정답이 궁금하신가요?</button>
+        </main>
+    </div>
+
+    <div class="answer_popup" role="dialog" aria-modal="true" aria-labelledby="answerTitleA" hidden>
+        <div class="answer_popup_dim" aria-hidden="true"></div>
+        <div class="answer_popup_inner">
+            <button type="button" class="btn_answer_close" aria-label="정답 안내 닫기">✕</button>
+            <h2 id="answerTitleA">메뉴 정답 안내</h2>
+            <div class="answer_dp_img">
+                <p>1. 취업지원 → 취업가이드 → 직업심리검사</p>
+                <p>2. 쉽게 보는 고용정보 (제공된 AS-IS 화면에 해당 메뉴 없음)</p>
+                <p>3. 취업지원 → 통합경력증명 → 발급·관리</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/UT-Hub/include/js/jquery-3.7.1.min.js"></script>
+    <script src="/UT-Hub/include/ut_common/js/lock_back.js"></script>
+    <script src="/UT-Hub/ut-allmenu/research/a/data/storage-a.js"></script>
+        <script src="/UT-Hub/ut-allmenu/research/a/data/dropout-a.js"></script>
+    <script>
+        $(function () {
+            'use strict';
+
+            // 고용24 전체메뉴 A타입 Apps Script 웹앱 배포 URL
+            var WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxYCfQUeMtC8NAk8WiZZ3Bx8fP42gAETB5JDcqCdrvFyFfD7PeHywL616_bUddPhE9_/exec';
+            var LOCK_KEY = 'utAllmenuAUploadRequested';
+            var PAYLOAD_KEY = 'utAllmenuAUploadPayload';
+            var ID_KEY = 'utAllmenuASubmissionId';
+            var $popup = $('.answer_popup');
+
+            function message(title, text) {
+                $('.loading_bar').hide();
+                $('.result_title').text(title);
+                $('.result_message').text(text);
+            }
+
+            function readJson(key) {
+                try {
+                    return JSON.parse(sessionStorage.getItem(key) || '{}');
+                } catch (ignore) {
+                    return {};
+                }
+            }
+
+            function showAnswerButton() {
+                $('.btn_answer_open').prop('hidden', false);
+            }
+
+            function getSubmissionId() {
+                var id = sessionStorage.getItem(ID_KEY);
+                if (!id) {
+                    id = 'A-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 12);
+                    sessionStorage.setItem(ID_KEY, id);
+                }
+                return id;
+            }
+
+            var personal = UT_A.getSurvey();
+            var tasks = UT_A.getTaskResult();
+            var opinion = readJson('utAllmenuACoSurvey');
+            var keys = ['task1', 'task2', 'task3'];
+            var validTasks = true;
+            $.each(keys, function (_, key) {
+                if (!tasks[key] || !/^(success|fail)$/.test(tasks[key].result)) {
+                    validTasks = false;
+                    return false;
+                }
+            });
+
+            if (!personal.age || !personal.experience || !personal.member || !validTasks ||
+                !opinion.survey1 || !opinion.survey3) {
+                message('제출할 데이터가 부족합니다.', '설문을 순차적으로 진행해주세요.');
+                return;
+            }
+
+            var resultData = {
+                groupNo: 'A',
+                testType: 'AS-IS',
+                submissionId: getSubmissionId(),
+                age: personal.age,
+                experience: personal.experience,
+                member: personal.member,
+                agree: personal.agree || '',
+                task1: tasks.task1,
+                task2: tasks.task2,
+                task3: tasks.task3,
+                survey1: opinion.survey1,
+                survey2: opinion.survey2 || '',
+                survey3: opinion.survey3,
+                userAgent: navigator.userAgent
+            };
+
+            sessionStorage.setItem(PAYLOAD_KEY, JSON.stringify(resultData));
+
+            if (!WEB_APP_URL) {
+                message('설문 작성이 완료되었습니다.', '설문에 참여해 주셔서 감사합니다.');
+                showAnswerButton();
+            } else if (sessionStorage.getItem(LOCK_KEY) === 'true') {
+                message('전송 요청 이력이 있습니다.', '중복 전송 방지를 위해 새로고침으로는 다시 보내지 않았습니다.');
+                showAnswerButton();
+            } else {
+                // Apps Script의 응답은 CORS 정책에 따라 읽을 수 없을 수 있으므로 중복 요청을 차단.
+                sessionStorage.setItem(LOCK_KEY, 'true');
+                $.ajax({
+                    url: WEB_APP_URL,
+                    method: 'POST',
+                    data: JSON.stringify(resultData),
+                    processData: false,
+                    contentType: 'text/plain;charset=utf-8',
+                    crossDomain: true,
+                    timeout: 15000
+                }).done(function () {
+                    message('전송 요청이 완료되었습니다.', '설문에 참여해 주셔서 감사합니다.');
+                    showAnswerButton();
+                }).fail(function () {
+                    message('전송 상태를 확인할 수 없습니다.', '중복 전송 방지를 위해 재전송하지 않습니다.');
+                    showAnswerButton();
+                });
+            }
+
+            function closeAnswer() {
+                $popup.stop(true, true).fadeOut(150, function () {
+                    $popup.prop('hidden', true);
+                    $('.result_wrap').prop('inert', false).removeAttr('aria-hidden');
+                    $('.btn_answer_open').trigger('focus');
+                });
+            }
+
+            $('.btn_answer_open').on('click', function () {
+                $('.result_wrap').prop('inert', true).attr('aria-hidden', 'true');
+                $popup.prop('hidden', false).stop(true, true).hide().fadeIn(150, function () {
+                    $popup.find('.btn_answer_close').trigger('focus');
+                });
+            });
+            $('.btn_answer_close,.answer_popup_dim').on('click', closeAnswer);
+            $(document).on('keydown', function (event) {
+                if ($popup.prop('hidden')) return;
+                if (event.which === 27) {
+                    event.preventDefault();
+                    closeAnswer();
+                } else if (event.which === 9) {
+                    event.preventDefault();
+                    $popup.find('.btn_answer_close').trigger('focus');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

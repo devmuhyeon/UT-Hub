@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고용24 사용자 조사 - 전체메뉴 이용 경험 설문</title>
+    <link rel="stylesheet" href="/UT-Hub/include/css/reset.css">
+    <link rel="stylesheet" href="/UT-Hub/include/css/font.css">
+    <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/ut-common.css">
+    <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/survey.css">
+    <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/responsive.css">
+    <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/subjective.css">
+    <link rel="stylesheet" href="/UT-Hub/ut-allmenu/source/css/allmenu-subjective.css">
+</head>
+<body>
+    <div class="survey_wrap">
+        <form id="surveyForm" class="survey_box" novalidate>
+            <div class="survey_head">
+                <span class="survey_badge">고용24 사용자 경험 조사</span>
+                <h1 class="survey_title">전체메뉴 이용 경험 설문</h1>
+                <p class="survey_desc">방금 이용한 전체메뉴에 대해 답변해 주세요.</p>
+                <ol class="step_list" aria-label="조사 진행 단계">
+                    <li><span class="sr_only">고용24 사용자 경험 조사</span></li>
+                    <li><span class="sr_only">참여 전 확인</span></li>
+                    <li><span class="sr_only">설문 방법 안내</span></li>
+                    <li><span class="sr_only">메뉴 탐색 테스트</span></li>
+                    <li class="is_current"><span class="sr_only">현재 단계: 전체메뉴 이용 경험 설문</span></li>
+                    <li><span class="sr_only">결과 제출</span></li>
+                </ol>
+            </div>
+            <div class="survey_body">
+                <fieldset class="fieldset_group" aria-labelledby="easeQuestion">
+                    <p class="question_desc" id="easeQuestion">메뉴를 보고 어떤 서비스인지 쉽게 이해할 수 있었나요?</p>
+                    <div class="option_list">
+                        <div class="option_item"><input type="radio" name="ease" id="ease1" value="1"><label for="ease1">매우 어려움</label></div>
+                        <div class="option_item"><input type="radio" name="ease" id="ease2" value="2"><label for="ease2">어려움</label></div>
+                        <div class="option_item"><input type="radio" name="ease" id="ease3" value="3"><label for="ease3">보통</label></div>
+                        <div class="option_item"><input type="radio" name="ease" id="ease4" value="4"><label for="ease4">쉬움</label></div>
+                        <div class="option_item"><input type="radio" name="ease" id="ease5" value="5"><label for="ease5">매우 쉬움</label></div>
+                    </div>
+                </fieldset>
+
+                <fieldset class="fieldset_group" id="question2" aria-labelledby="difficultyQuestion" hidden>
+                    <p class="question_desc" id="difficultyQuestion" tabindex="-1">메뉴를 보고 어떤 서비스인지 이해하는 데 가장 어려웠던 점은 무엇인가요?</p>
+                    <p class="survey_hint">하나만 선택해 주세요.</p>
+                    <div class="option_list flx_direction">
+                        <div class="option_item"><input type="radio" name="difficulty" id="difficulty1" value="1"><label for="difficulty1">메뉴명이 무엇을 의미하는지 이해하기 어려움</label></div>
+                        <div class="option_item"><input type="radio" name="difficulty" id="difficulty2" value="2"><label for="difficulty2">어떤 분류에서 찾아야 할지 판단하기 어려움</label></div>
+                        <div class="option_item"><input type="radio" name="difficulty" id="difficulty3" value="3"><label for="difficulty3">비슷한 메뉴가 여러 개 있어 선택하기 어려움</label></div>
+                        <div class="option_item"><input type="radio" name="difficulty" id="difficulty4" value="4"><label for="difficulty4">메뉴가 많아 원하는 메뉴를 찾기 어려움</label></div>
+                        <div class="option_item"><input type="radio" name="difficulty" id="difficulty5" value="5"><label for="difficulty5">기타(직접 입력)</label></div>
+                    </div>
+                    <label for="difficultyOther" class="sr_only">기타 어려웠던 점</label>
+                    <input type="text" id="difficultyOther" class="survey_other" maxlength="200" placeholder="어려웠던 점을 입력해 주세요" hidden disabled>
+                </fieldset>
+
+                <fieldset class="fieldset_group improvement_group" aria-labelledby="improvementQuestion">
+                    <p class="question_desc" id="improvementQuestion">전체메뉴에서 개선이 필요하다고 생각하는 부분은 무엇인가요?</p>
+                    <p class="survey_hint">복수 선택 가능합니다.</p>
+                    <div class="option_list">
+                        <div class="option_item"><input type="checkbox" name="improvement" id="improve1" value="1"><label for="improve1">메뉴명과 용어를 더 쉽고 명확하게 표현</label></div>
+                        <div class="option_item"><input type="checkbox" name="improvement" id="improve2" value="2"><label for="improve2">비슷한 서비스는 차이를 쉽게 구분할 수 있도록 개선</label></div>
+                        <div class="option_item"><input type="checkbox" name="improvement" id="improve3" value="3"><label for="improve3">메뉴의 분류와 배치를 더 알기 쉽게 개선</label></div>
+                        <div class="option_item"><input type="checkbox" name="improvement" id="improve4" value="4"><label for="improve4">의견 없음</label></div>
+                        <div class="option_item"><input type="checkbox" name="improvement" id="improve5" value="5"><label for="improve5">기타(직접 입력)</label></div>
+                    </div>
+                    <label for="improvementOther" class="sr_only">기타 개선 사항</label>
+                    <input type="text" id="improvementOther" class="survey_other" maxlength="200" placeholder="개선 사항을 입력해 주세요" hidden disabled>
+                </fieldset>
+                <p id="surveyError" class="survey_error" role="alert" hidden>응답하지 않은 항목이 있습니다.</p>
+                <div class="button_area"><button type="submit" class="btn_submit">설문 완료</button></div>
+            </div>
+        </form>
+    </div>
+
+    <script src="/UT-Hub/include/js/jquery-3.7.1.min.js"></script>
+    <script src="/UT-Hub/include/ut_common/js/lock_back.js"></script>
+    <script src="/UT-Hub/ut-allmenu/research/a/data/storage-a.js"></script>
+        <script src="/UT-Hub/ut-allmenu/research/a/data/dropout-a.js"></script>
+    <script>
+        $(function () {
+            'use strict';
+            var $form = $('#surveyForm');
+            var $error = $('#surveyError');
+
+            $('input[name="ease"]').on('change', function () {
+                var difficult = /^(1|2)$/.test($(this).val());
+                var $followup = $('#question2');
+                $followup.prop('hidden', !difficult);
+                if (!difficult) {
+                    $followup.find('input').prop('checked', false);
+                    $('#difficultyOther').val('').prop('hidden', true).prop('disabled', true);
+                } else {
+                    $('#difficultyQuestion').trigger('focus');
+                }
+                $error.prop('hidden', true);
+            });
+            $('input[name="difficulty"]').on('change', function () {
+                var other = $('#difficulty5').prop('checked');
+                $('#difficultyOther').prop('hidden', !other).prop('disabled', !other);
+                if (!other) $('#difficultyOther').val('');
+                if (other) $('#difficultyOther').trigger('focus');
+                $error.prop('hidden', true);
+            });
+            $('input[name="improvement"]').on('change', function () {
+                if ($(this).attr('id') === 'improve4' && $(this).prop('checked')) {
+                    $('input[name="improvement"]').not(this).prop('checked', false);
+                } else if ($(this).prop('checked')) {
+                    $('#improve4').prop('checked', false);
+                }
+                var other = $('#improve5').prop('checked');
+                $('#improvementOther').prop('hidden', !other).prop('disabled', !other);
+                if (!other) $('#improvementOther').val('');
+                if (other && $(this).attr('id') === 'improve5') $('#improvementOther').trigger('focus');
+                $error.prop('hidden', true);
+            });
+            $('#difficultyOther,#improvementOther').on('input', function () {
+                $error.prop('hidden', true);
+            });
+            $form.on('submit', function (event) {
+                event.preventDefault();
+                var ease = $('input[name="ease"]:checked').val();
+                var difficulty = $('input[name="difficulty"]:checked').val();
+                var improvements = $('input[name="improvement"]:checked').map(function () {
+                    return $(this).val();
+                }).get();
+                var mustExplain = ease === '1' || ease === '2';
+                var $focus = $();
+                var errorText = '⚠️ 응답하지 않은 항목을 확인해 주세요.';
+                if (!ease) $focus = $('input[name="ease"]').first();
+                else if (mustExplain && !difficulty) $focus = $('input[name="difficulty"]').first();
+                else if (mustExplain && difficulty === '5' && !$.trim($('#difficultyOther').val())) {
+                    $focus = $('#difficultyOther');
+                    errorText = '"메뉴를 보고 어떤 서비스인지 이해하는 데 가장 어려웠던 점은 무엇인가요?"의 기타 내용을 입력해 주세요.';
+                }
+                else if (!improvements.length) $focus = $('input[name="improvement"]').first();
+                else if ($.inArray('5', improvements) !== -1 && !$.trim($('#improvementOther').val())) {
+                    $focus = $('#improvementOther');
+                    errorText = '"전체메뉴에서 개선이 필요하다고 생각하는 부분은 무엇인가요?" 의 기타 내용을 입력해 주세요.';
+                }
+
+                if ($focus.length) {
+                    $error.text(errorText).prop('hidden', false);
+                    $focus.trigger('focus');
+                    return;
+                }
+
+                var survey2Value = mustExplain && difficulty === '5'
+                    ? $.trim($('#difficultyOther').val())
+                    : (mustExplain ? Number(difficulty) : '');
+                var survey3Values = $.map(improvements, function (value) {
+                    return value === '5' ? $.trim($('#improvementOther').val()) : value;
+                });
+                sessionStorage.setItem('utAllmenuACoSurvey', JSON.stringify({
+                    survey1: Number(ease),
+                    survey2: survey2Value,
+                    survey3: survey3Values.join(',')
+                }));
+                UT_A_TRACK.navigate('결과 제출');
+                location.href = '/UT-Hub/ut-allmenu/research/a/7_upload.html';
+            });
+        });
+    </script>
+</body>
+</html>

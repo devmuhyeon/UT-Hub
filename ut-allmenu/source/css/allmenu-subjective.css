@@ -1,0 +1,18 @@
+@charset "utf-8";
+
+.survey_other {box-sizing:border-box;display:block;width:100%;margin-top:12px;padding:12px;border:1px solid #aaa;border-radius:8px}
+.survey_hint {margin:0 0 14px;color:#555}
+.survey_error {padding: 8px; background: #f8f0f0; color:#e0024b; text-align: center; font-size: 18px; font-weight: 600; margin-top: 36px;}
+#question2[hidden],#difficultyOther[hidden],#improvementOther[hidden] {display:none!important}
+.improvement_group .option_list {grid-template-columns:1fr}
+.survey_body .button_area {display:flex;justify-content:flex-end}
+.option_item input[type="checkbox"] {position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);border:0}
+.option_item input[type="checkbox"] + label::before {border-radius:5px}
+.option_item input[type="checkbox"] + label::after {content:"✓";width:auto;height:auto;left:26px;background:none;color:#fff;font-size:12px;line-height:1}
+.option_item input[type="checkbox"]:checked + label {border:2px solid #3f58d4;background:#eff3ff;color:#25368c}
+.option_item input[type="checkbox"]:checked + label::before {background:#3f58d4;border-color:#3f58d4}
+.option_item input[type="checkbox"]:checked + label::after {transform:translateY(-50%) scale(1)}
+.option_item input:focus-visible + label {outline:3px solid #111;outline-offset:3px}
+.option_list.flx_direction {display: flex; flex-direction: column;}
+.question_desc:has(+.survey_hint) {margin-bottom: 4px;}
+.fieldset_group {margin: 0; padding: 30px; border: 1px solid var(--col_border); border-radius: 26px; background: linear-gradient(180deg, var(--col_white) 0%, var(--col_box_bg) 100%); box-shadow: 0 12px 34px rgba(17, 17, 17, .06);}
