@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="/UT-Hub/include/css/reset.css">
+        <link rel="stylesheet" href="/UT-Hub/include/css/font.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/ut-common.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/survey.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/task.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/responsive.css">
+        <link rel="stylesheet" href="/UT-Hub/ut-allmenu/source/css/allmenu-theme.css">
+
+
+		<title>고용24 사용자 조사 - 설문 방법 안내</title>
+    </head>
+
+    <body>
+        <div class="survey_wrap">
+            <form id="surveyForm" class="survey_box" novalidate>
+                <input type="hidden" id="user_ut_id" name="user_ut_id">
+                <div class="survey_head">
+                    <span class="survey_badge">고용24 사용자 경험 조사</span>
+                    <h1 class="survey_title">설문 방법 안내</h1>
+                    <p class="survey_desc">제시된 상황에 맞는 메뉴를 고용24 전체메뉴에서 찾아 선택하는 테스트입니다. 아래 진행 방법을 확인해 주세요.</p>
+                    <ol class="step_list" aria-label="조사 진행 단계">
+                        <li><span class="sr_only">고용24 사용자 경험 조사</span></li>
+                        <li><span class="sr_only">참여 전 확인</span></li>
+                        <li class="is_current"><span class="sr_only">현재 단계: 설문 방법 안내</span></li>
+                        <li><span class="sr_only">메뉴 탐색 테스트</span></li>
+                        <li><span class="sr_only">주관식 의견 조사</span></li>
+                        <li><span class="sr_only">결과 제출</span></li>
+                    </ol>
+                </div>
+                <div class="survey_body">
+                    <main class="task_body">
+                        <section class="guide_card" aria-labelledby="guideTitle01">
+                            <h3 id="guideTitle01" class="guide_title"><span class="guide_number" aria-hidden="true">STEP 1</span>제시된 상황을 확인합니다.</h3>
+                            <p class="guide_desc">테스트 시작 전, 서비스를 이용하려는 상황이 안내됩니다. 내용을 확인해 주세요.</p>
+                        </section>
+                        <section class="guide_card" aria-labelledby="guideTitle02">
+                            <h3 id="guideTitle02" class="guide_title"><span class="guide_number" aria-hidden="true">STEP 2</span>시작 버튼을 누르면 테스트가 시작됩니다.</h3>
+                            <p class="guide_desc">시작 버튼을 누르면 안내창이 사라지고 전체메뉴가 표시됩니다.</p>
+                        </section>
+                        <section class="guide_card" aria-labelledby="guideTitle03">
+                            <h3 id="guideTitle03" class="guide_title"><span class="guide_number" aria-hidden="true">STEP 3</span>자유롭게 메뉴를 찾아 클릭합니다.</h3>
+                            <p class="guide_desc">제시된 상황에 맞는 메뉴를 자유롭게 찾아 클릭해 주세요. 다른 메뉴를 선택해도 다시 찾아볼 수 있습니다. 제한 시간이 지나면 다음 단계로 이동합니다.</p>
+                        </section>
+                    </main>
+                    <!-- 버튼 -->
+                    <div class="task_button_area">
+                        <button type="button" class="btn_next" id="goTestPage">테스트 진행하기</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <script src="/UT-Hub/include/js/jquery-3.7.1.min.js"></script>
+        <script src="/UT-Hub/include/ut_common/js/lock_back.js"></script>
+
+        <script src="/UT-Hub/ut-allmenu/research/b/data/config-b.js"></script>
+    <script src="/UT-Hub/ut-allmenu/research/b/data/storage-b.js"></script>
+        <script src="/UT-Hub/ut-allmenu/research/b/data/dropout-b.js"></script>
+        <script>
+            $(function() {
+                $('#taskLimitText').text(UT_B_CONFIG.taskLimitSeconds + '초');
+
+                $('#goTestPage').on('click', function() {
+
+                    UT_B_TRACK.navigate('TASK 1');
+                    location.href = '/UT-Hub/ut-allmenu/research/b/4_survey_tobe.html';
+
+                });
+
+            });
+        </script>
+
+    </body>
+</html>

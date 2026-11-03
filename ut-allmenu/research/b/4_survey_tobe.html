@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko" style="overflow: hidden;">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>고용24 사용자 조사 - 메뉴 탐색 테스트</title>
+
+		<link rel="stylesheet" href="/UT-Hub/include/css/reset.css">
+        <link rel="stylesheet" href="/UT-Hub/include/css/font.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/ut-common.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/survey.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/task.css">
+        <link rel="stylesheet" href="/UT-Hub/include/ut_common/css/responsive.css">
+		<link rel="stylesheet" href="/UT-Hub/include/ut_common/css/ut-test.css">
+        <link rel="stylesheet" href="/UT-Hub/ut-allmenu/source/css/allmenu-task.css">
+        <link rel="stylesheet" href="/UT-Hub/ut-allmenu/source/css/allmenu-theme.css">
+
+
+		<style>
+			.ut_task_meta {display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:8px;font-weight:600}
+			.ut_timer {font-variant-numeric:tabular-nums;white-space:nowrap;color:#283fb1}
+			.ut_timer.is_warning {color:#e0024b;}
+			.ut_task_question {font-size:18px;line-height:1.55;word-break:keep-all}
+			.ut_target_box .ut_scenario {display:block;font-size:18px;line-height:1.6;word-break:keep-all}
+			.ut_other_wrap {margin-top:8px}
+			.radio_item input.ut_other_input {width: 100% !important; height: 40px; overflow: initial !important; clip: initial; box-sizing:border-box; margin-left: 1px; margin-top:8px;padding:12px;border:1px solid #aaa;border-radius:8px}
+			#failError {color:#e0024b;margin:12px 0}
+		</style>
+	</head>
+
+	<body>
+		<div id="utPage" class="ut_page" aria-hidden="true">
+			<iframe id="testFrame" class="ut_frame" title="고용24 화면 탐색 테스트 화면" src="/UT-Hub/ut-allmenu/source/frame/allmenu_tobe.html"></iframe>
+			<div class="step_floating">
+				<div class="survey_head">
+					<p class="ut_task_meta"><span id="taskProgress">1 / 4</span><span class="ut_timer" id="timeRemaining" role="timer" aria-live="off">남은 시간 00:20</span></p>
+					<p class="survey_infotxt ut_task_question" id="taskQuestion">자신의 흥미와 적성에 맞는 직업이 무엇인지 알아보고 싶습니다. 이를 확인할 수 있는 서비스를 찾아주세요.</p>
+
+					<ol class="step_list" aria-label="조사 진행 단계">
+                        <li><span class="sr_only">고용24 사용자 경험 조사</span></li>
+                        <li><span class="sr_only">참여 전 확인</span></li>
+                        <li><span class="sr_only">설문 방법 안내</span></li>
+                        <li class="is_current"><span class="sr_only">현재 단계: 메뉴 탐색 테스트</span></li>
+						<li><span class="sr_only">주관식 의견 조사</span></li>
+                        <li><span class="sr_only">결과 제출</span></li>
+                    </ol>
+				</div>
+			</div>
+		</div>
+
+		<!-- 시작 팝업 -->
+		<div id="utOverlay" class="ut_overlay" role="dialog" aria-modal="true" aria-labelledby="utOverlayTitle" aria-describedby="utOverlayDesc">
+			<div class="ut_alert">
+				<span class="survey_logo"><img src="/UT-Hub/include/images/logo.svg" alt="고용24"></span>
+				<h1 id="utOverlayTitle" class="ut_alert_title">총 4개의 테스트를 진행합니다.<br><span class="txt_highlight" id="taskOrdinal">첫 번째 테스트</span>를 시작합니다.</h1>
+				<p id="utOverlayDesc" class="ut_alert_desc">아래 제시된 상황을 확인해 주세요. <br>'시작하기' 버튼을 누르면 안내창이 사라지고 전체메뉴가 표시됩니다.</p>
+				<div class="ut_target_box">
+					<span class="ut_target_tit">상황 안내</span>
+					<strong class="ut_scenario" id="taskScenario">자신의 흥미와 적성에 맞는 직업이 무엇인지 알아보고 싶습니다. 이를 확인할 수 있는 서비스를 찾아주세요.</strong>
+					
+				</div>
+				<p id="frameError" role="alert" hidden></p>
+				<button type="button" id="startTest" class="btn_start" disabled>시작하기</button>
+			</div>
+		</div>
+
+
+		<!-- 성공 팝업 -->
+		<div id="successPopup" class="ut_result_overlay" role="dialog" aria-modal="true" aria-labelledby="successTitle" aria-describedby="successDesc" hidden>
+			<div class="ut_result_box" style="width: min(480px, 100%);">
+				<span class="survey_logo"><img src="/UT-Hub/include/images/logo.svg" alt="고용24"></span>
+				<h2 id="successTitle" class="ut_alert_title">메뉴를 찾으셨네요!</h2>
+				<p id="successDesc" class="ut_alert_desc">다음 단계로 넘어갑니다.</p>
+				<button type="button" class="btn_next">다음 단계로 이동</button>
+			</div>
+		</div>
+
+		<!-- 실패 사유 팝업 -->
+		<div id="failPopup" class="ut_result_overlay" role="dialog" aria-modal="true" aria-labelledby="failTitle" aria-describedby="failDesc" hidden>
+			<div class="ut_result_box" style="width: min(480px, 100%);">
+				<span class="survey_logo"><img src="/UT-Hub/include/images/logo.svg" alt="고용24"></span>
+				<h2 id="failTitle" class="ut_alert_title">메뉴를 찾는 데 어떤 점이 어려웠나요?</h2>
+				<p id="failDesc" class="ut_alert_desc">제한시간이 지났습니다. <br>아래 항목 중 가장 가까운 이유를 선택해 주세요.</p>
+				<div class="fail_radio_group" role="radiogroup" aria-labelledby="failTitle" aria-describedby="failDesc">
+					<div class="radio_item">
+						<input type="radio" id="failReason01" name="failReason" value="1">
+						<label for="failReason01">메뉴명이 무엇을 의미하는지 이해하기 어려웠어요.</label>
+					</div>
+					<div class="radio_item">
+						<input type="radio" id="failReason02" name="failReason" value="2">
+						<label for="failReason02">어떤 분류에서 찾아야 할지 판단하기 어려웠어요.</label>
+					</div>
+					<div class="radio_item">
+						<input type="radio" id="failReason03" name="failReason" value="3">
+						<label for="failReason03">비슷한 메뉴가 여러 개 있어 선택하기 어려웠어요.</label>
+					</div>
+					<div class="radio_item">
+						<input type="radio" id="failReason04" name="failReason" value="4">
+						<label for="failReason04">메뉴가 많아 원하는 메뉴를 찾기 어려웠어요.</label>
+					</div>
+					<div class="radio_item"><input type="radio" id="failReason05" name="failReason" value="5"><label for="failReason05">메뉴 설명을 읽어도 어떤 서비스인지 알기 어려웠어요.</label></div>
+<div class="radio_item ut_other_wrap">
+						<input type="radio" id="failReason06" name="failReason" value="6">
+						<label for="failReason06">기타(직접 입력)</label>
+						<input type="text" class="ut_other_input" id="failOther" aria-label="실패 이유 기타의견" maxlength="200" placeholder="이유를 작성해 주세요" disabled hidden>
+					</div>
+				</div>
+				<p id="failError" role="alert" hidden>실패 이유를 선택해 주세요.</p>
+				<button type="button" class="btn_next">다음 단계로 이동</button>
+			</div>
+		</div>
+
+		<script src="/UT-Hub/include/js/jquery-3.7.1.min.js"></script>
+		<script src="/UT-Hub/include/ut_common/js/lock_back.js"></script>
+
+		<script src="/UT-Hub/ut-allmenu/research/b/data/config-b.js"></script>
+        <script src="/UT-Hub/ut-allmenu/research/b/data/storage-b.js"></script>
+        <script src="/UT-Hub/ut-allmenu/research/b/data/dropout-b.js"></script>
+		<script src="/UT-Hub/ut-allmenu/research/b/data/data-b.js"></script>
+
+	</body>
+</html>
