@@ -33,7 +33,7 @@
             <h2 id="answerTitleA">메뉴 정답 안내</h2>
             <div class="answer_dp_img">
                 <p>1. 취업지원 → 취업가이드 → 직업심리검사</p>
-                <p>2. 쉽게 보는 고용정보 (제공된 AS-IS 화면에 해당 메뉴 없음)</p>
+                <p>2. 고용24 콘텐츠 → 쉽게 보는 고용 정보</p>
                 <p>3. 취업지원 → 통합경력증명 → 발급·관리</p>
             </div>
         </div>
@@ -41,6 +41,7 @@
 
     <script src="/UT-Hub/include/js/jquery-3.7.1.min.js"></script>
     <script src="/UT-Hub/include/ut_common/js/lock_back.js"></script>
+    <script src="/UT-Hub/ut-allmenu/research/a/data/config-a.js"></script>
     <script src="/UT-Hub/ut-allmenu/research/a/data/storage-a.js"></script>
         <script src="/UT-Hub/ut-allmenu/research/a/data/dropout-a.js"></script>
     <script>
@@ -48,14 +49,14 @@
             'use strict';
 
             // 고용24 전체메뉴 A타입 Apps Script 웹앱 배포 URL
-            var WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxYCfQUeMtC8NAk8WiZZ3Bx8fP42gAETB5JDcqCdrvFyFfD7PeHywL616_bUddPhE9_/exec';
+            var WEB_APP_URL = UT_A_CONFIG.webAppUrl;
             var LOCK_KEY = 'utAllmenuAUploadRequested';
             var PAYLOAD_KEY = 'utAllmenuAUploadPayload';
             var ID_KEY = 'utAllmenuASubmissionId';
             var $popup = $('.answer_popup');
 
-            function message(title, text) {
-                $('.loading_bar').hide();
+            function message(title, text, loading) {
+                $('.loading_bar').toggle(loading === true);
                 $('.result_title').text(title);
                 $('.result_message').text(text);
             }
@@ -112,36 +113,72 @@
                 task3: tasks.task3,
                 survey1: opinion.survey1,
                 survey2: opinion.survey2 || '',
+                survey2Other: opinion.survey2Other || '',
                 survey3: opinion.survey3,
+                survey3Other: opinion.survey3Other || '',
                 userAgent: navigator.userAgent
             };
 
             sessionStorage.setItem(PAYLOAD_KEY, JSON.stringify(resultData));
 
-            if (!WEB_APP_URL) {
-                message('설문 작성이 완료되었습니다.', '설문에 참여해 주셔서 감사합니다.');
+            var checking = false;
+            var $retry = $('<button>', {type: 'button', text: '저장 여부 확인 후 다시 제출', hidden: true})
+                .addClass('btn_submit').insertBefore('.btn_answer_open');
+
+            function complete() {
+                sessionStorage.setItem('utAllmenuAUploadComplete', resultData.submissionId);
+                $retry.prop('hidden', true);
+                message('설문 제출이 완료되었습니다.', '설문에 참여해 주셔서 감사합니다.');
                 showAnswerButton();
-            } else if (sessionStorage.getItem(LOCK_KEY) === 'true') {
-                message('전송 요청 이력이 있습니다.', '중복 전송 방지를 위해 새로고침으로는 다시 보내지 않았습니다.');
-                showAnswerButton();
-            } else {
-                // Apps Script의 응답은 CORS 정책에 따라 읽을 수 없을 수 있으므로 중복 요청을 차단.
-                sessionStorage.setItem(LOCK_KEY, 'true');
-                $.ajax({
-                    url: WEB_APP_URL,
-                    method: 'POST',
-                    data: JSON.stringify(resultData),
-                    processData: false,
-                    contentType: 'text/plain;charset=utf-8',
-                    crossDomain: true,
-                    timeout: 15000
-                }).done(function () {
-                    message('전송 요청이 완료되었습니다.', '설문에 참여해 주셔서 감사합니다.');
-                    showAnswerButton();
-                }).fail(function () {
-                    message('전송 상태를 확인할 수 없습니다.', '중복 전송 방지를 위해 재전송하지 않습니다.');
-                    showAnswerButton();
+            }
+            function status(callback) {
+                $.ajax({url: WEB_APP_URL, dataType: 'jsonp', timeout: 15000,
+                    data: {action: 'status', submissionId: resultData.submissionId}
+                }).done(function (response) {
+                    callback(response && response.ok === true ? response.saved === true : null);
+                }).fail(function () { callback(null); });
+            }
+            function verify(attempt) {
+                message('저장 여부를 확인하고 있습니다.', '잠시만 기다려 주세요.', true);
+                status(function (saved) {
+                    if (saved === true) { checking = false; complete(); return; }
+                    if (attempt < 3) { setTimeout(function () { verify(attempt + 1); }, 2500); return; }
+                    checking = false;
+                    message('저장 완료를 확인하지 못했습니다.', '응답은 이 탭에 보관 중입니다. 아래 버튼으로 확인 후 다시 제출해 주세요.');
+                    $retry.prop('hidden', false);
                 });
+            }
+            function submit() {
+                sessionStorage.setItem(LOCK_KEY, 'true');
+                $retry.prop('hidden', true);
+                message('결과를 저장하고 있습니다.', '잠시만 기다려 주세요.', true);
+                // POST 응답을 읽지 못해도 서버의 고유 ID 조회로 실제 저장 여부를 확인.
+                $.ajax({url: WEB_APP_URL, method: 'POST', data: JSON.stringify(resultData),
+                    processData: false, contentType: 'text/plain;charset=utf-8',
+                    crossDomain: true, timeout: 15000
+                }).always(function () { verify(0); });
+            }
+            $retry.on('click', function () {
+                if (checking) return;
+                checking = true;
+                $retry.prop('hidden', true);
+                message('저장 여부를 확인하고 있습니다.', '잠시만 기다려 주세요.', true);
+                status(function (saved) {
+                    if (saved === true) { checking = false; complete(); }
+                    else if (saved === false) submit();
+                    else {
+                        checking = false;
+                        message('서버 연결을 확인할 수 없습니다.', '잠시 후 다시 시도해 주세요.');
+                        $retry.prop('hidden', false);
+                    }
+                });
+            });
+            if (sessionStorage.getItem('utAllmenuAUploadComplete') === resultData.submissionId) complete();
+            else if (!WEB_APP_URL) message('제출 서버가 설정되지 않았습니다.', '조사 담당자에게 문의해 주세요.');
+            else {
+                checking = true;
+                if (sessionStorage.getItem(LOCK_KEY) === 'true') verify(0);
+                else submit();
             }
 
             function closeAnswer() {

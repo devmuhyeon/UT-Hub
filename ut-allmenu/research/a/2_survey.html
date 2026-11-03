@@ -111,7 +111,8 @@
         <script src="/UT-Hub/include/js/jquery-3.7.1.min.js"></script>
         <script src="/UT-Hub/include/ut_common/js/lock_back.js"></script>
 
-        <script src="/UT-Hub/ut-allmenu/research/a/data/storage-a.js"></script>
+        <script src="/UT-Hub/ut-allmenu/research/a/data/config-a.js"></script>
+    <script src="/UT-Hub/ut-allmenu/research/a/data/storage-a.js"></script>
         <script src="/UT-Hub/ut-allmenu/research/a/data/dropout-a.js"></script>
         <script>
             $('#submitArea').hide();
@@ -172,6 +173,15 @@
                     agree: $('input[name="svry"]:checked').val()
                 };
 
+                var missing = '';
+                $.each(['age', 'experience', 'member', 'agree'], function (_, key) {
+                    if (!surveyData[key]) { missing = key === 'agree' ? 'svry' : key; return false; }
+                });
+                if (missing) {
+                    alert('참여 전 확인 항목을 모두 선택해 주세요.');
+                    $('input[name="' + missing + '"]').first().trigger('focus');
+                    return;
+                }
                 UT_A.saveSurvey(surveyData);
 
                 UT_A_TRACK.navigate('과업 안내');

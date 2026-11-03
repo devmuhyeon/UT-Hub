@@ -6,7 +6,7 @@ $(function () {
 
     var BASE = '/UT-Hub/ut-allmenu/research/a/';
     var FRAME_URL = '/UT-Hub/ut-allmenu/source/frame/allmenu_asis.html';
-    var LIMIT_MS = 180000;
+    var LIMIT_MS = UT_A_CONFIG.taskLimitSeconds * 1000;
     var TASKS = [
         {
             key: 'task1',
@@ -16,7 +16,7 @@ $(function () {
         },
         {
             key: 'task2',
-            answer: '쉽게 보는 고용정보',
+            answer: '쉽게 보는 고용 정보',
             answerId: '',
             scenario: '구직 노하우, 고용 정책 등을 카드뉴스와 같은 시각화 이미지로 살펴보고 싶습니다. 관련 정보를 확인할 수 있는 메뉴를 찾아주세요.'
         },
@@ -124,6 +124,7 @@ $(function () {
             scenario: currentTask().scenario,
             finalClickMenu: finalMenu || lastMenu,
             failReason: '',
+            failOther: '',
             clickCount: clickLogs.length,
             duration: Math.min(LIMIT_MS / 1000, Math.round((ended - startTime) / 100) / 10),
             clickPath: UT_A.makeClickPath(clickLogs),
@@ -219,7 +220,8 @@ $(function () {
         $('#taskProgress').text((taskIndex + 1) + ' / 3');
         $('#taskOrdinal').text(ORDINAL[taskIndex] + ' 테스트');
         $('#taskScenario,#taskQuestion').text(task.scenario);
-        $time.text('남은 시간 03:00').removeClass('is_warning');
+        $time.text('남은 시간 ' + String(Math.floor(LIMIT_MS / 60000)).padStart(2, '0') + ':' + String(LIMIT_MS / 1000 % 60).padStart(2, '0')).removeClass('is_warning');
+        $('#taskLimitText').text(LIMIT_MS / 1000 + '초');
         $success.add($fail).find('.btn_next')
             .text(taskIndex === TASKS.length - 1 ? '설문으로 이동' : '다음 테스트로 이동');
     }
@@ -253,7 +255,7 @@ $(function () {
     while (taskIndex < TASKS.length && saved[TASKS[taskIndex].key]) taskIndex++;
     if (taskIndex === TASKS.length) {
         UT_A_TRACK.navigate('사후 설문');
-        location.replace(BASE + '6_survey_subjective.html');
+        location.replace(BASE + '5_survey_subjective.html');
         return;
     }
 
@@ -283,24 +285,22 @@ $(function () {
                 $fail.find('input[name="failReason"]').first().trigger('focus');
                 return;
             }
-            if (reason === '기타') {
-                reason = clean($('#failOther').val());
-                if (!reason) {
+            if (reason === '5') {
+                result.failOther = clean($('#failOther').val());
+                if (!result.failOther) {
                     $('#failError').text('기타 이유를 입력해 주세요.').prop('hidden', false);
                     $('#failOther').trigger('focus');
                     return;
                 }
-            } else {
-                reason = Number(reason);
             }
-            result.failReason = reason;
+            result.failReason = clean($reason.siblings('label[for="' + $reason.attr('id') + '"]').text());
             UT_A.saveTask(currentTask().key, result);
         }
         UT_A_TRACK.progress('TASK ' + (taskIndex + 1) + ' 완료', taskIndex + 1, clickLogs.length);
         moving = true;
         if (taskIndex === TASKS.length - 1) {
             UT_A_TRACK.navigate('사후 설문');
-            location.href = BASE + '6_survey_subjective.html';
+            location.href = BASE + '5_survey_subjective.html';
             return;
         }
         taskIndex++;

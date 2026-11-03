@@ -32,7 +32,7 @@
 			<iframe id="testFrame" class="ut_frame" title="고용24 화면 탐색 테스트 화면" src="/UT-Hub/ut-allmenu/source/frame/allmenu_asis.html"></iframe>
 			<div class="step_floating">
 				<div class="survey_head">
-					<p class="ut_task_meta"><span id="taskProgress">1 / 3</span><span class="ut_timer" id="timeRemaining" role="timer" aria-live="off">남은 시간 03:00</span></p>
+					<p class="ut_task_meta"><span id="taskProgress">1 / 3</span><span class="ut_timer" id="timeRemaining" role="timer" aria-live="off">남은 시간 00:20</span></p>
 					<p class="survey_infotxt ut_task_question" id="taskQuestion">자신의 흥미와 적성에 맞는 직업이 무엇인지 알아보고 싶습니다. 이를 확인할 수 있는 서비스를 찾아주세요.</p>
 
 					<ol class="step_list" aria-label="조사 진행 단계">
@@ -52,20 +52,21 @@
 			<div class="ut_alert">
 				<span class="survey_logo"><img src="/UT-Hub/include/images/logo.svg" alt="고용24"></span>
 				<h1 id="utOverlayTitle" class="ut_alert_title">총 3개의 메뉴를 찾는 테스트를 진행합니다.<br><span class="txt_highlight" id="taskOrdinal">첫 번째 테스트</span>를 시작합니다.</h1>
-				<p id="utOverlayDesc" class="ut_alert_desc">아래 제시된 상황을 확인해 주세요. '시작하기' 버튼을 누르면 안내창이 사라지고 전체메뉴가 표시됩니다.</p>
+				<p id="utOverlayDesc" class="ut_alert_desc">아래 제시된 상황을 확인해 주세요. <br>'시작하기' 버튼을 누르면 안내창이 사라지고 전체메뉴가 표시됩니다.</p>
 				<div class="ut_target_box">
 					<span class="ut_target_tit">상황 안내</span>
 					<strong class="ut_scenario" id="taskScenario">자신의 흥미와 적성에 맞는 직업이 무엇인지 알아보고 싶습니다. <br>이를 확인할 수 있는 서비스를 찾아주세요.</strong>
 					
 				</div>
-				<button type="button" id="startTest" class="btn_start">시작하기</button>
+				<p id="frameError" role="alert" hidden></p>
+				<button type="button" id="startTest" class="btn_start" disabled>시작하기</button>
 			</div>
 		</div>
 
 
 		<!-- 성공 팝업 -->
 		<div id="successPopup" class="ut_result_overlay" role="dialog" aria-modal="true" aria-labelledby="successTitle" aria-describedby="successDesc" hidden>
-			<div class="ut_result_box">
+			<div class="ut_result_box" style="width: min(480px, 100%);">
 				<span class="survey_logo"><img src="/UT-Hub/include/images/logo.svg" alt="고용24"></span>
 				<h2 id="successTitle" class="ut_alert_title">메뉴를 찾으셨네요!</h2>
 				<p id="successDesc" class="ut_alert_desc">다음 단계로 넘어갑니다.</p>
@@ -75,10 +76,10 @@
 
 		<!-- 실패 사유 팝업 -->
 		<div id="failPopup" class="ut_result_overlay" role="dialog" aria-modal="true" aria-labelledby="failTitle" aria-describedby="failDesc" hidden>
-			<div class="ut_result_box">
+			<div class="ut_result_box" style="width: min(480px, 100%);">
 				<span class="survey_logo"><img src="/UT-Hub/include/images/logo.svg" alt="고용24"></span>
 				<h2 id="failTitle" class="ut_alert_title">메뉴를 찾는 데 어떤 점이 어려웠나요?</h2>
-				<p id="failDesc" class="ut_alert_desc">제한시간이 지났습니다. 아래 항목 중 가장 가까운 이유를 선택해 주세요.</p>
+				<p id="failDesc" class="ut_alert_desc">제한시간이 지났습니다. <br>아래 항목 중 가장 가까운 이유를 선택해 주세요.</p>
 				<div class="fail_radio_group" role="radiogroup" aria-labelledby="failTitle" aria-describedby="failDesc">
 					<div class="radio_item">
 						<input type="radio" id="failReason01" name="failReason" value="1">
@@ -97,10 +98,9 @@
 						<label for="failReason04">메뉴가 많아 원하는 메뉴를 찾기 어려웠어요.</label>
 					</div>
 					<div class="radio_item ut_other_wrap">
-						<input type="radio" id="failReason05" name="failReason" value="기타">
+						<input type="radio" id="failReason05" name="failReason" value="5">
 						<label for="failReason05">기타(직접 입력)</label>
-						<label class="blind" for="failOther">기타 실패 이유 입력</label>
-						<input type="text" class="ut_other_input" id="failOther" maxlength="200" placeholder="이유를 작성해 주세요" disabled hidden>
+						<input type="text" class="ut_other_input" id="failOther" aria-label="실패 이유 기타의견" maxlength="200" placeholder="이유를 작성해 주세요" disabled hidden>
 					</div>
 				</div>
 				<p id="failError" role="alert" hidden>실패 이유를 선택해 주세요.</p>
@@ -111,7 +111,8 @@
 		<script src="/UT-Hub/include/js/jquery-3.7.1.min.js"></script>
 		<script src="/UT-Hub/include/ut_common/js/lock_back.js"></script>
 
-		<script src="/UT-Hub/ut-allmenu/research/a/data/storage-a.js"></script>
+		<script src="/UT-Hub/ut-allmenu/research/a/data/config-a.js"></script>
+        <script src="/UT-Hub/ut-allmenu/research/a/data/storage-a.js"></script>
         <script src="/UT-Hub/ut-allmenu/research/a/data/dropout-a.js"></script>
 		<script src="/UT-Hub/ut-allmenu/research/a/data/data-a.js"></script>
 

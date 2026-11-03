@@ -1,72 +1,206 @@
-/* A타입 이탈 후보 감지: 조사 페이지 전용. iframe/CSS/전체메뉴 스크립트 변경 없음. */
+/* 전체메뉴 UT / A타입 진행상태 추적 */
 var UT_A_TRACK = (function ($) {
     'use strict';
-    var URL = 'https://script.google.com/macros/s/AKfycbxYCfQUeMtC8NAk8WiZZ3Bx8fP42gAETB5JDcqCdrvFyFfD7PeHywL616_bUddPhE9_/exec';
-    var KEY = 'utAllmenuASubmissionId';
+
+    var URL = UT_A_CONFIG.webAppUrl;
+    var ID_KEY = 'utAllmenuASubmissionId';
+    var STATE_KEY = 'utAllmenuATrackStateV6';
     var INTERNAL = false;
-    var stage = '';
-    var taskNo = '';
-    var clickCount = 0;
-    var lastProgressSent = 0;
-    var pageNames = {
-        '1_intro.html':'조사 시작', '2_survey.html':'참여 전 확인',
-        '3_task.html':'과업 안내', '4_survey_asis.html':'TASK 1',
-        '6_survey_subjective.html':'사후 설문', '7_upload.html':'결과 제출'
+    var lastSent = 0;
+    var pages = {
+        '1_intro.html': '조사 시작',
+        '2_survey.html': '참여 전 확인',
+        '3_task.html': '과업 안내',
+        '4_survey_asis.html': 'TASK 1 준비',
+        '5_survey_subjective.html': '사후 설문',
+        '6_upload.html': '결과 제출'
     };
 
-    function id(create) {
-        var existing = sessionStorage.getItem(KEY);
-        if (!existing && create) {
-            existing = 'A-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 12);
-            sessionStorage.setItem(KEY, existing);
+    function getId(create) {
+        var value = sessionStorage.getItem(ID_KEY);
+        if (!value && create) {
+            value = 'A-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 12);
+            sessionStorage.setItem(ID_KEY, value);
         }
-        return existing || '';
+        return value || '';
     }
+
+    function readState() {
+        try {
+            return JSON.parse(sessionStorage.getItem(STATE_KEY) || '{}') || {};
+        } catch (error) {
+            return {};
+        }
+    }
+
+    var state = readState();
+    state.startedAt = state.startedAt || '';
+    state.stage = state.stage || '';
+    state.taskStarted = Math.max(0, Math.min(3, Number(state.taskStarted) || 0));
+    state.clickCount = Math.max(0, Number(state.clickCount) || 0);
+    state.sequence = Math.max(0, Number(state.sequence) || 0);
+
+    function saveState() {
+        sessionStorage.setItem(STATE_KEY, JSON.stringify(state));
+    }
+
+    function savedTasks() {
+        if (typeof UT_A !== 'undefined' && typeof UT_A.getTaskResult === 'function') {
+            return UT_A.getTaskResult() || {};
+        }
+        return {};
+    }
+
+    function countStartedTasks() {
+        var tasks = savedTasks();
+        var count = state.taskStarted;
+        for (var i = 1; i <= 3; i++) {
+            if (tasks['task' + i] && tasks['task' + i].startTime) {
+                count = Math.max(count, i);
+            }
+        }
+        return Math.min(3, count);
+    }
+
+    function totalClicks(currentClicks, stage) {
+        var tasks = savedTasks();
+        var sum = 0;
+        var match = String(stage || '').match(/TASK\s*([1-3])/i);
+        var currentKey = match ? 'task' + match[1] : '';
+
+        for (var i = 1; i <= 3; i++) {
+            if (tasks['task' + i]) {
+                sum += Math.max(0, Number(tasks['task' + i].clickCount) || 0);
+            }
+        }
+
+        if (currentKey && !tasks[currentKey]) {
+            sum += Math.max(0, Number(currentClicks) || 0);
+        }
+        return Math.max(state.clickCount, sum);
+    }
+
     function send(eventType) {
-        var identifier = id(false);
-        if (!identifier || !URL) return;
+        var identifier = getId(false);
+        if (!identifier) return;
+
+        state.sequence += 1;
+        saveState();
+
         var payload = JSON.stringify({
-            action: 'progress', groupNo: 'A', testType: 'AS-IS',
-            submissionId: identifier, eventType: eventType,
-            stage: stage, task: taskNo, clickCount: clickCount,
+            action: 'progress',
+            groupNo: 'A',
+            testType: 'AS-IS',
+            submissionId: identifier,
+            startedAt: state.startedAt,
+            sequence: state.sequence,
+            eventType: eventType,
+            stage: state.stage,
+            task: state.taskStarted,
+            taskStarted: state.taskStarted,
+            clickCount: state.clickCount,
             userAgent: navigator.userAgent
         });
-        var data = new Blob([payload], {type:'text/plain;charset=UTF-8'});
-        if (navigator.sendBeacon && navigator.sendBeacon(URL, data)) return;
-        // 종료 시 통신 실패 가능. 그 경우 다음 기록과 서버 미활동 판정으로 보완.
-        $.ajax({url:URL, method:'POST', data:payload,
-            processData:false, contentType:'text/plain;charset=UTF-8',
-            crossDomain:true, timeout:6000});
+
+        var blob = new Blob([payload], { type: 'text/plain;charset=UTF-8' });
+        if (navigator.sendBeacon && navigator.sendBeacon(URL, blob)) return;
+
+        // 전송 확인이 불가능한 종료 상황에서는 Beacon을 우선 사용한다.
+        $.ajax({
+            url: URL,
+            method: 'POST',
+            data: payload,
+            processData: false,
+            contentType: 'text/plain;charset=UTF-8',
+            crossDomain: true,
+            timeout: 6000
+        });
     }
+
     function progress(nextStage, nextTask, nextClicks) {
-        var sameStage = nextStage === stage;
-        if (typeof nextStage === 'string' && nextStage) stage = nextStage;
-        if (nextTask !== undefined) taskNo = nextTask;
-        if (nextClicks !== undefined) clickCount = nextClicks;
-        // 같은 단계에서 연속 클릭 시 Apps Script 요청 과다 발생 방지.
+        if (!getId(false)) return;
+
+        var oldStage = state.stage;
+        var previousClicks = state.clickCount;
+        var previousTask = state.taskStarted;
+
+        if (typeof nextStage === 'string' && nextStage) state.stage = nextStage;
+
+        // 'TASK N 준비'와 안내 페이지 이동은 과업 시작으로 계산하지 않는다.
+        // data-a.js에서 시작 버튼을 누르면 'TASK N 진행'을 전송한다.
+        var match = state.stage.match(/TASK\s*([1-3])/i);
+        if (match && /(?:진행|완료|제한시간 종료)/.test(state.stage)) {
+            state.taskStarted = Math.max(state.taskStarted, Number(match[1]));
+        }
+        state.taskStarted = Math.max(state.taskStarted, countStartedTasks());
+
+        if (nextClicks !== undefined) {
+            state.clickCount = totalClicks(nextClicks, state.stage);
+        } else {
+            state.clickCount = totalClicks(0, state.stage);
+        }
+        saveState();
+
         var now = Date.now();
-        if (sameStage && now - lastProgressSent < 2000) return;
-        lastProgressSent = now;
+        if (oldStage === state.stage && previousTask === state.taskStarted &&
+            previousClicks === state.clickCount && now - lastSent < 2000) return;
+        lastSent = now;
         send('progress');
     }
+
     function navigate(nextStage) {
+        // 다음 페이지가 실제로 로드되기 전에는 최종단계를 선반영하지 않는다.
         INTERNAL = true;
-        progress(nextStage);
     }
+
     function begin() {
-        id(true);
-        progress('조사 시작', '', 0);
+        // 새 조사에서는 기존 참여자 식별자와 진행 수치를 모두 초기화한다.
+        sessionStorage.removeItem(STATE_KEY);
+        state = {
+            startedAt: new Date().toISOString(),
+            stage: '조사 시작',
+            taskStarted: 0,
+            clickCount: 0,
+            sequence: 0
+        };
+        getId(true);
+        saveState();
+        send('progress');
     }
+
     $(function () {
         var filename = location.pathname.split('/').pop();
-        stage = pageNames[filename] || filename;
-        if (id(false)) send('progress');
-        // 탭 전환/최소화는 종료로 간주하지 않는다.
-        setInterval(function () { if (id(false)) send('heartbeat'); }, 45000);
+        if (!getId(false)) return;
+
+        if (!state.startedAt) state.startedAt = new Date().toISOString();
+        if (filename === '4_survey_asis.html') {
+            var stored = savedTasks();
+            var nextTask = 1;
+            while (nextTask <= 3 && stored['task' + nextTask]) nextTask++;
+            state.stage = 'TASK ' + Math.min(3, nextTask) + ' 준비';
+        } else {
+            state.stage = pages[filename] || state.stage || filename;
+        }
+        state.taskStarted = countStartedTasks();
+        state.clickCount = totalClicks(0, state.stage);
+        saveState();
+        send('progress');
+
+        // 숨김, 탭 전환, 최소화는 종료가 아니다.
+        setInterval(function () {
+            if (getId(false)) send('heartbeat');
+        }, 45000);
+
         $(window).on('pagehide.utADropout', function () {
-            // 조사 자체의 정상적인 다음 페이지 이동은 이탈 후보에서 제외.
-            if (!INTERNAL && id(false)) send('exit_candidate');
+            // 새로고침도 pagehide가 발생하므로 서버에서 유예 후 판정한다.
+            if (!INTERNAL && getId(false)) send('exit_candidate');
         });
     });
-    return {begin:begin, progress:progress, navigate:navigate, id:id};
+
+    return {
+        begin: begin,
+        progress: progress,
+        navigate: navigate,
+        id: getId
+    };
 })(jQuery);

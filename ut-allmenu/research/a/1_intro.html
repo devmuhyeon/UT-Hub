@@ -50,7 +50,8 @@
         <script src="/UT-Hub/include/js/jquery-3.7.1.min.js"></script>
         <script src="/UT-Hub/include/ut_common/js/lock_back.js"></script>
 
-        <script src="/UT-Hub/ut-allmenu/research/a/data/storage-a.js"></script>
+        <script src="/UT-Hub/ut-allmenu/research/a/data/config-a.js"></script>
+    <script src="/UT-Hub/ut-allmenu/research/a/data/storage-a.js"></script>
         <script src="/UT-Hub/ut-allmenu/research/a/data/dropout-a.js"></script>
         <script>
             $(function () {
@@ -63,6 +64,8 @@
                     sessionStorage.removeItem('utAllmenuAUploadRequested');
                     sessionStorage.removeItem('utAllmenuAUploadPayload');
                     sessionStorage.removeItem('utAllmenuASubmissionId');
+                    sessionStorage.removeItem('utAllmenuAUploadComplete');
+                    sessionStorage.removeItem('utAllmenuAStartedAt');
 
                     UT_A_TRACK.begin();
                     UT_A_TRACK.navigate('참여 전 확인');

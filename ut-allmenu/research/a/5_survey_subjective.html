@@ -75,6 +75,7 @@
 
     <script src="/UT-Hub/include/js/jquery-3.7.1.min.js"></script>
     <script src="/UT-Hub/include/ut_common/js/lock_back.js"></script>
+    <script src="/UT-Hub/ut-allmenu/research/a/data/config-a.js"></script>
     <script src="/UT-Hub/ut-allmenu/research/a/data/storage-a.js"></script>
         <script src="/UT-Hub/ut-allmenu/research/a/data/dropout-a.js"></script>
     <script>
@@ -82,6 +83,11 @@
             'use strict';
             var $form = $('#surveyForm');
             var $error = $('#surveyError');
+            function selectedText(name) {
+                return $('input[name="' + name + '"]:checked').map(function () {
+                    return $.trim($('label[for="' + this.id + '"]').text());
+                }).get().join(' | ');
+            }
 
             $('input[name="ease"]').on('change', function () {
                 var difficult = /^(1|2)$/.test($(this).val());
@@ -145,19 +151,15 @@
                     return;
                 }
 
-                var survey2Value = mustExplain && difficulty === '5'
-                    ? $.trim($('#difficultyOther').val())
-                    : (mustExplain ? Number(difficulty) : '');
-                var survey3Values = $.map(improvements, function (value) {
-                    return value === '5' ? $.trim($('#improvementOther').val()) : value;
-                });
                 sessionStorage.setItem('utAllmenuACoSurvey', JSON.stringify({
-                    survey1: Number(ease),
-                    survey2: survey2Value,
-                    survey3: survey3Values.join(',')
+                    survey1: selectedText('ease'),
+                    survey2: mustExplain ? selectedText('difficulty') : '',
+                    survey2Other: mustExplain && difficulty === '5' ? $.trim($('#difficultyOther').val()) : '',
+                    survey3: selectedText('improvement'),
+                    survey3Other: $.inArray('5', improvements) !== -1 ? $.trim($('#improvementOther').val()) : ''
                 }));
                 UT_A_TRACK.navigate('결과 제출');
-                location.href = '/UT-Hub/ut-allmenu/research/a/7_upload.html';
+                location.href = '/UT-Hub/ut-allmenu/research/a/6_upload.html';
             });
         });
     </script>

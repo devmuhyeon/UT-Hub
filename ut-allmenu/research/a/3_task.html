@@ -35,15 +35,15 @@
                     <main class="task_body">
                         <section class="guide_card" aria-labelledby="guideTitle01">
                             <h3 id="guideTitle01" class="guide_title"><span class="guide_number" aria-hidden="true">STEP 1</span>제시된 상황을 확인합니다.</h3>
-                            <p class="guide_desc">테스트를 시작하기 전에 서비스를 이용하려는 상황이 안내됩니다. 내용을 읽고 어떤 메뉴가 적합할지 생각해 주세요.</p>
+                            <p class="guide_desc">테스트 시작 전, 서비스를 이용하려는 상황이 안내됩니다. 내용을 확인해 주세요.</p>
                         </section>
                         <section class="guide_card" aria-labelledby="guideTitle02">
-                            <h3 id="guideTitle02" class="guide_title"><span class="guide_number" aria-hidden="true">STEP 2</span>시작 버튼을 누르면 전체메뉴가 표시됩니다.</h3>
-                            <p class="guide_desc">시작하기를 누르는 순간 시간 측정이 시작됩니다. 과업당 제한시간은 3분입니다.</p>
+                            <h3 id="guideTitle02" class="guide_title"><span class="guide_number" aria-hidden="true">STEP 2</span>시작 버튼을 누르면 테스트가 시작됩니다.</h3>
+                            <p class="guide_desc">시작 버튼을 누르면 안내창이 사라지고 전체메뉴가 표시됩니다.</p>
                         </section>
                         <section class="guide_card" aria-labelledby="guideTitle03">
-                            <h3 id="guideTitle03" class="guide_title"><span class="guide_number" aria-hidden="true">STEP 3</span>메뉴를 자유롭게 찾아 선택합니다.</h3>
-                            <p class="guide_desc">다른 메뉴를 선택해도 다시 탐색할 수 있습니다. 정답 메뉴를 선택하면 다음 과업으로 이동하며, 시간이 초과되면 이유를 선택한 후 다음으로 넘어갑니다.</p>
+                            <h3 id="guideTitle03" class="guide_title"><span class="guide_number" aria-hidden="true">STEP 3</span>자유롭게 메뉴를 찾아 클릭합니다.</h3>
+                            <p class="guide_desc">제시된 상황에 맞는 메뉴를 자유롭게 찾아 클릭해 주세요. 다른 메뉴를 선택해도 다시 찾아볼 수 있습니다. 제한 시간이 지나면 다음 단계로 이동합니다.</p>
                         </section>
                     </main>
                     <!-- 버튼 -->
@@ -57,10 +57,12 @@
         <script src="/UT-Hub/include/js/jquery-3.7.1.min.js"></script>
         <script src="/UT-Hub/include/ut_common/js/lock_back.js"></script>
 
-        <script src="/UT-Hub/ut-allmenu/research/a/data/storage-a.js"></script>
+        <script src="/UT-Hub/ut-allmenu/research/a/data/config-a.js"></script>
+    <script src="/UT-Hub/ut-allmenu/research/a/data/storage-a.js"></script>
         <script src="/UT-Hub/ut-allmenu/research/a/data/dropout-a.js"></script>
         <script>
             $(function() {
+                $('#taskLimitText').text(UT_A_CONFIG.taskLimitSeconds + '초');
 
                 $('#goTestPage').on('click', function() {
 
