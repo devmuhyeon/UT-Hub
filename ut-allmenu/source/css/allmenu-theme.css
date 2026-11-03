@@ -1,0 +1,65 @@
+@charset "utf-8";
+/* 전체메뉴 UT 전용. 부모 설문 페이지에서만 로드하며 frame에는 연결하지 않습니다. */
+:root {
+    --gray_0: #FFFFFF;
+    --gray_60: #757575;
+    --gray_100: #000000;
+    --primary_green_5: #F3FDF7;
+    --primary_green_10: #CBF2DD;
+    --primary_green_20: #AAF3CC;
+    --primary_green_30: #81E4AE;
+    --primary_green_40: #57DB92;
+    --primary_green_50: #40BF79;
+    --primary_green_60: #24A960;
+    --primary_green_70: #1C824A;
+    --primary_green_80: #145C34;
+    --primary_green_90: #092A18;
+    --primary_green_95: #04150C;
+
+    --col_blue: var(--primary_green_70);
+    --col_darkblue: var(--primary_green_80);
+    --col_skyblue: var(--primary_green_70);
+    --col_skyblue_light: var(--primary_green_5);
+    --col_bluegray: var(--primary_green_5);
+}
+body {
+    background: radial-gradient(circle at 12% 8%, rgba(28, 130, 74, .16) 0, transparent 30%), linear-gradient(135deg, var(--gray_0) 0%, var(--primary_green_5) 48%, var(--primary_green_5) 100%);
+}
+.intro_text_box {border-color: var(--primary_green_10); background: var(--primary_green_5);}
+.option_item input[type="radio"]:checked + label {
+    box-shadow: 0 14px 30px rgba(28, 130, 74, .16), inset 0 0 0 1px rgba(28, 130, 74, .28);
+}
+.option_item input[type="checkbox"]:checked + label {border-color: var(--primary_green_70); background: var(--primary_green_5); color: var(--primary_green_80);}
+.option_item input[type="checkbox"]:checked + label::before {border-color: var(--primary_green_70); background: var(--primary_green_70);}
+.btn_submit, .btn_next, .btn_start {box-shadow: 0 16px 34px rgba(28, 130, 74, .28);}
+.btn_submit:hover, .btn_next:hover {box-shadow: 0 20px 42px rgba(28, 130, 74, .34);}
+.btn_result {background: var(--primary_green_70);}
+.ut_page .btn_next {background: var(--primary_green_70);}
+.btn_result:hover, .ut_page .btn_next:hover {background: var(--primary_green_80);}
+/* ut-test.css의 고정 파란색 버튼도 전용 테마로 덮어씁니다. */
+.ut_result_box .btn_next {background: var(--primary_green_70);}
+.ut_result_box .btn_next:hover {background: var(--primary_green_80);}
+.guide_number, .ut_target_box {box-shadow: inset 0 0 0 1px rgba(28, 130, 74, .24);}
+.radio_item input:checked + label {border-color: var(--primary_green_70); background: var(--primary_green_5);}
+.radio_item input:checked + label::before {border-color: var(--primary_green_70); background: var(--primary_green_70);}
+.radio_item label::before {border-color: var(--gray_60);}
+.txt_highlight {box-shadow: inset 0 -10px 0 var(--primary_green_10);}
+.survey_textarea:hover {border-color: var(--primary_green_70);}
+.survey_textarea:focus {box-shadow: 0 14px 30px rgba(28, 130, 74, .12);}
+.result_wrap {background: radial-gradient(circle at 50% 35%, var(--primary_green_10) 0, var(--primary_green_5) 36%, var(--gray_0) 72%);}
+.loading_card {border-color: rgba(28, 130, 74, .24);}
+.loading_spinner {border-color: var(--primary_green_10); border-top-color: var(--primary_green_70);}
+.loading_bar {background: var(--primary_green_10);}
+.loading_bar::after {background: linear-gradient(90deg, var(--primary_green_70), var(--primary_green_80));}
+.btn_answer_open {border-color: var(--primary_green_70); color: var(--primary_green_70);}
+.btn_answer_open:hover, .btn_answer_open:focus, .btn_answer_open:focus-visible {background-color: var(--primary_green_70); color: var(--gray_0);}
+/* 숨겨진 입력의 키보드 초점은 화면에 보이는 레이블에 표시합니다. */
+.option_item input:focus-visible + label,
+#question1 input:focus-visible + label,
+.radio_item input:focus-visible + label,
+a:focus-visible, button:focus-visible, textarea:focus-visible,
+.survey_other:focus-visible {
+    outline: 3px solid var(--primary_green_80);
+    outline-offset: 3px;
+}
+.step_floating button:focus-visible, .survey_head a:focus-visible {outline-color: var(--gray_0);}
