@@ -727,7 +727,7 @@ span.ico16_loudspeaker_white{ display:inline-block;width:16px;height:16px;margin
 #footer .footer_wrap ul:not(.footer_top_ci ul), .footer_container01 ul { display:flex;justify-content:center;align-items:center;gap:32px;padding:40px 0}
 #footer .footer_wrap ul li:not(.footer_top_ci ul li), .footer_container01 ul li { line-height:26px;color:var(--col_p)}
 #footer .footer_wrap .footer_copy {margin-top:40px; text-align:center;padding-bottom:100px;line-height:24px;font-size:14px;color:var(--col_p)}
-#footer .footer_wrap .footer_info{text-align:center;font-size:14px;line-height:1.6}
+#footer .footer_wrap .footer_info{text-align:center;font-size:14px;line-height:1.5}
 
 #footer.footer_type02 .footer_top_ci {width: auto; border-bottom:0; margin-right: 40px;}
 #footer.footer_type02 .footer_wrap {width: 1248px; margin: 0 auto; display: flex; align-items: center; padding-bottom: 40px;}
