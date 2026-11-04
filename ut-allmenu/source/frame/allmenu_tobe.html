@@ -176,7 +176,6 @@
 
     /* 261001 고용24 전체메뉴 안내문구 UI 수정 */
     #sitemappopup .menu_info_header { border-width: 2px;}
-    #sitemappopup .box_list_area .txt_list a { font-size: 18px;}
     #sitemappopup .tab_cont .box_tab-contents.active { display: flex; justify-content: space-between; align-items: center;}
     #sitemappopup .tab_cont .tab_wrap { min-width: initial; max-width: initial;}
     #sitemappopup .order_check_all { display: flex; align-items: center; gap: 8px;}
@@ -207,6 +206,10 @@
     /* 261001 고용24 전체메뉴 안내문구 UI 수정 end */
 #order_check_all:focus-visible + label {outline:3px solid #111;outline-offset:4px;}
 #sitemappopup .site_map_cn[hidden] {display:none!important;}
+
+.btn_link_new:not(.lnb > ul *):before, .lnb .btn_link_new::after {background-image: url('/UT-Hub/include/images/ico_share_gray.svg');}
+.btn_link_new:not(.lnb > ul *).right:before, .lnb .btn_link_new.blue.right::after {right: 0; left: auto;}
+
 </style>
 </head>
 <body id="body">
