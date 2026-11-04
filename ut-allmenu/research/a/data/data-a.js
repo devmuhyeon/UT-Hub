@@ -270,7 +270,7 @@ $(function () {
         UT_A_TRACK.progress('TASK ' + (taskIndex + 1) + ' 진행', taskIndex + 1, 0);
         closeDialogs();
         blockTest(false);
-        $frame.trigger('focus');
+        $frame.contents().find('#sitemappopup').trigger('focus');
         updateTime();
         timer = setInterval(updateTime, 250);
     });
