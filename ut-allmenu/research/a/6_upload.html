@@ -134,7 +134,7 @@
                 showAnswerButton();
             }
             function status(callback) {
-                $.ajax({url: WEB_APP_URL, dataType: 'jsonp', timeout: 15000,
+                $.ajax({url: WEB_APP_URL, dataType: 'jsonp', timeout: 5000,
                     data: {action: 'status', submissionId: resultData.submissionId}
                 }).done(function (response) {
                     callback(response && response.ok === true ? response.saved === true : null);
@@ -157,7 +157,7 @@
                 // POST 응답을 읽지 못해도 서버의 고유 ID 조회로 실제 저장 여부를 확인.
                 $.ajax({url: WEB_APP_URL, method: 'POST', data: JSON.stringify(resultData),
                     processData: false, contentType: 'text/plain;charset=utf-8',
-                    crossDomain: true, timeout: 15000
+                    crossDomain: true, timeout: 5000
                 }).always(function () { verify(0); });
             }
             $retry.on('click', function () {
