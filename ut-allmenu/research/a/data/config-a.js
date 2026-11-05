@@ -1,5 +1,4 @@
 var UT_A_CONFIG = {
-    // 테스트 20초. 본 조사 시 60으로 변경.
     taskLimitSeconds: 180,
-    webAppUrl: 'https://script.google.com/macros/s/AKfycbwelooTf45MOgTx7aKJTXKWiUTSa6AacakN-ulmjI1_tCKjwXOG2x0p_GKEohVhZsD1gQ/exec'
+    webAppUrl: 'https://script.google.com/macros/s/AKfycby1Ov-2EnOxxL7pOFL1JBUVB7w9rK6qdaJoXBXEIzNmQfy8xc_Zha9O6xj__vyyRT6d/exec'
 };
