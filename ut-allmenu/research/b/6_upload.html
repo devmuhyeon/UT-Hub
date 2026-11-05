@@ -37,7 +37,7 @@
                 <img src="/UT-Hub/ut-allmenu/source/images/tobe_Q1.png" alt="메뉴 정답 예시 화면 - 토글">
                 <img src="/UT-Hub/ut-allmenu/source/images/tobe_Q2.png" alt="메뉴 정답 예시 화면 - 1">
                 <img src="/UT-Hub/ut-allmenu/source/images/tobe_Q3.png" alt="메뉴 정답 예시 화면 - 2">
-                <img src="/UT-Hub/ut-allmenu/source/images/tobe_Q4.png" alt="메뉴 정답 예시 화면 - 3-1">
+                <img src="/UT-Hub/ut-allmenu/source/images/tobe_Q4.png" alt="메뉴 정답 예시 화면 - 3">
                 <img src="/UT-Hub/ut-allmenu/source/images/tobe_Q4_2.png" alt="메뉴 정답 예시 화면 - 3-2">
             </div>
         </div>
@@ -127,65 +127,66 @@
 
             sessionStorage.setItem(PAYLOAD_KEY, JSON.stringify(resultData));
 
-            var checking = false;
-            var $retry = $('<button>', {type: 'button', text: '저장 여부 확인 후 다시 제출', hidden: true})
-                .addClass('btn_submit').insertBefore('.btn_answer_open');
+            var REQUEST_COMPLETE_KEY = ID_KEY.replace('SubmissionId', 'UploadRequestComplete');
+            var LEGACY_COMPLETE_KEY = ID_KEY.replace('SubmissionId', 'UploadComplete');
 
-            function complete() {
-                sessionStorage.setItem('utAllmenuBUploadComplete', resultData.submissionId);
-                $retry.prop('hidden', true);
-                message('설문 제출이 완료되었습니다.', '설문에 참여해 주셔서 감사합니다.');
+            // jQuery 전송 흐름에 콘텐츠 UT와 같은 no-cors 방식을 연결한다.
+            // XMLHttpRequest에는 no-cors가 없어 실제 전송부만 fetch를 사용한다.
+            $.ajaxTransport('utnocors', function (options) {
+                return {
+                    send: function (_, finish) {
+                        window.fetch(options.url, {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            headers: {'Content-Type': 'text/plain;charset=utf-8'},
+                            body: options.data
+                        }).then(function () {
+                            // 전송 요청 종료이며 실제 시트 저장 성공 확인은 아니다.
+                            finish(200, 'success', {utnocors: true});
+                        }).catch(function () {
+                            finish(0, 'error');
+                        });
+                    },
+                    abort: $.noop
+                };
+            });
+
+            function completeRequest() {
+                message('전송 요청이 완료되었습니다.', '설문에 참여해 주셔서 감사합니다.');
                 showAnswerButton();
             }
-            function status(callback) {
-                $.ajax({url: WEB_APP_URL, dataType: 'jsonp', timeout: 5000,
-                    data: {action: 'status', submissionId: resultData.submissionId}
-                }).done(function (response) {
-                    callback(response && response.ok === true ? response.saved === true : null);
-                }).fail(function () { callback(null); });
-            }
-            function verify(attempt) {
-                message('저장 여부를 확인하고 있습니다.', '잠시만 기다려 주세요.', true);
-                status(function (saved) {
-                    if (saved === true) { checking = false; complete(); return; }
-                    if (attempt < 3) { setTimeout(function () { verify(attempt + 1); }, 2500); return; }
-                    checking = false;
-                    message('저장 완료를 확인하지 못했습니다.', '응답은 이 탭에 보관 중입니다. 아래 버튼으로 확인 후 다시 제출해 주세요.');
-                    $retry.prop('hidden', false);
-                });
-            }
-            function submit() {
+
+            if (sessionStorage.getItem(REQUEST_COMPLETE_KEY) === resultData.submissionId ||
+                sessionStorage.getItem(LEGACY_COMPLETE_KEY) === resultData.submissionId) {
+                completeRequest();
+            } else if (!WEB_APP_URL) {
+                message('제출중에 오류가 발생했습니다.');
+            } else if (sessionStorage.getItem(LOCK_KEY)) {
+                message('전송 요청 이력이 있습니다.', '중복 전송 방지를 위해 다시 전송하지 않습니다.');
+            } else if (typeof window.fetch !== 'function') {
+                message('전송을 시작하지 못했습니다.', '현재 브라우저에서 전송 기능을 사용할 수 없습니다.');
+            } else {
                 sessionStorage.setItem(LOCK_KEY, 'true');
-                $retry.prop('hidden', true);
-                message('결과를 저장하고 있습니다.', '잠시만 기다려 주세요.', true);
-                // POST 응답을 읽지 못해도 서버의 고유 ID 조회로 실제 저장 여부를 확인.
-                $.ajax({url: WEB_APP_URL, method: 'POST', data: JSON.stringify(resultData),
-                    processData: false, contentType: 'text/plain;charset=utf-8',
-                    crossDomain: true, timeout: 5000
-                }).always(function () { verify(0); });
-            }
-            $retry.on('click', function () {
-                if (checking) return;
-                checking = true;
-                $retry.prop('hidden', true);
-                message('저장 여부를 확인하고 있습니다.', '잠시만 기다려 주세요.', true);
-                status(function (saved) {
-                    if (saved === true) { checking = false; complete(); }
-                    else if (saved === false) submit();
-                    else {
-                        checking = false;
-                        message('서버 연결을 확인할 수 없습니다.', '잠시 후 다시 시도해 주세요.');
-                        $retry.prop('hidden', false);
-                    }
+                message('테스트 결과를 제출중입니다.', '잠시만 기다려 주세요.', true);
+
+                $.ajax({
+                    url: WEB_APP_URL,
+                    method: 'POST',
+                    dataType: 'utnocors',
+                    data: JSON.stringify(resultData),
+                    processData: false,
+                    contentType: 'text/plain;charset=utf-8',
+                    global: false,
+                    timeout: 0
+                }).done(function () {
+                    sessionStorage.setItem(REQUEST_COMPLETE_KEY, resultData.submissionId);
+                    completeRequest();
+                }).fail(function () {
+                    message('전송 결과를 확인하지 못했습니다.');
                 });
-            });
-            if (sessionStorage.getItem('utAllmenuBUploadComplete') === resultData.submissionId) complete();
-            else if (!WEB_APP_URL) message('제출 서버가 설정되지 않았습니다.', '조사 담당자에게 문의해 주세요.');
-            else {
-                checking = true;
-                if (sessionStorage.getItem(LOCK_KEY) === 'true') verify(0);
-                else submit();
             }
+
+
 
             function closeAnswer() {
                 $popup.stop(true, true).fadeOut(150, function () {

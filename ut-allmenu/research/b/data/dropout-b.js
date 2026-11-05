@@ -175,11 +175,31 @@ var UT_B_TRACK = (function ($) {
         state.taskStarted = countStartedTasks();
         state.clickCount = totalClicks(0, state.stage);
         saveState();
-        send('progress');
+        var isUploadPage = filename === '6_upload.html';
 
-        // 숨김, 탭 전환, 최소화는 종료가 아니다.
+        function uploadRequestFinished() {
+            var id = getId(false);
+            return id && (
+                sessionStorage.getItem(ID_KEY.replace('SubmissionId', 'UploadRequestComplete')) === id ||
+                sessionStorage.getItem(ID_KEY.replace('SubmissionId', 'UploadComplete')) === id
+            );
+        }
+
+        if (isUploadPage) {
+            // 결과 전송과 진행 기록이 동시에 서버에 몰리지 않도록 한다.
+            // 전송이 길어지거나 실패한 경우에는 결과 제출 단계도 기록한다.
+            setTimeout(function () {
+                if (getId(false) && !uploadRequestFinished()) send('progress');
+            }, 15000);
+        } else {
+            send('progress');
+        }
+
+        // 일반 단계의 이탈 추적은 유지한다. 요청 완료 화면은 주기 통신을 멈춘다.
         setInterval(function () {
-            if (getId(false)) send('heartbeat');
+            if (getId(false) && !(isUploadPage && uploadRequestFinished())) {
+                send('heartbeat');
+            }
         }, 45000);
 
         $(window).on('pagehide.utBDropout', function () {
