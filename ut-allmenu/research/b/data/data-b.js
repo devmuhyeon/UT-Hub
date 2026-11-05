@@ -161,6 +161,9 @@ $(function () {
 
     function isCorrect($control, name) {
         var task = currentTask();
+        if (task.key === 'task3' && name === '통합경력증명서 발급') {
+            return $control.attr('id') === 'tab_person_EBG020440301001';
+        }
         if (task.key === 'toggle') return false;
         if (name !== task.answer) return false;
         if (task.answerId) return $control.attr('id') === task.answerId;
