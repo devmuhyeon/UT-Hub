@@ -16,6 +16,8 @@
         .btn_answer_open[hidden], .answer_popup[hidden] {display:none!important}
         .answer_popup_inner h2 {margin:0 0 24px;padding-right:60px;font-size:24px;font-weight:700;line-height:1.5}
         .answer_dp_img p {margin:0 0 12px;line-height:1.5}
+        .dp_flex_bx {display: flex; gap: 8px; flex-direction: column;}
+        .dp_flex_bx strong {margin-bottom: 8px; font-size: 18px; color: #111; font-weight: 600;}
     </style>
 </head>
 <body>
@@ -34,10 +36,19 @@
             <button type="button" class="btn_answer_close" aria-label="정답 안내 닫기">✕</button>
             <h2 id="answerTitleA">메뉴 정답 안내</h2>
             <div class="answer_dp_img">
-                <img src="/UT-Hub/ut-allmenu/source/images/asis_Q1.png" alt="메뉴 정답 예시 화면 - 1">
-                <img src="/UT-Hub/ut-allmenu/source/images/asis_Q2.png" alt="메뉴 정답 예시 화면 - 2">
-                <img src="/UT-Hub/ut-allmenu/source/images/asis_Q3.png" alt="메뉴 정답 예시 화면 - 3">
-                <img src="/UT-Hub/ut-allmenu/source/images/asis_Q3_2.png" alt="메뉴 정답 예시 화면 - 3-2">
+                <div class="dp_flex_bx">
+                    <strong>첫번째</strong>
+                    <img src="/UT-Hub/ut-allmenu/source/images/asis_Q1.png" alt="메뉴 정답 예시 화면 - 1">
+                </div>
+                <div class="dp_flex_bx">
+                    <strong>두번째</strong>
+                    <img src="/UT-Hub/ut-allmenu/source/images/asis_Q2.png" alt="메뉴 정답 예시 화면 - 2">
+                </div>
+                <div class="dp_flex_bx">
+                    <strong>세번째</strong>
+                    <img src="/UT-Hub/ut-allmenu/source/images/asis_Q3.png" alt="메뉴 정답 예시 화면 - 3">
+                    <img src="/UT-Hub/ut-allmenu/source/images/asis_Q3_2.png" alt="메뉴 정답 예시 화면 - 3-2">
+                </div>
             </div>
         </div>
     </div>
