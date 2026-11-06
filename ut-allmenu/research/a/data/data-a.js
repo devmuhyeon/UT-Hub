@@ -265,12 +265,48 @@ $(function () {
     $frame.on('load.utAllmenuA', bindFrame);
     prepareTask(false);
 
+    // TASK3 시작 후 앞부분 결과를 미리 전송한다. 실패해도 TASK3 진행은 멈추지 않는다.
+    function sendEarlyResult() {
+        var survey = UT_A.getSurvey();
+        var tasks = UT_A.getTaskResult();
+        var required = ['task1', 'task2'];
+        var hasResults = $.grep(required, function (key) {
+            return tasks[key] && /^(success|fail)$/.test(tasks[key].result);
+        }).length === required.length;
+        var id = UT_A_TRACK.id(false);
+
+        if (!id || !survey.age || !survey.experience || !survey.member || !hasResults) return;
+        if (!UT_A_CONFIG.webAppUrl || typeof window.fetch !== 'function') return;
+
+        var data = {
+            action: 'partial',
+            groupNo: 'A',
+            submissionId: id,
+            age: survey.age,
+            experience: survey.experience,
+            member: survey.member,
+            userAgent: navigator.userAgent,
+            task1: tasks.task1,
+            task2: tasks.task2
+        };
+
+        window.fetch(UT_A_CONFIG.webAppUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(data)
+        }).catch(function () {
+            // 완료 페이지에서 서버 저장 여부를 조회하고 누락된 경우 다시 전송한다.
+        });
+    }
+
     $start.on('click.utAllmenuA', function () {
         if (started || finished || !frameReady) return;
         startTime = Date.now();
         lastClickTime = startTime;
         started = true;
         UT_A_TRACK.progress('TASK ' + (taskIndex + 1) + ' 진행', taskIndex + 1, 0);
+        if (currentTask().key === 'task3') sendEarlyResult();
         closeDialogs();
         blockTest(false);
         $frame.contents().find('#sitemappopup').trigger('focus');

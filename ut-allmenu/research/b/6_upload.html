@@ -68,29 +68,28 @@
         $(function () {
             'use strict';
 
-            // 고용24 전체메뉴 B타입 Apps Script 웹앱 배포 URL
+            // 전송 여부는 서버 조회로 확인한다. no-cors 요청 종료는 저장 완료가 아니다.
             var WEB_APP_URL = UT_B_CONFIG.webAppUrl;
-            var LOCK_KEY = 'utAllmenuBUploadRequested';
-            var PAYLOAD_KEY = 'utAllmenuBUploadPayload';
             var ID_KEY = 'utAllmenuBSubmissionId';
+            var REQUEST_COMPLETE_KEY = 'utAllmenuBUploadRequestComplete';
+            var PAYLOAD_KEY = 'utAllmenuBUploadPayload';
             var $popup = $('.answer_popup');
+            var checkCount = 0;
+            var earlyRetryCount = 0;
+            var lateRetryCount = 0;
+            var checking = false;
+            var finished = false;
+            var MAX_CHECKS = 12;
 
             function message(title, text, loading) {
                 $('.loading_bar').toggle(loading === true);
                 $('.result_title').text(title);
-                $('.result_message').text(text);
+                $('.result_message').text(text || '');
             }
 
             function readJson(key) {
-                try {
-                    return JSON.parse(sessionStorage.getItem(key) || '{}');
-                } catch (ignore) {
-                    return {};
-                }
-            }
-
-            function showAnswerButton() {
-                $('.btn_answer_open').prop('hidden', false);
+                try { return JSON.parse(sessionStorage.getItem(key) || '{}'); }
+                catch (ignore) { return {}; }
             }
 
             function getSubmissionId() {
@@ -102,35 +101,126 @@
                 return id;
             }
 
+            function completeRequest() {
+                finished = true;
+                sessionStorage.setItem(REQUEST_COMPLETE_KEY, id);
+                message('결과가 저장되었습니다.', '설문에 참여해 주셔서 감사합니다.');
+                $('.btn_answer_open').prop('hidden', false);
+            }
+
+            // $.ajax의 UI/상태 관리를 사용하고 no-cors 전송만 fetch로 처리한다.
+            $.ajaxTransport('utnocors', function (options) {
+                return {
+                    send: function (_, done) {
+                        window.fetch(options.url, {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                            body: options.data
+                        }).then(function () {
+                            done(200, 'success', {utnocors: true});
+                        }).catch(function () {
+                            done(0, 'error');
+                        });
+                    },
+                    abort: $.noop
+                };
+            });
+
+            function post(data) {
+                return $.ajax({
+                    url: WEB_APP_URL,
+                    method: 'POST',
+                    dataType: 'utnocors',
+                    data: JSON.stringify(data),
+                    processData: false,
+                    contentType: 'text/plain;charset=utf-8',
+                    global: false,
+                    timeout: 0
+                });
+            }
+
+            // Apps Script JSONP 조회: 저장 성공/1차 누락 여부를 실제 시트 기준으로 판정.
+            function checkStatus() {
+                if (finished || checking || checkCount >= MAX_CHECKS) {
+                    if (!finished && checkCount >= MAX_CHECKS) {
+                        message('저장 완료 여부를 확인하지 못했습니다.',
+                            '잠시 후 페이지를 새로고침하면 저장 여부를 다시 확인합니다.');
+                    }
+                    return;
+                }
+                checking = true;
+                checkCount++;
+                $.ajax({
+                    url: WEB_APP_URL,
+                    method: 'GET',
+                    dataType: 'jsonp',
+                    jsonp: 'callback',
+                    cache: false,
+                    timeout: 12000,
+                    data: { action: 'status', submissionId: id }
+                }).done(function (response) {
+                    if (response && response.ok && response.saved &&
+                        response.earlySaved === true && response.lateSaved === true) {
+                        completeRequest();
+                        return;
+                    }
+                    if (response && response.ok) {
+                        // 1차가 누락된 경우에만 TASK1·2 데이터를 재전송한다.
+                        if (!response.earlySaved && earlyRetryCount < 2 && checkCount >= 2) {
+                            earlyRetryCount++;
+                            post(earlyData);
+                        }
+                        // 2차가 누락된 경우에만 TASK3·사후설문을 재전송한다.
+                        if (!response.lateSaved && lateRetryCount < 2 && checkCount >= 4) {
+                            lateRetryCount++;
+                            post(lateData);
+                        }
+                    }
+                }).fail(function () {
+                    // 통신 실패/서버 오류는 완료로 취급하지 않는다.
+                }).always(function () {
+                    checking = false;
+                    if (!finished) setTimeout(checkStatus, 1600);
+                });
+            }
+
             var personal = UT_B.getSurvey();
             var tasks = UT_B.getTaskResult();
             var opinion = readJson('utAllmenuBCoSurvey');
-            var keys = ['toggle', 'task1', 'task2', 'task3'];
-            var validTasks = true;
-            $.each(keys, function (_, key) {
-                if (!tasks[key] || !/^(success|fail)$/.test(tasks[key].result)) {
-                    validTasks = false;
-                    return false;
-                }
-            });
+            var id = getSubmissionId();
+            var allKeys = ['toggle', 'task1', 'task2', 'task3'];
+            var validTasks = $.grep(allKeys, function (key) {
+                return tasks[key] && /^(success|fail)$/.test(tasks[key].result);
+            }).length === allKeys.length;
+            var validSurvey = !!(personal.age && personal.experience && personal.member &&
+                opinion.survey1 && opinion.survey3 && opinion.survey4);
 
-            if (!personal.age || !personal.experience || !personal.member || !validTasks ||
-                !opinion.survey1 || !opinion.survey3 || !opinion.survey4) {
-                message('제출할 데이터가 부족합니다.', '설문을 순차적으로 진행해주세요.');
+            if (!validTasks || !validSurvey) {
+                message('제출할 데이터가 부족합니다.', '설문을 순차적으로 진행해 주세요.');
+                return;
+            }
+            if (!WEB_APP_URL || typeof window.fetch !== 'function') {
+                message('전송을 시작하지 못했습니다.', '전송 설정 또는 브라우저 지원 여부를 확인해 주세요.');
                 return;
             }
 
-            var resultData = {
+            var earlyData = {
+                action: 'partial',
                 groupNo: 'B',
-                testType: 'TO-BE',
-                submissionId: getSubmissionId(),
+                submissionId: id,
                 age: personal.age,
                 experience: personal.experience,
                 member: personal.member,
-                agree: personal.agree || '',
                 toggle: tasks.toggle,
                 task1: tasks.task1,
                 task2: tasks.task2,
+                userAgent: navigator.userAgent
+            };
+            var lateData = {
+                action: 'finish',
+                groupNo: 'B',
+                submissionId: id,
                 task3: tasks.task3,
                 survey1: opinion.survey1,
                 survey2: opinion.survey2 || '',
@@ -141,68 +231,16 @@
                 userAgent: navigator.userAgent
             };
 
-            sessionStorage.setItem(PAYLOAD_KEY, JSON.stringify(resultData));
-
-            var REQUEST_COMPLETE_KEY = ID_KEY.replace('SubmissionId', 'UploadRequestComplete');
-            var LEGACY_COMPLETE_KEY = ID_KEY.replace('SubmissionId', 'UploadComplete');
-
-            // jQuery 전송 흐름에 콘텐츠 UT와 같은 no-cors 방식을 연결한다.
-            // XMLHttpRequest에는 no-cors가 없어 실제 전송부만 fetch를 사용한다.
-            $.ajaxTransport('utnocors', function (options) {
-                return {
-                    send: function (_, finish) {
-                        window.fetch(options.url, {
-                            method: 'POST',
-                            mode: 'no-cors',
-                            headers: {'Content-Type': 'text/plain;charset=utf-8'},
-                            body: options.data
-                        }).then(function () {
-                            // 전송 요청 종료이며 실제 시트 저장 성공 확인은 아니다.
-                            finish(200, 'success', {utnocors: true});
-                        }).catch(function () {
-                            finish(0, 'error');
-                        });
-                    },
-                    abort: $.noop
-                };
-            });
-
-            function completeRequest() {
-                message('전송 요청이 완료되었습니다.', '설문에 참여해 주셔서 감사합니다.');
-                showAnswerButton();
+            // 중간 데이터는 재전송에 대비해 브라우저 저장소에도 그대로 남겨둔다.
+            sessionStorage.setItem(PAYLOAD_KEY, JSON.stringify({ early: earlyData, late: lateData }));
+            message('테스트 결과를 제출 중입니다.', '구글 시트 저장 여부를 확인하고 있습니다.', true);
+            // 재방문·새로고침에도 서버의 실제 완료 여부를 조회하여 중복을 방지한다.
+            // 서버의 고유 ID upsert가 중복 요청을 안전하게 처리한다.
+            if (sessionStorage.getItem(REQUEST_COMPLETE_KEY) !== id) {
+                post(lateData);
             }
-
-            if (sessionStorage.getItem(REQUEST_COMPLETE_KEY) === resultData.submissionId ||
-                sessionStorage.getItem(LEGACY_COMPLETE_KEY) === resultData.submissionId) {
-                completeRequest();
-            } else if (!WEB_APP_URL) {
-                message('제출중에 오류가 발생했습니다.');
-            } else if (sessionStorage.getItem(LOCK_KEY)) {
-                message('전송 요청 이력이 있습니다.', '중복 전송 방지를 위해 다시 전송하지 않습니다.');
-            } else if (typeof window.fetch !== 'function') {
-                message('전송을 시작하지 못했습니다.', '현재 브라우저에서 전송 기능을 사용할 수 없습니다.');
-            } else {
-                sessionStorage.setItem(LOCK_KEY, 'true');
-                message('테스트 결과를 제출중입니다.', '잠시만 기다려 주세요.', true);
-
-                $.ajax({
-                    url: WEB_APP_URL,
-                    method: 'POST',
-                    dataType: 'utnocors',
-                    data: JSON.stringify(resultData),
-                    processData: false,
-                    contentType: 'text/plain;charset=utf-8',
-                    global: false,
-                    timeout: 0
-                }).done(function () {
-                    sessionStorage.setItem(REQUEST_COMPLETE_KEY, resultData.submissionId);
-                    completeRequest();
-                }).fail(function () {
-                    message('전송 결과를 확인하지 못했습니다.');
-                });
-            }
-
-
+            // POST 응답이 지연되더라도 서버의 실제 저장 여부 확인은 시작한다.
+            setTimeout(checkStatus, 1600);
 
             function closeAnswer() {
                 $popup.stop(true, true).fadeOut(150, function () {
