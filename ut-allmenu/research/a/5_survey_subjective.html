@@ -79,7 +79,6 @@
     <script src="/UT-Hub/include/ut_common/js/lock_back.js"></script>
     <script src="/UT-Hub/ut-allmenu/research/a/data/config-a.js"></script>
     <script src="/UT-Hub/ut-allmenu/research/a/data/storage-a.js"></script>
-        <script src="/UT-Hub/ut-allmenu/research/a/data/dropout-a.js"></script>
     <script>
         $(function () {
             'use strict';
@@ -160,7 +159,6 @@
                     survey3: selectedText('improvement'),
                     survey3Other: $.inArray('5', improvements) !== -1 ? $.trim($('#improvementOther').val()) : ''
                 }));
-                UT_A_TRACK.navigate('결과 제출');
                 location.href = '/UT-Hub/ut-allmenu/research/a/6_upload.html';
             });
         });

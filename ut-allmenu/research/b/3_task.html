@@ -64,14 +64,12 @@
 
         <script src="/UT-Hub/ut-allmenu/research/b/data/config-b.js"></script>
     <script src="/UT-Hub/ut-allmenu/research/b/data/storage-b.js"></script>
-        <script src="/UT-Hub/ut-allmenu/research/b/data/dropout-b.js"></script>
         <script>
             $(function() {
                 $('#taskLimitText').text(UT_B_CONFIG.taskLimitSeconds + '초');
 
                 $('#goTestPage').on('click', function() {
 
-                    UT_B_TRACK.navigate('TASK 1');
                     location.href = '/UT-Hub/ut-allmenu/research/b/4_survey_tobe.html';
 
                 });

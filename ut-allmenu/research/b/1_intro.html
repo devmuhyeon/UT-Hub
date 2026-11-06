@@ -53,7 +53,6 @@
 
         <script src="/UT-Hub/ut-allmenu/research/b/data/config-b.js"></script>
     <script src="/UT-Hub/ut-allmenu/research/b/data/storage-b.js"></script>
-        <script src="/UT-Hub/ut-allmenu/research/b/data/dropout-b.js"></script>
         <script>
             $(function () {
                 sessionStorage.setItem('ut_group', 'B');
@@ -68,8 +67,7 @@
                     sessionStorage.removeItem('utAllmenuBUploadComplete');
                     sessionStorage.removeItem('utAllmenuBStartedAt');
 
-                    UT_B_TRACK.begin();
-                    UT_B_TRACK.navigate('참여 전 확인');
+                    UT_B.getSubmissionId();
                     location.href = '/UT-Hub/ut-allmenu/research/b/2_survey.html';
                 });
             });

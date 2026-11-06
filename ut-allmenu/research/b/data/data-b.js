@@ -148,13 +148,11 @@ $(function () {
 
         if (status === 'success') {
             UT_B.saveTask(currentTask().key, result);
-            UT_B_TRACK.progress(taskLabel() + ' 완료', taskIndex + 1, clickLogs.length);
             openDialog($success, '.btn_next');
         } else {
             $fail.find('input[name="failReason"]').prop('checked', false);
             $('#failOther').val('').prop('disabled', true).prop('hidden', true);
             $('#failError').prop('hidden', true);
-            UT_B_TRACK.progress(taskLabel() + ' 제한시간 종료', taskIndex + 1, clickLogs.length);
             openDialog($fail, 'input[name="failReason"]');
         }
     }
@@ -182,7 +180,6 @@ $(function () {
         });
         lastClickTime = now;
         lastMenu = name;
-        UT_B_TRACK.progress(taskLabel(), taskIndex + 1, clickLogs.length);
         return name;
     }
 
@@ -283,7 +280,6 @@ $(function () {
         clearInterval(timer);
         timer = null;
         setTaskText();
-        UT_B_TRACK.progress(taskLabel() + ' 준비', taskIndex + 1, 0);
         blockTest(true);
         closeDialogs();
         $start.prop('disabled', true);
@@ -298,7 +294,6 @@ $(function () {
     var saved = UT_B.getTaskResult();
     while (taskIndex < TASKS.length && saved[TASKS[taskIndex].key]) taskIndex++;
     if (taskIndex === TASKS.length) {
-        UT_B_TRACK.navigate('사후 설문');
         location.replace(BASE + '5_survey_subjective.html');
         return;
     }
@@ -314,10 +309,10 @@ $(function () {
         var hasResults = $.grep(required, function (key) {
             return tasks[key] && /^(success|fail)$/.test(tasks[key].result);
         }).length === required.length;
-        var id = UT_B_TRACK.id(false);
+        var id = UT_B.getSubmissionId();
 
         if (!id || !survey.age || !survey.experience || !survey.member || !hasResults) return;
-        if (!UT_B_CONFIG.webAppUrl || typeof window.fetch !== 'function') return;
+        if (!UT_B_CONFIG.webAppUrl) return;
 
         var data = {
             action: 'partial',
@@ -332,14 +327,7 @@ $(function () {
             task2: tasks.task2
         };
 
-        window.fetch(UT_B_CONFIG.webAppUrl, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(data)
-        }).catch(function () {
-            // 완료 페이지에서 서버 저장 여부를 조회하고 누락된 경우 다시 전송한다.
-        });
+        UT_B.post(data);
     }
 
     $start.on('click.utAllmenuB', function () {
@@ -347,7 +335,6 @@ $(function () {
         startTime = Date.now();
         lastClickTime = startTime;
         started = true;
-        UT_B_TRACK.progress(taskLabel() + ' 진행', taskIndex + 1, 0);
         if (currentTask().key === 'task3') sendEarlyResult();
         closeDialogs();
         blockTest(false);
@@ -377,10 +364,8 @@ $(function () {
             result.failReason = clean($reason.siblings('label[for="' + $reason.attr('id') + '"]').text());
             UT_B.saveTask(currentTask().key, result);
         }
-        UT_B_TRACK.progress(taskLabel() + ' 완료', taskIndex + 1, clickLogs.length);
         moving = true;
         if (taskIndex === TASKS.length - 1) {
-            UT_B_TRACK.navigate('사후 설문');
             location.href = BASE + '5_survey_subjective.html';
             return;
         }

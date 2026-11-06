@@ -63,12 +63,11 @@
     <script src="/UT-Hub/include/ut_common/js/lock_back.js"></script>
     <script src="/UT-Hub/ut-allmenu/research/b/data/config-b.js"></script>
     <script src="/UT-Hub/ut-allmenu/research/b/data/storage-b.js"></script>
-    <script src="/UT-Hub/ut-allmenu/research/b/data/dropout-b.js"></script>
     <script>
         $(function () {
             'use strict';
 
-            // 전송 여부는 서버 조회로 확인한다. no-cors 요청 종료는 저장 완료가 아니다.
+            // 전송 여부는 서버 조회로 확인한다. POST 요청 종료는 저장 완료가 아니다.
             var WEB_APP_URL = UT_B_CONFIG.webAppUrl;
             var ID_KEY = 'utAllmenuBSubmissionId';
             var REQUEST_COMPLETE_KEY = 'utAllmenuBUploadRequestComplete';
@@ -108,36 +107,8 @@
                 $('.btn_answer_open').prop('hidden', false);
             }
 
-            // $.ajax의 UI/상태 관리를 사용하고 no-cors 전송만 fetch로 처리한다.
-            $.ajaxTransport('utnocors', function (options) {
-                return {
-                    send: function (_, done) {
-                        window.fetch(options.url, {
-                            method: 'POST',
-                            mode: 'no-cors',
-                            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                            body: options.data
-                        }).then(function () {
-                            done(200, 'success', {utnocors: true});
-                        }).catch(function () {
-                            done(0, 'error');
-                        });
-                    },
-                    abort: $.noop
-                };
-            });
-
             function post(data) {
-                return $.ajax({
-                    url: WEB_APP_URL,
-                    method: 'POST',
-                    dataType: 'utnocors',
-                    data: JSON.stringify(data),
-                    processData: false,
-                    contentType: 'text/plain;charset=utf-8',
-                    global: false,
-                    timeout: 0
-                });
+                return UT_B.post(data);
             }
 
             // Apps Script JSONP 조회: 저장 성공/1차 누락 여부를 실제 시트 기준으로 판정.
@@ -200,8 +171,8 @@
                 message('제출할 데이터가 부족합니다.', '설문을 순차적으로 진행해 주세요.');
                 return;
             }
-            if (!WEB_APP_URL || typeof window.fetch !== 'function') {
-                message('전송을 시작하지 못했습니다.', '전송 설정 또는 브라우저 지원 여부를 확인해 주세요.');
+            if (!WEB_APP_URL) {
+                message('전송을 시작하지 못했습니다.', '브라우저 지원이 되지 않으니, 다른 브라우저를 사용해주세요.');
                 return;
             }
 
@@ -233,7 +204,7 @@
 
             // 중간 데이터는 재전송에 대비해 브라우저 저장소에도 그대로 남겨둔다.
             sessionStorage.setItem(PAYLOAD_KEY, JSON.stringify({ early: earlyData, late: lateData }));
-            message('테스트 결과를 제출 중입니다.', '구글 시트 저장 여부를 확인하고 있습니다.', true);
+            message('설문 결과를 제출 중입니다.', true);
             // 재방문·새로고침에도 서버의 실제 완료 여부를 조회하여 중복을 방지한다.
             // 서버의 고유 ID upsert가 중복 요청을 안전하게 처리한다.
             if (sessionStorage.getItem(REQUEST_COMPLETE_KEY) !== id) {

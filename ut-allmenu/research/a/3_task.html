@@ -64,14 +64,12 @@
 
         <script src="/UT-Hub/ut-allmenu/research/a/data/config-a.js"></script>
     <script src="/UT-Hub/ut-allmenu/research/a/data/storage-a.js"></script>
-        <script src="/UT-Hub/ut-allmenu/research/a/data/dropout-a.js"></script>
         <script>
             $(function() {
                 $('#taskLimitText').text(UT_A_CONFIG.taskLimitSeconds + '초');
 
                 $('#goTestPage').on('click', function() {
 
-                    UT_A_TRACK.navigate('TASK 1');
                     location.href = '/UT-Hub/ut-allmenu/research/a/4_survey_asis.html';
 
                 });
