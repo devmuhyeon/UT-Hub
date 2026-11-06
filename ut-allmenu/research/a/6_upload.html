@@ -59,178 +59,180 @@
     <script src="/UT-Hub/ut-allmenu/research/a/data/storage-a.js"></script>
     <script>
         $(function () {
-            'use strict';
+    'use strict';
 
-            // 전송 여부는 서버 조회로 확인한다. POST 요청 종료는 저장 완료가 아니다.
-            var WEB_APP_URL = UT_A_CONFIG.webAppUrl;
-            var ID_KEY = 'utAllmenuASubmissionId';
-            var REQUEST_COMPLETE_KEY = 'utAllmenuAUploadRequestComplete';
-            var PAYLOAD_KEY = 'utAllmenuAUploadPayload';
-            var $popup = $('.answer_popup');
-            var checkCount = 0;
-            var earlyRetryCount = 0;
-            var lateRetryCount = 0;
-            var checking = false;
-            var finished = false;
-            var MAX_CHECKS = 12;
+    // 전송 여부는 서버 조회로 확인한다. POST 요청 종료는 저장 완료가 아니다.
+    var WEB_APP_URL = UT_A_CONFIG.webAppUrl;
+    var ID_KEY = 'utAllmenuASubmissionId';
+    var REQUEST_COMPLETE_KEY = 'utAllmenuAUploadRequestComplete';
+    var PAYLOAD_KEY = 'utAllmenuAUploadPayload';
+    var $popup = $('.answer_popup');
+    var checkCount = 0;
+    var earlyRetryCount = 0;
+    var lateRetryCount = 0;
+    var checking = false;
+    var finished = false;
+    var MAX_CHECKS = 12;
 
-            function message(title, text, loading) {
-                $('.loading_bar').toggle(loading === true);
-                $('.result_title').text(title);
-                $('.result_message').text(text || '');
+    function message(options) {
+        var isLoading = options.loading === true;
+        $('.result_title').text(typeof options.title === 'string' ? options.title : '');
+        $('.result_message').text(typeof options.description === 'string' ? options.description : '');
+        $('.loading_bar').prop('hidden', !isLoading).toggle(isLoading);
+    }
+
+    function readJson(key) {
+        try { return JSON.parse(sessionStorage.getItem(key) || '{}'); }
+        catch (ignore) { return {}; }
+    }
+
+    function getSubmissionId() {
+        var id = sessionStorage.getItem(ID_KEY);
+        if (!id) {
+            id = 'A-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 12);
+            sessionStorage.setItem(ID_KEY, id);
+        }
+        return id;
+    }
+
+    function completeRequest() {
+        finished = true;
+        sessionStorage.setItem(REQUEST_COMPLETE_KEY, id);
+        message({ title: '결과가 저장되었습니다.', description: '설문에 참여해 주셔서 감사합니다.', loading: false });
+        $('.btn_answer_open').prop('hidden', false);
+    }
+
+    function post(data) {
+        return UT_A.post(data);
+    }
+
+    // Apps Script JSONP 조회: 저장 성공/1차 누락 여부를 실제 시트 기준으로 판정.
+    function checkStatus() {
+        if (finished || checking || checkCount >= MAX_CHECKS) {
+            if (!finished && checkCount >= MAX_CHECKS) {
+                message({ title: '저장 완료 여부를 확인하지 못했습니다.', description: '페이지를 새로고침하면 저장 여부를 다시 확인합니다.', loading: false });
             }
-
-            function readJson(key) {
-                try { return JSON.parse(sessionStorage.getItem(key) || '{}'); }
-                catch (ignore) { return {}; }
-            }
-
-            function getSubmissionId() {
-                var id = sessionStorage.getItem(ID_KEY);
-                if (!id) {
-                    id = 'A-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 12);
-                    sessionStorage.setItem(ID_KEY, id);
-                }
-                return id;
-            }
-
-            function completeRequest() {
-                finished = true;
-                sessionStorage.setItem(REQUEST_COMPLETE_KEY, id);
-                message('결과가 저장되었습니다.', '설문에 참여해 주셔서 감사합니다.');
-                $('.btn_answer_open').prop('hidden', false);
-            }
-
-            function post(data) {
-                return UT_A.post(data);
-            }
-
-            // Apps Script JSONP 조회: 저장 성공/1차 누락 여부를 실제 시트 기준으로 판정.
-            function checkStatus() {
-                if (finished || checking || checkCount >= MAX_CHECKS) {
-                    if (!finished && checkCount >= MAX_CHECKS) {
-                        message('저장 완료 여부를 확인하지 못했습니다.',
-                            '잠시 후 페이지를 새로고침하면 저장 여부를 다시 확인합니다.');
-                    }
-                    return;
-                }
-                checking = true;
-                checkCount++;
-                $.ajax({
-                    url: WEB_APP_URL,
-                    method: 'GET',
-                    dataType: 'jsonp',
-                    jsonp: 'callback',
-                    cache: false,
-                    timeout: 12000,
-                    data: { action: 'status', submissionId: id }
-                }).done(function (response) {
-                    if (response && response.ok && response.saved &&
-                        response.earlySaved === true && response.lateSaved === true) {
-                        completeRequest();
-                        return;
-                    }
-                    if (response && response.ok) {
-                        // 1차가 누락된 경우에만 TASK1·2 데이터를 재전송한다.
-                        if (!response.earlySaved && earlyRetryCount < 2 && checkCount >= 2) {
-                            earlyRetryCount++;
-                            post(earlyData);
-                        }
-                        // 2차가 누락된 경우에만 TASK3·사후설문을 재전송한다.
-                        if (!response.lateSaved && lateRetryCount < 2 && checkCount >= 4) {
-                            lateRetryCount++;
-                            post(lateData);
-                        }
-                    }
-                }).fail(function () {
-                    // 통신 실패/서버 오류는 완료로 취급하지 않는다.
-                }).always(function () {
-                    checking = false;
-                    if (!finished) setTimeout(checkStatus, 1600);
-                });
-            }
-
-            var personal = UT_A.getSurvey();
-            var tasks = UT_A.getTaskResult();
-            var opinion = readJson('utAllmenuACoSurvey');
-            var id = getSubmissionId();
-            var allKeys = ['task1', 'task2', 'task3'];
-            var validTasks = $.grep(allKeys, function (key) {
-                return tasks[key] && /^(success|fail)$/.test(tasks[key].result);
-            }).length === allKeys.length;
-            var validSurvey = !!(personal.age && personal.experience && personal.member &&
-                opinion.survey1 && opinion.survey3);
-
-            if (!validTasks || !validSurvey) {
-                message('제출할 데이터가 부족합니다.', '설문을 순차적으로 진행해 주세요.');
+            return;
+        }
+        checking = true;
+        checkCount++;
+        $.ajax({
+            url: WEB_APP_URL,
+            method: 'GET',
+            dataType: 'jsonp',
+            jsonp: 'callback',
+            cache: false,
+            timeout: 12000,
+            data: { action: 'status', submissionId: id }
+        }).done(function (response) {
+            if (response && response.ok && response.saved &&
+                response.earlySaved === true && response.lateSaved === true) {
+                completeRequest();
                 return;
             }
-            if (!WEB_APP_URL) {
-                message('전송을 시작하지 못했습니다.', '브라우저 지원이 되지 않으니, 다른 브라우저를 사용해주세요.');
-                return;
-            }
-
-            var earlyData = {
-                action: 'partial',
-                groupNo: 'A',
-                submissionId: id,
-                age: personal.age,
-                experience: personal.experience,
-                member: personal.member,
-                task1: tasks.task1,
-                task2: tasks.task2,
-                userAgent: navigator.userAgent
-            };
-            var lateData = {
-                action: 'finish',
-                groupNo: 'A',
-                submissionId: id,
-                task3: tasks.task3,
-                survey1: opinion.survey1,
-                survey2: opinion.survey2 || '',
-                survey2Other: opinion.survey2Other || '',
-                survey3: opinion.survey3,
-                survey3Other: opinion.survey3Other || '',
-                userAgent: navigator.userAgent
-            };
-
-            // 중간 데이터는 재전송에 대비해 브라우저 저장소에도 그대로 남겨둔다.
-            sessionStorage.setItem(PAYLOAD_KEY, JSON.stringify({ early: earlyData, late: lateData }));
-            message('설문 결과를 제출 중입니다.', true);
-            // 재방문·새로고침에도 서버의 실제 완료 여부를 조회하여 중복을 방지한다.
-            // 서버의 고유 ID upsert가 중복 요청을 안전하게 처리한다.
-            if (sessionStorage.getItem(REQUEST_COMPLETE_KEY) !== id) {
-                post(lateData);
-            }
-            // POST 응답이 지연되더라도 서버의 실제 저장 여부 확인은 시작한다.
-            setTimeout(checkStatus, 1600);
-
-            function closeAnswer() {
-                $popup.stop(true, true).fadeOut(150, function () {
-                    $popup.prop('hidden', true);
-                    $('.result_wrap').prop('inert', false).removeAttr('aria-hidden');
-                    $('.btn_answer_open').trigger('focus');
-                });
-            }
-
-            $('.btn_answer_open').on('click', function () {
-                $('.result_wrap').prop('inert', true).attr('aria-hidden', 'true');
-                $popup.prop('hidden', false).stop(true, true).hide().fadeIn(150, function () {
-                    $popup.find('.btn_answer_close').trigger('focus');
-                });
-            });
-            $('.btn_answer_close,.answer_popup_dim').on('click', closeAnswer);
-            $(document).on('keydown', function (event) {
-                if ($popup.prop('hidden')) return;
-                if (event.which === 27) {
-                    event.preventDefault();
-                    closeAnswer();
-                } else if (event.which === 9) {
-                    event.preventDefault();
-                    $popup.find('.btn_answer_close').trigger('focus');
+            if (response && response.ok) {
+                // 1차가 누락된 경우에만 TASK1·2 데이터를 재전송한다.
+                if (!response.earlySaved && earlyRetryCount < 2 && checkCount >= 2) {
+                    earlyRetryCount++;
+                    post(earlyData);
                 }
-            });
+                // 2차가 누락된 경우에만 TASK3·사후설문을 재전송한다.
+                if (!response.lateSaved && lateRetryCount < 2 && checkCount >= 4) {
+                    lateRetryCount++;
+                    post(lateData);
+                }
+            }
+        }).fail(function () {
+            // 통신 실패/서버 오류는 완료로 취급하지 않는다.
+        }).always(function () {
+            checking = false;
+            if (!finished) setTimeout(checkStatus, 1600);
         });
+    }
+
+    var personal = UT_A.getSurvey();
+    var tasks = UT_A.getTaskResult();
+    var opinion = readJson('utAllmenuACoSurvey');
+    var id = getSubmissionId();
+    var allKeys = ['task1', 'task2', 'task3'];
+    var validTasks = $.grep(allKeys, function (key) {
+        return tasks[key] && /^(success|fail)$/.test(tasks[key].result);
+    }).length === allKeys.length;
+    var validSurvey = !!(personal.age && personal.experience && personal.member &&
+        opinion.survey1 && opinion.survey3);
+
+    if (!validTasks || !validSurvey) {
+        message({ title: '제출할 데이터가 부족합니다.', description: '설문을 순차적으로 진행해 주세요.', loading: false });
+        return;
+    }
+    if (!WEB_APP_URL) {
+        message({ title: '전송을 시작하지 못했습니다.', loading: false });
+        return;
+    }
+
+    var earlyData = {
+        action: 'partial',
+        groupNo: 'A',
+        submissionId: id,
+        age: personal.age,
+        experience: personal.experience,
+        member: personal.member,
+        task1: tasks.task1,
+        task2: tasks.task2,
+        userAgent: navigator.userAgent
+    };
+    var lateData = {
+        action: 'finish',
+        groupNo: 'A',
+        submissionId: id,
+        task3: tasks.task3,
+        survey1: opinion.survey1,
+        survey2: opinion.survey2 || '',
+        survey2Other: opinion.survey2Other || '',
+        survey3: opinion.survey3,
+        survey3Other: opinion.survey3Other || '',
+        userAgent: navigator.userAgent
+    };
+
+    // 중간 데이터는 재전송에 대비해 브라우저 저장소에도 그대로 남겨둔다.
+    sessionStorage.setItem(PAYLOAD_KEY, JSON.stringify({ early: earlyData, late: lateData }));
+    message({ title: '설문 결과를 제출 중입니다.', description: '잠시만 기다려 주세요.', loading: true });
+    // 재방문·새로고침에도 서버의 실제 완료 여부를 조회하여 중복을 방지한다.
+    // 서버의 고유 ID upsert가 중복 요청을 안전하게 처리한다.
+    if (sessionStorage.getItem(REQUEST_COMPLETE_KEY) !== id) {
+        post(lateData);
+    }
+    // POST 응답이 지연되더라도 서버의 실제 저장 여부 확인은 시작한다.
+    setTimeout(checkStatus, 1600);
+
+    function closeAnswer() {
+        $popup.stop(true, true).fadeOut(150, function () {
+            $popup.prop('hidden', true);
+            $('.result_wrap').prop('inert', false).removeAttr('aria-hidden');
+            $('.btn_answer_open').trigger('focus');
+        });
+    }
+
+    $('.btn_answer_open').on('click', function () {
+        $('.result_wrap').prop('inert', true).attr('aria-hidden', 'true');
+        $popup.prop('hidden', false).stop(true, true).hide().fadeIn(150, function () {
+            $popup.find('.btn_answer_close').trigger('focus');
+        });
+    });
+    $('.btn_answer_close,.answer_popup_dim').on('click', closeAnswer);
+    $(document).on('keydown', function (event) {
+        if ($popup.prop('hidden')) return;
+        if (event.which === 27) {
+            event.preventDefault();
+            closeAnswer();
+        } else if (event.which === 9) {
+            event.preventDefault();
+            $popup.find('.btn_answer_close').trigger('focus');
+        }
+    });
+});
+
+
     </script>
 </body>
 </html>
