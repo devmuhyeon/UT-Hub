@@ -8,24 +8,24 @@ $(function () {
     var FRAME_URL = '/UT-Hub/ut-allmenu/source/frame/allmenu_tobe.html';
     var LIMIT_MS = UT_B_CONFIG.taskLimitSeconds * 1000;
     var TASKS = [
-        {key: 'toggle', answer: '토글 기능 찾기', scenario: '전체메뉴에서 메뉴 설명이 보이도록 설정하는 기능을 찾아 눌러주세요.'},
+        {key: 'toggle', answer: '토글 기능 찾기', scenario: '전체메뉴에서 각 메뉴에 대한 간결한 설명이 보이도록 설정하는 기능을 찾아주세요.'},
         {
             key: 'task1',
             answer: '직업심리검사',
             answerId: 'tab_person_EBG020000000085',
-            scenario: '취업을 준비하면서 어떤 직업이 잘 맞을지 검사를 해보고 싶습니다. 자신의 심리에 따른 흥미와 적성을 알아볼 수 있는 메뉴를 찾아주세요.'
+            scenario: '나에게 맞는 직업을 알아보기 위해 흥미와 적성을 검사를 해볼 수 있는 메뉴를 찾아주세요.'
         },
         {
             key: 'task2',
             answer: '쉽게 보는 고용정보',
             answerId: '',
-            scenario: '고용정보에 대한 설명을 쉽게 확인할 수 있는 콘텐츠들을 볼 수 있는 메뉴를 찾아주세요.'
+            scenario: '구직 노하우나 고용 정책 등 다양한 고용정보를 쉽게 살펴볼 수 있는 메뉴를 찾아주세요.'
         },
         {
             key: 'task3',
-            answer: '발급·관리',
-            answerId: 'tab_person_EBG020440301003',
-            scenario: '취업에 필요한 서류를 준비하고 있습니다. 여러 곳에서 근무한 경력을 통합된 서류로 증명할 수 있는 서비스를 찾아주세요.'
+            answer: '발급 신청',
+            answerId: 'tab_person_EBG020040300081',
+            scenario: '직업훈련을 받기 위해 국민내일배움카드를 발급 및 신청할 수 있는 메뉴를 찾아주세요.'
         }
     ];
     var ORDINAL = ['첫 번째', '두 번째', '세 번째', '네 번째'];
